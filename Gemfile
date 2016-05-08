@@ -5,6 +5,10 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.6'
 # bcrypt password
 gem 'bcrypt'
+# Fake Users.
+gem 'faker'
+gem 'will_paginate'
+gem 'bootstrap-will_paginate'
 # Bootstrap SASS
 gem 'bootstrap-sass'
 # Use postgres as the database for Active Record
