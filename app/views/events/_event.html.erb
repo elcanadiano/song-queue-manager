@@ -1,7 +1,12 @@
 <li>
-  <%= event.name %> |
-  <%= event.date.strftime("%A %B %l, %Y") %>
+    <%= event.name %>
+  | <%= event.date.strftime("%A %B %l, %Y") %>
   <% if admin? %>
-    awefaoijwefo
+    | <%= link_to "Edit", edit_event_path(event.id) %>
+    <% if event.is_open? %>
+      | <%= link_to "Close Event", toggle_open_event_path(event.id), method: :patch %>
+    <% else %>
+      | <%= link_to "Open Event", toggle_open_event_path(event.id), method: :patch %>
+    <% end %>
   <% end %>
 </li>
