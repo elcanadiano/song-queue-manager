@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  song: Song 1
+  artist: Blur
+  order: 2
+  is_completed: false
+  event_id: 2
+  band_id: 2
+
+two:
+  song: Song 2
+  artist: Blur
+  order: 3
+  is_completed: false
+  event_id: 2
+  band_id: 2

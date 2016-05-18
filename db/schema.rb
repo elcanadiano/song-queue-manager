@@ -11,10 +11,55 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160516200052) do
+ActiveRecord::Schema.define(version: 20160517033149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bands", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "bands", ["name"], name: "index_bands_on_name", using: :btree
+
+  create_table "events", force: :cascade do |t|
+    t.string   "name",                         null: false
+    t.date     "date",                         null: false
+    t.boolean  "has_started",  default: false, null: false
+    t.boolean  "is_completed", default: false, null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "events", ["has_started", "date", "is_completed"], name: "index_events_on_has_started_and_date_and_is_completed", using: :btree
+
+  create_table "members", force: :cascade do |t|
+    t.boolean  "is_admin",   default: false, null: false
+    t.integer  "user_id"
+    t.integer  "band_id"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "members", ["band_id"], name: "index_members_on_band_id", using: :btree
+  add_index "members", ["user_id"], name: "index_members_on_user_id", using: :btree
+
+  create_table "requests", force: :cascade do |t|
+    t.string   "song",                         null: false
+    t.string   "artist",                       null: false
+    t.integer  "order",        default: 0,     null: false
+    t.boolean  "is_completed", default: false, null: false
+    t.integer  "event_id"
+    t.integer  "band_id"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "requests", ["band_id"], name: "index_requests_on_band_id", using: :btree
+  add_index "requests", ["event_id"], name: "index_requests_on_event_id", using: :btree
+  add_index "requests", ["order"], name: "index_requests_on_order", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
@@ -31,4 +76,8 @@ ActiveRecord::Schema.define(version: 20160516200052) do
     t.datetime "reset_sent_at"
   end
 
+  add_foreign_key "members", "bands"
+  add_foreign_key "members", "users"
+  add_foreign_key "requests", "bands"
+  add_foreign_key "requests", "events"
 end

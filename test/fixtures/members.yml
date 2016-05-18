@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+dankey:
+  is_admin: true
+  user_id: 7
+  band_id: 2
+
+archer:
+  is_admin: false
+  user_id: 3
+  band_id: 2

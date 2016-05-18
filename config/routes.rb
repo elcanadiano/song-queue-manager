@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'events/new'
+
+  get 'models/new'
+
   get 'password_resets/new'
 
   get 'password_resets/edit'
@@ -18,6 +22,7 @@ Rails.application.routes.draw do
 
   resources :microposts
   resources :users
-  resources :account_activations, only: [:edit]
-  resources :password_resets,     only: [:new, :create, :edit, :update]
+  resources :account_activations, only:   [:edit]
+  resources :password_resets,     only:   [:new, :create, :edit, :update]
+  resources :events,              except: [:show, :destroy]
 end
