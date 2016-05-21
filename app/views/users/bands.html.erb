@@ -1,0 +1,22 @@
+<% provide(:title, "Showing Bands for #{@user.name}") %>
+<div class="row">
+  <aside class="col-md-4">
+    <section class="user_info">
+      <h1>Showing Bands for <%= @user.name %></h1>
+    </section>
+  </aside>
+</div>
+
+<div class="row">
+  <aside class="col-md-12">
+    <ul class="users">
+      <% if @memberships.each do |membership| %>
+        <%= membership.band.name %>
+      <% end.empty? %>
+        <li>You currently are not a member of any bands. Why not join or create one?</li>
+      <% end %>
+    </ul>
+
+    <%= link_to "Create a Band", new_band_url, class: "btn btn-primary", style: "color:#FFF" %>
+  </aside>
+</div>

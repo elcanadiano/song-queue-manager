@@ -21,7 +21,12 @@ Rails.application.routes.draw do
   delete 'logout'  => 'sessions#destroy'
 
   resources :microposts
-  resources :users
+  resources :users do
+    member do
+      get 'bands'
+    end
+  end
+
   resources :account_activations, only:   [:edit]
   resources :password_resets,     only:   [:new, :create, :edit, :update]
   resources :events,              except: [:show, :destroy] do
@@ -29,4 +34,6 @@ Rails.application.routes.draw do
       patch 'toggle_open'
     end
   end
+
+  resources :bands, only: [:new, :create]
 end

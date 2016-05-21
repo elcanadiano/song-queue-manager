@@ -1,4 +1,4 @@
 class Member < ActiveRecord::Base
-  belongs_to :User
-  belongs_to :Band
+  belongs_to :user
+  belongs_to :band
 end
