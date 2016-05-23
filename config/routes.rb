@@ -35,5 +35,5 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :bands, only: [:new, :create, :edit, :update]
+  resources :bands, except: [:index, :destroy]
 end

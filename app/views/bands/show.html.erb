@@ -1,0 +1,6 @@
+<% provide(:title, "Showing Members of #{@band.name}") %>
+<h1>Showing Members of <%= @band.name %></h1>
+
+<ul class="users">
+  <%= render partial: 'band_members', collection: @members, as: :member %>
+</ul>

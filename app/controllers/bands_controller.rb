@@ -37,6 +37,13 @@ class BandsController < ApplicationController
     end
   end
 
+  def show
+    @band = Band.find(params[:id])
+    @members = Member.where({
+      band_id: params[:id]
+    })
+  end
+
   private
 
     def band_params
