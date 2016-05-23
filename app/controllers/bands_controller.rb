@@ -1,5 +1,6 @@
 class BandsController < ApplicationController
-  before_action :logged_in_user, only: [:new, :create]
+  before_action :logged_in_user, only: [:new, :create, :edit, :update]
+  before_action :band_admin_user, only: [:edit, :update]
   #before_action :correct_user, only: [:create]
 
   def new
@@ -22,9 +23,38 @@ class BandsController < ApplicationController
     end
   end
 
+  def edit
+  end
+
+  def update
+    @user = current_user
+
+    if @band.update_attributes(band_params)
+      flash[:success] = "Band updated!"
+      redirect_to bands_user_url @user.id
+    else
+      render 'edit'
+    end
+  end
+
   private
 
     def band_params
       params.require(:band).permit(:name)
+    end
+
+    # Checks to see if the user has administration privileges as part of its
+    # membership.
+    def band_admin_user
+      @band = Band.find(params[:id])
+      @member = Member.find_by({
+        band_id: @band.id,
+        user_id: current_user.id
+      })
+
+      if !@member || !@member.is_admin?
+        flash[:danger] = "You are not authorized to manage this band."
+        redirect_to(root_url)
+      end
     end
 end

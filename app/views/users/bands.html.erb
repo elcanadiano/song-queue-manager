@@ -10,13 +10,13 @@
 <div class="row">
   <aside class="col-md-12">
     <ul class="users">
-      <% if @memberships.each do |membership| %>
-        <%= membership.band.name %>
-      <% end.empty? %>
-        <li>You currently are not a member of any bands. Why not join or create one?</li>
-      <% end %>
+      <%= render @memberships || "<li>You currently are not a member of any bands. Why not join or create one?</li>" %>
     </ul>
+  </aside>
+</div>
 
+<div class="row">
+  <aside class="col-md-12">
     <%= link_to "Create a Band", new_band_url, class: "btn btn-primary", style: "color:#FFF" %>
   </aside>
 </div>

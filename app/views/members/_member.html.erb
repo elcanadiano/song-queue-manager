@@ -1,0 +1,6 @@
+<li>
+  <%= member.band.name %>
+  <% if member.is_admin? %>
+    | <%= link_to "Edit", edit_band_url(member.band_id) %>
+  <% end %>
+</li>
