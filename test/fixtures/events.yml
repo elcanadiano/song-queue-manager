@@ -1,11 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 rebar:
-  id: 1
   name: ReBar - January 2016
   date: 2016-01-04
 
 brs8:
-  id: 2
   name: Battle Rock Seattle 8
   date: 2016-05-15

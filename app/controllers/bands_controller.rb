@@ -42,6 +42,10 @@ class BandsController < ApplicationController
     @members = Member.where({
       band_id: params[:id]
     })
+    @current_member = Member.find_by({
+      band_id: @band.id,
+      user_id: current_user.id
+    })
   end
 
   private

@@ -36,7 +36,7 @@ malory:
   activated_at: <%= Time.zone.now %>
 
 tom:
-  name: J. Thomas Sanders
+  name: Thomas Sanders
   email: tom@testsanders.com
   password_digest: <%= User.digest('password') %>
   admin: true
