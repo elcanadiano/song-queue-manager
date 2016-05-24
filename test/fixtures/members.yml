@@ -2,10 +2,30 @@
 
 dankey:
   is_admin: true
-  user_id: 7
-  band_id: 2
+  user: dankey
+  band: dankey
 
 archer:
   is_admin: false
-  user_id: 3
-  band_id: 2
+  user: archer
+  band: dankey
+
+alexander:
+  is_admin: true
+  user: alexander
+  band: h4h
+
+erin:
+  is_admin: false
+  user: erin
+  band: h4h
+
+andrew:
+  is_admin: false
+  user: andrew
+  band: h4h
+
+ray:
+  is_admin: false
+  user: ray
+  band: h4h

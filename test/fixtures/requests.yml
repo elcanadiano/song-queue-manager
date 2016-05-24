@@ -5,13 +5,13 @@ one:
   artist: Blur
   order: 2
   is_completed: false
-  event_id: 2
-  band_id: 2
+  event: brs8
+  band: nbam
 
 two:
   song: Song 2
   artist: Blur
   order: 3
   is_completed: false
-  event_id: 2
-  band_id: 2
+  event: brs8
+  band: nbam
