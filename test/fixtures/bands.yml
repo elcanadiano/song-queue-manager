@@ -1,16 +1,21 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 trickydick:
+  #id: 1
   name: Tricky Dick and the Ragequitters
 
 nbam:
+  #id: 2
   name: No Boston After Midnight
 
 dankey:
+  #id: 3
   name: Dankey Kang and the Tribe
 
 sammies:
+  #id: 4
   name: The Sammies
 
 h4h:
+  #id: 5
   name: Harmonies for Hire

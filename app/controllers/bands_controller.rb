@@ -1,5 +1,5 @@
 class BandsController < ApplicationController
-  before_action :logged_in_user, only: [:new, :create, :edit, :update]
+  before_action :logged_in_user, only: [:new, :create, :edit, :update, :show]
   before_action :band_admin_user, only: [:edit, :update]
   #before_action :correct_user, only: [:create]
 
@@ -40,7 +40,7 @@ class BandsController < ApplicationController
   def show
     @band = Band.find(params[:id])
     @members = Member.where({
-      band_id: params[:id]
+      band_id: @band.id
     })
     @current_member = Member.find_by({
       band_id: @band.id,
@@ -65,7 +65,7 @@ class BandsController < ApplicationController
 
       if !@member || !@member.is_admin?
         flash[:danger] = "You are not authorized to manage this band."
-        redirect_to(root_url)
+        redirect_to root_url
       end
     end
 end
