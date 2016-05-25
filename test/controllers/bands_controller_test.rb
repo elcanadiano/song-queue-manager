@@ -50,4 +50,24 @@ class BandsControllerTest < ActionController::TestCase
     assert_not flash.empty?
     assert_redirected_to root_url
   end
+
+  test "should not update if not logged in" do
+    patch :update, id: @band, band: { name: "Harmonies for Hire Starship" }
+    assert_not flash.empty?
+    assert_redirected_to login_url
+  end
+
+  test "should not update if not admin" do
+    log_in_as(@member)
+    patch :update, id: @band, band: { name: "Harmonies for Hire Starship" }
+    assert_not flash.empty?
+    assert_redirected_to root_url
+  end
+
+  test "should update if admin" do
+    log_in_as(@admin)
+    patch :update, id: @band, band: { name: "Harmonies for Hire Starship" }
+    assert_not flash.empty?
+    assert_redirected_to bands_user_url(@admin)
+  end
 end
