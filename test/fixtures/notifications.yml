@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: 
+  user_id: 
+  creator_id: 
+  band_id_id: 
+  has_expired: false
+
+two:
+  type: 
+  user_id: 
+  creator_id: 
+  band_id_id: 
+  has_expired: false

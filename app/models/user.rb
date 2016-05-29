@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   validates :password, presence: true, length: { minimum: 8 }, allow_nil: true
   has_many :members, dependent: :destroy
   has_many :bands, through: :members
+  has_many :notifications
 
   # Returns the hash digest of the given string.
   def User.digest(string)
