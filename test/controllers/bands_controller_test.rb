@@ -5,6 +5,7 @@ class BandsControllerTest < ActionController::TestCase
     @non_member = users(:lana)
     @member     = users(:erin)
     @admin      = users(:alexander)
+    @invited    = users(:chris)
     @band       = bands(:h4h)
   end
 
@@ -69,5 +70,53 @@ class BandsControllerTest < ActionController::TestCase
     patch :update, id: @band, band: { name: "Harmonies for Hire Starship" }
     assert_not flash.empty?
     assert_redirected_to bands_user_url(@admin)
+  end
+
+  test "should redirect invite when not logged in" do
+    get :invite, id: @band
+    assert_not flash.empty?
+    assert_redirected_to login_url
+  end
+
+  test "should redirect invite when not admin" do
+    log_in_as(@member)
+    get :invite, id: @band
+    assert_not flash.empty?
+    assert_redirected_to root_url
+  end
+
+  test "send invite" do
+    log_in_as(@admin)
+    post :create_invite, id: @band, notification: {band_id: @band.id, user_id: @non_member.id, creator_id: @admin.id}
+    assert_not flash.empty?
+    assert_redirected_to band_url(@band)
+  end
+
+  test "incorrect creator does not send invite" do
+    log_in_as(@admin)
+    post :create_invite, id: @band, notification: {band_id: @band.id, user_id: @non_member.id, creator_id: @member.id}
+    assert_not flash.empty?
+    assert_redirected_to invite_band_url
+  end
+
+  test "invite not sent if user does not exist" do
+    log_in_as(@admin)
+    post :create_invite, id: @band, notification: {band_id: @band.id, user_id: -99999, creator_id: @admin.id}
+    assert_not flash.empty?
+    assert_redirected_to invite_band_url
+  end
+
+  test "invite not sent if user is already invited" do
+    log_in_as(@admin)
+    post :create_invite, id: @band, notification: {band_id: @band.id, user_id: @invited.id, creator_id: @admin.id}
+    assert_not flash.empty?
+    assert_redirected_to invite_band_url
+  end
+
+  test "invite not sent to current member" do
+    log_in_as(@admin)
+    post :create_invite, id: @band, notification: {band_id: @band.id, user_id: @member.id, creator_id: @admin.id}
+    assert_not flash.empty?
+    assert_redirected_to invite_band_url
   end
 end

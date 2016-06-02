@@ -1,15 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  type: 
-  user_id: 
-  creator_id: 
-  band_id_id: 
-  has_expired: false
+chris_h4h:
+  notification_type: invite
+  user:              chris
+  creator:           alexander
+  band:              h4h
+  has_expired:       false
 
-two:
-  type: 
-  user_id: 
-  creator_id: 
-  band_id_id: 
-  has_expired: false
+michael_dankey:
+  notification_type: invite
+  user:              michael
+  creator:           dankey
+  band:              dankey
+  has_expired:       false

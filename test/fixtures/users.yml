@@ -86,3 +86,10 @@ ray:
   password_digest: <%= User.digest('password') %>
   activated: true
   activated_at: <%= Time.zone.now %>
+
+chris:
+  name: Chris Cheveldayoff
+  email: chris.cheveldayoff@gmail.com
+  password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>

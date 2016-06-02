@@ -3,6 +3,8 @@ class BandsController < ApplicationController
   before_action :band_admin_user, only: [:edit, :update, :invite, :create_invite]
   before_action :existing_user,   only: [:create_invite]
   before_action :existing_member, only: [:create_invite]
+  before_action :existing_invite, only: [:create_invite]
+  before_action :correct_params,  only: [:create_invite]
 
   def new
     @band = Band.new
@@ -55,16 +57,12 @@ class BandsController < ApplicationController
   end
 
   def create_invite
-    @band = Band.find(params[:id])
-    @notification = Notification.new({
-      user_id: params[:notification][:user_id],
-      band_id: @band.id,
-      creator_id: current_user.id
-    })
+    @notification = Notification.new(notification_params)
+    @notification.notification_type = 'invite'
 
-    if @notifcation.save
+    if @notification.save
       flash[:success] = "Invite sent!"
-      redirect_to 'show'
+      redirect_to band_url(@band)
     else
       render 'invite'
     end
@@ -76,8 +74,20 @@ class BandsController < ApplicationController
       params.require(:band).permit(:name)
     end
 
+    def notification_params
+      params.require(:notification).permit(:user_id, :band_id, :creator_id)
+    end
+
+    def correct_params
+      @band = Band.find(params[:id])
+
+      if params[:notification][:band_id].to_i != @band.id || params[:notification][:creator_id].to_i != current_user.id
+        flash[:danger] = "It has been detected that the parameters were incorrectly modified."
+        redirect_to invite_band_url
+      end
+    end
+
     def existing_user
-      puts "Meow."
       user = User.find_by(id: params[:notification][:user_id])
 
       if user.nil?
@@ -94,6 +104,20 @@ class BandsController < ApplicationController
 
       if !member.nil?
         flash[:danger] = "This user is already a member of the band."
+        redirect_to invite_band_url
+      end
+    end
+
+    def existing_invite
+      notifications = Notification.find_by({
+        band_id:           @band.id,
+        user_id:           params[:notification][:user_id],
+        notification_type: 'invite',
+        has_expired:       false
+      })
+
+      if !notifications.nil?
+        flash[:danger] = "An invite has been sent to this user already."
         redirect_to invite_band_url
       end
     end

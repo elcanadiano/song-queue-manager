@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   has_many :members, dependent: :destroy
   has_many :bands, through: :members
   has_many :notifications
+  has_many :notifications_created, class_name: "Notification"
 
   # Returns the hash digest of the given string.
   def User.digest(string)
