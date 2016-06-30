@@ -1,0 +1,7 @@
+<li>
+  <%= notification.creator.name %> has invited you to join <%= notification.band.name %>.
+  <% if !notification.has_expired %>
+    | <%= link_to "Accept", accept_notification_path(notification.id), method: :patch %>
+    | <%= link_to "Decline", decline_notification_path(notification.id), method: :patch %>
+  <% end %>
+</li>

@@ -7,7 +7,7 @@
   </ul>
 </div>
 
-<% if @current_member.is_admin? %>
+<% if !@current_member.nil? && @current_member.is_admin? %>
   <div class="row">
     <%= link_to "Invite User", invite_band_url, class: "btn btn-primary" %>
   </div>

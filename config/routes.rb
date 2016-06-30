@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'notifications/new'
+
   get 'events/new'
 
   get 'models/new'
@@ -29,6 +31,12 @@ Rails.application.routes.draw do
 
   resources :account_activations, only:   [:edit]
   resources :password_resets,     only:   [:new, :create, :edit, :update]
+  resources :notifications,       only:   [:index] do
+    member do
+      patch 'accept'
+      patch 'decline'
+    end
+  end
   resources :events,              except: [:show, :destroy] do
     member do
       patch 'toggle_open'
