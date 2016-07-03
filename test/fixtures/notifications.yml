@@ -7,6 +7,13 @@ chris_h4h:
   band:              h4h
   has_expired:       false
 
+chris_dankey_expired:
+  notification_type: invite
+  user:              chris
+  creator:           dankey
+  band:              dankey
+  has_expired:       true
+
 michael_dankey:
   notification_type: invite
   user:              michael

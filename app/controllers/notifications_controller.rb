@@ -1,5 +1,7 @@
 class NotificationsController < ApplicationController
-  before_action :logged_in_user, only: [:index, :accept, :decline]
+  before_action :logged_in_user,             only: [:index,  :accept, :decline]
+  before_action :correct_notification_user,  only: [:accept, :decline]
+  before_action :check_expired_notification, only: [:accept, :decline]
 
   def index
     @user = current_user
@@ -10,7 +12,8 @@ class NotificationsController < ApplicationController
     @user = current_user
 
     @notification = Notification.find_by(id: params[:id])
-    @notification.toggle!(:has_expired)
+
+    @notification.update(has_expired: true)
 
     @member = Member.create!({
       user_id: @user.id,
@@ -24,8 +27,7 @@ class NotificationsController < ApplicationController
 
   def decline
     @notification = Notification.find_by(id: params[:id])
-
-    @notification.toggle!(:has_expired)
+    @notification.update(has_expired: true)
 
     flash[:success] = "You have declined to join #{@notification.band.name}!"
 
@@ -37,6 +39,19 @@ class NotificationsController < ApplicationController
     def correct_notification_user
       @user = current_user
       @notification = Notification.find_by(id: params[:id])
-      redirect_to(root_url) if @notification.nil? || @notification.user_id != @user.id
+      if @notification.nil? || @notification.user_id != @user.id
+        flash[:danger] = "The notification is invalid."
+        redirect_to(root_url)
+      end
+    end
+
+    # Cannot accept or decline an expired notification.
+    def check_expired_notification
+      @notification = Notification.find_by(id: params[:id])
+
+      if @notification.has_expired
+        flash[:danger] = "You cannot accept or decline an expired notification."
+        redirect_to(notifications_url)
+      end
     end
 end
