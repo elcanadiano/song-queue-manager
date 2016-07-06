@@ -5,7 +5,7 @@ class NotificationsControllerTest < ActionController::TestCase
     @noninvitee   = users(:malory)
     @invitee      = users(:chris)
     @notification = notifications(:chris_h4h)
-    @expired      = notifications(:chris_dankey_expired)
+    @expired      = notifications(:chris_dankey)
     @band         = bands(:h4h)
   end
 

@@ -7,7 +7,35 @@ chris_h4h:
   band:              h4h
   has_expired:       false
 
-chris_dankey_expired:
+erin_h4h:
+  notification_type: invite
+  user:              erin
+  creator:           alexander
+  band:              h4h
+  has_expired:       true
+
+andrew_h4h:
+  notification_type: invite
+  user:              andrew
+  creator:           alexander
+  band:              h4h
+  has_expired:       true
+
+ray_h4h:
+  notification_type: invite
+  user:              ray
+  creator:           alexander
+  band:              h4h
+  has_expired:       true
+
+lana_h4h:
+  notification_type: invite
+  user:              ray
+  creator:           lana
+  band:              h4h
+  has_expired:       true
+
+chris_dankey:
   notification_type: invite
   user:              chris
   creator:           dankey
