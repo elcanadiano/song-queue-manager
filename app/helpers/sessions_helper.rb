@@ -38,6 +38,11 @@ module SessionsHelper
     !current_user.nil? && current_user.admin?
   end
 
+  # Gets the amount of unread notifications a user has.
+  def unread_notifications
+    Notification.where(user_id: current_user.id, has_expired: false).count
+  end
+
   # Forgets a persistent session.
   def forget(user)
     user.forget
