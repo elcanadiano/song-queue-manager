@@ -3,15 +3,41 @@
 one:
   song: Song 1
   artist: Blur
-  order: 2
   is_completed: false
   event: brs8
   band: nbam
 
 two:
+  song: I Must Be In Love
+  artist: The Rutles
+  is_completed: false
+  event: brs8
+  band: h4h
+
+three:
   song: Song 2
   artist: Blur
-  order: 3
+  is_completed: false
+  event: brs8
+  band: dankey
+
+four:
+  song: Can't Buy Me Love
+  artist: The Beatles
+  is_completed: false
+  event: brs8
+  band: h4h
+
+five:
+  song: MakeDamnSure
+  artist: Taking Back Sunday
+  is_completed: false
+  event: brs8
+  band: dankey
+
+six:
+  song: Song 2
+  artist: Blur
   is_completed: false
   event: brs8
   band: nbam

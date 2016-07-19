@@ -1,5 +1,5 @@
 class RequestsController < ApplicationController
-  before_action :logged_in_user, only: [:create]
+  before_action :logged_in_user, only: [:create, :toggle_completed]
   before_action :admin_user,     only: [:toggle_completed]
   before_action :correct_params, only: [:create]
 
@@ -25,8 +25,7 @@ class RequestsController < ApplicationController
   end
 
   private
-    # Checks to see if the User ID passed in is correct and checks to see if the
-    # user is a member is part of the band passed in.
+    # Checks to see if the current user is in fact a member of the band.
     def correct_params
       @member = Member.find_by({
         band_id: params[:request][:band_id],
