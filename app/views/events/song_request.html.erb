@@ -1,0 +1,23 @@
+<% provide(:title, 'Sign up') %>
+<h1>Sign up</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for(@song_request, url: requests_url) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <%= f.label :song %>
+      <%= f.text_field :song, class: 'form-control' %>
+
+      <%= f.label :artist %>
+      <%= f.text_field :artist, class: 'form-control' %>
+
+      <%= f.label :band_id %>
+      <%= f.collection_select(:band_id, @bands, :id, :name, { include_blank: "Select Band" }) %>
+
+      <%= f.hidden_field :event_id, value: @event.id %>
+
+      <%= f.submit "Create my account", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

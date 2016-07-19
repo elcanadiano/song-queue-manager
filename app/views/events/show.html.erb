@@ -1,0 +1,6 @@
+<% provide(:title, 'Events') %>
+<h1><%= @event.name %></h1>
+
+<ul class="users">
+  <%= render partial: "event_requests", collection: @requests, as: "song_request" %>
+</ul>

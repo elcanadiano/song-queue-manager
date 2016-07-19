@@ -1,5 +1,5 @@
 <li>
-    <%= event.name %>
+    <%= link_to event.name,event_path(event.id) %>
   | <%= event.date.strftime("%A %B %l, %Y") %>
   <% if admin? %>
     | <%= link_to "Edit", edit_event_path(event.id) %>

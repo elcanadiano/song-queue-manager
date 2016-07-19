@@ -37,9 +37,15 @@ Rails.application.routes.draw do
       patch 'decline'
     end
   end
-  resources :events,              except: [:show, :destroy] do
+  resources :events,              except: [:destroy] do
     member do
       patch 'toggle_open'
+      get   'request'     => 'events#song_request'
+    end
+  end
+  resources :requests,            only:   [:create] do
+    member do
+      patch 'toggle_completed'
     end
   end
 
