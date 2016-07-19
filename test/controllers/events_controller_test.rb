@@ -2,7 +2,7 @@ require 'test_helper'
 
 class EventsControllerTest < ActionController::TestCase
   def setup
-    @user       = users(:alexander)
+    @admin      = users(:alexander)
     @other_user = users(:archer)
     @rebar      = events(:rebar)
   end
@@ -52,17 +52,38 @@ class EventsControllerTest < ActionController::TestCase
   end
 
   test "should get new when logged in as admin" do
-    log_in_as(@user)
+    log_in_as(@admin)
     get :new
     assert flash.empty?
     assert_response :success
   end
 
   test "should get edit when logged in as admin" do
-    log_in_as(@user)
+    log_in_as(@admin)
     get :edit, id: @rebar
     assert flash.empty?
     assert_response :success
   end
 
+  test "guests should not be able to toggle an event opening" do
+    patch :toggle_open, id: @rebar
+    assert_not flash.empty?
+    assert_redirected_to login_url
+  end
+
+  test "non-admins should not be able to toggle an event opening" do
+    log_in_as(@other_user)
+    patch :toggle_open, id: @rebar
+    assert_not flash.empty?
+    assert_redirected_to root_url
+  end
+
+  test "admins should not be able to toggle an event opening" do
+    log_in_as(@admin)
+    patch :toggle_open, id: @rebar
+    @rebar.reload
+    assert @rebar.is_open
+    assert_not flash.empty?
+    assert_redirected_to events_url
+  end
 end
