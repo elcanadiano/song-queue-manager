@@ -22,7 +22,6 @@ Rails.application.routes.draw do
   post   'login'   => 'sessions#create'
   delete 'logout'  => 'sessions#destroy'
 
-  resources :microposts
   resources :users do
     member do
       get 'bands'
@@ -43,7 +42,7 @@ Rails.application.routes.draw do
       get   'request'     => 'events#song_request'
     end
   end
-  resources :requests,            only:   [:create] do
+  resources :song_requests, as: 'requests', only: [:create] do
     member do
       patch 'toggle_completed'
     end

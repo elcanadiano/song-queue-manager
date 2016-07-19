@@ -1,4 +1,4 @@
-class Request < ActiveRecord::Base
+class SongRequest < ActiveRecord::Base
   belongs_to :event
   belongs_to :band
   default_scope -> { order(created_at: :asc) }

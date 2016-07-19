@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160531211138) do
+ActiveRecord::Schema.define(version: 20160719184157) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 20160531211138) do
   add_index "notifications", ["band_id"], name: "index_notifications_on_band_id", using: :btree
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
 
-  create_table "requests", force: :cascade do |t|
+  create_table "song_requests", force: :cascade do |t|
     t.string   "song",                         null: false
     t.string   "artist",                       null: false
     t.integer  "order",        default: 0,     null: false
@@ -69,9 +69,9 @@ ActiveRecord::Schema.define(version: 20160531211138) do
     t.datetime "updated_at",                   null: false
   end
 
-  add_index "requests", ["band_id"], name: "index_requests_on_band_id", using: :btree
-  add_index "requests", ["event_id"], name: "index_requests_on_event_id", using: :btree
-  add_index "requests", ["order"], name: "index_requests_on_order", using: :btree
+  add_index "song_requests", ["band_id"], name: "index_song_requests_on_band_id", using: :btree
+  add_index "song_requests", ["event_id"], name: "index_song_requests_on_event_id", using: :btree
+  add_index "song_requests", ["order"], name: "index_song_requests_on_order", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
@@ -91,6 +91,6 @@ ActiveRecord::Schema.define(version: 20160531211138) do
   add_foreign_key "members", "bands"
   add_foreign_key "members", "users"
   add_foreign_key "notifications", "bands"
-  add_foreign_key "requests", "bands"
-  add_foreign_key "requests", "events"
+  add_foreign_key "song_requests", "bands"
+  add_foreign_key "song_requests", "events"
 end

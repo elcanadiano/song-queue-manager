@@ -23,7 +23,7 @@ class EventsController < ApplicationController
 
   def show
     @event    = Event.find(params[:id])
-    @requests = Request.where({
+    @requests = SongRequest.where({
       event_id: params[:id]
     })
   end
@@ -46,7 +46,7 @@ class EventsController < ApplicationController
   def song_request
     @event = Event.find(params[:id])
     @bands = current_user.bands
-    @song_request = Request.new
+    @song_request = SongRequest.new
   end
 
   # PATCH function to toggle an event being open/closed for requests.
