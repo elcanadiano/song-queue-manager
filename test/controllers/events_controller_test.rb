@@ -86,4 +86,16 @@ class EventsControllerTest < ActionController::TestCase
     assert_not flash.empty?
     assert_redirected_to events_url
   end
+
+  test "guests should not be able to visit a song request" do
+    get :song_request, id: @rebar
+    assert_not flash.empty?
+    assert_redirected_to login_url
+  end
+
+  test "members should be able to visit a song request" do
+    log_in_as(@other_user)
+    get :song_request, id: @rebar
+    assert_response :success
+  end
 end
