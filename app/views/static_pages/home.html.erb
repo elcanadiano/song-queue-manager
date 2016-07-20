@@ -1,14 +1,20 @@
 <div class="center jumbotron">
-  <h1>Welcome to the Sample App</h1>
+  <% if logged_in? %>
+    <h1>Welcome back, <%= current_user.name %>.</h1>
+    <h2>
+      Have you created a band? Check to see if you were invited to join one or
+      create your own! Check out <%= link_to "your notifications", notifications_url %>
+      or the <%= link_to "bands page", bands_user_url(current_user) %>. Both are
+      under "Account" on the top-right corner.
+    </h2>
+  <% else %>
+    <h1>Welcome to Song Queue Manager.</h1>
+    <h2>
+      This is where you come if you would like to add songs into your Rock Band
+      or Karaoke queue. Create yourself a band or join a friend's band and add
+      songs so you can perform them! Interested? Sign up today, it's free!
+    </h2>
 
-  <h2>
-    This is the home page for the
-    <a href="http://www.railstutorial.org/">Ruby on Rails Tutorial</a>
-    sample application.
-  </h2>
-
-  <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>
+    <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>
+  <% end %>
 </div>
-
-<%= link_to image_tag("rails.png", alt: "Rails logo"),
-            'http://rubyonrails.org/' %>
