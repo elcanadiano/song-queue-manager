@@ -3,7 +3,7 @@ require 'test_helper'
 class EventsEditTest < ActionDispatch::IntegrationTest
 
   def setup
-    @user = users(:alexander)
+    @user  = users(:alexander)
     @event = events(:rebar)
   end
 

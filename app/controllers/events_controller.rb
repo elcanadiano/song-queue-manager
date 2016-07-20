@@ -2,6 +2,7 @@ class EventsController < ApplicationController
   before_action :logged_in_user, only: [:new, :create, :edit, :update, :show, :toggle_open, :song_request]
   before_action :admin_user,     only: [:new, :create, :edit, :update, :toggle_open]
   before_action :correct_params, only: [:create_invite]
+  before_action :open_event,     only: [:song_request]
 
   def index
     @events = Event.paginate(page: params[:page])
@@ -62,5 +63,15 @@ class EventsController < ApplicationController
 
     def event_params
       params.require(:event).permit(:name, :date)
+    end
+
+    # Confirms an event is open.
+    def open_event
+      @event = Event.find(params[:id])
+
+      if !@event.is_open
+        flash[:danger] = "We're sorry, but this event is not open for requests."
+        redirect_to events_url
+      end
     end
 end

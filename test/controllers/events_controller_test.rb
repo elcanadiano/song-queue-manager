@@ -2,9 +2,10 @@ require 'test_helper'
 
 class EventsControllerTest < ActionController::TestCase
   def setup
-    @admin      = users(:alexander)
-    @other_user = users(:archer)
-    @rebar      = events(:rebar)
+    @admin        = users(:alexander)
+    @other_user   = users(:archer)
+    @rebar        = events(:rebar)
+    @closed_event = events(:brs7)
   end
 
   test "should get index" do
@@ -67,6 +68,8 @@ class EventsControllerTest < ActionController::TestCase
 
   test "guests should not be able to toggle an event opening" do
     patch :toggle_open, id: @rebar
+    @rebar.reload
+    assert @rebar.is_open
     assert_not flash.empty?
     assert_redirected_to login_url
   end
@@ -74,15 +77,28 @@ class EventsControllerTest < ActionController::TestCase
   test "non-admins should not be able to toggle an event opening" do
     log_in_as(@other_user)
     patch :toggle_open, id: @rebar
+    @rebar.reload
+    assert @rebar.is_open
     assert_not flash.empty?
     assert_redirected_to root_url
   end
 
-  test "admins should not be able to toggle an event opening" do
+  test "admins should be able to toggle an event closing" do
     log_in_as(@admin)
+    assert @rebar.is_open
     patch :toggle_open, id: @rebar
     @rebar.reload
-    assert @rebar.is_open
+    assert !@rebar.is_open
+    assert_not flash.empty?
+    assert_redirected_to events_url
+  end
+
+  test "admins should be able to toggle an event opening" do
+    log_in_as(@admin)
+    assert !@closed_event.is_open
+    patch :toggle_open, id: @closed_event
+    @closed_event.reload
+    assert @closed_event.is_open
     assert_not flash.empty?
     assert_redirected_to events_url
   end
@@ -97,5 +113,11 @@ class EventsControllerTest < ActionController::TestCase
     log_in_as(@other_user)
     get :song_request, id: @rebar
     assert_response :success
+  end
+
+  test "members should not be able to visit song request page of closed event" do
+    log_in_as(@other_user)
+    get :song_request, id: @closed_event
+    assert_redirected_to events_url
   end
 end

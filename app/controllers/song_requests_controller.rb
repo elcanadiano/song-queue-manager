@@ -2,6 +2,7 @@ class SongRequestsController < ApplicationController
   before_action :logged_in_user, only: [:create, :toggle_completed]
   before_action :admin_user,     only: [:toggle_completed]
   before_action :correct_params, only: [:create]
+  before_action :open_event,     only: [:create]
 
   def create
     @request = SongRequest.new(request_params)
@@ -40,5 +41,15 @@ class SongRequestsController < ApplicationController
 
     def request_params
       params.require(:song_request).permit(:song, :artist, :band_id, :event_id)
+    end
+
+    # Confirms an event is open.
+    def open_event
+      @event = Event.find(params[:song_request][:event_id])
+
+      if !@event.is_open
+        flash[:danger] = "We're sorry, but this event is not open for requests."
+        redirect_to events_url
+      end
     end
 end
