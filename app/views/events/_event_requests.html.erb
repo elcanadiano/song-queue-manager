@@ -1,9 +1,12 @@
 <li>
   Request: <%= song_request.band.name %>
   | <%= song_request.song %> by <%= song_request.artist %>
-  <% if song_request.is_completed %>
+  <% if song_request.is_abandoned %>
+    | Abandoned
+  <% elsif song_request.is_completed %>
     | Completed
   <% elsif admin? %>
     | <%= link_to "Mark as Completed", toggle_completed_request_path(song_request.id), method: :patch %>
+    | <%= link_to "Mark as Abandoned", toggle_abandoned_request_path(song_request.id), method: :patch %>
   <% end %>
 </li>

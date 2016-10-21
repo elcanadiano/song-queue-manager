@@ -4,6 +4,7 @@ one:
   song: Song 1
   artist: Blur
   is_completed: false
+  is_abandoned: false
   event: brs8
   band: nbam
 
@@ -11,6 +12,7 @@ two:
   song: I Must Be In Love
   artist: The Rutles
   is_completed: false
+  is_abandoned: false
   event: brs8
   band: h4h
 
@@ -18,6 +20,7 @@ three:
   song: Song 2
   artist: Blur
   is_completed: false
+  is_abandoned: false
   event: brs8
   band: dankey
 
@@ -25,6 +28,7 @@ four:
   song: Can't Buy Me Love
   artist: The Beatles
   is_completed: false
+  is_abandoned: false
   event: brs8
   band: h4h
 
@@ -32,6 +36,7 @@ five:
   song: MakeDamnSure
   artist: Taking Back Sunday
   is_completed: false
+  is_abandoned: false
   event: brs8
   band: dankey
 
@@ -39,5 +44,22 @@ six:
   song: Song 2
   artist: Blur
   is_completed: false
+  is_abandoned: false
+  event: brs8
+  band: nbam
+
+abandoned:
+  song: Chandelier
+  artist: Sia
+  is_completed: false
+  is_abandoned: true
+  event: brs8
+  band: nbam
+
+completed:
+  song: Closing Time
+  artist: Semisonic
+  is_completed: false
+  is_abandoned: false
   event: brs8
   band: nbam

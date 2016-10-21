@@ -6,6 +6,8 @@ class SongRequestsControllerTest < ActionController::TestCase
     @closed_event = events(:brs7)
     @open_event   = events(:brs8)
     @song_request = song_requests(:one)
+    @completed    = song_requests(:completed)
+    @abandoned    = song_requests(:abandoned)
     @admin        = users(:michael)
     @nonadmin     = users(:malory)
     @member       = users(:ray)
@@ -87,5 +89,44 @@ class SongRequestsControllerTest < ActionController::TestCase
     assert_redirected_to event_url(@open_event.id)
     @song_request.reload
     assert @song_request.is_completed
+  end
+
+  test "admins cannot mark an abandoned song request as complete" do
+    log_in_as @admin
+    patch :toggle_completed, id: @abandoned
+    assert_redirected_to event_url(@open_event.id)
+    @song_request.reload
+    assert !@song_request.is_completed
+  end
+
+  test "guests cannot mark a song request as abandoned" do
+    patch :toggle_abandoned, id: @song_request
+    assert_redirected_to login_url
+    @song_request.reload
+    assert !@song_request.is_abandoned
+  end
+
+  test "nonadmins cannot mark a song request as abandoned" do
+    log_in_as @nonadmin
+    patch :toggle_abandoned, id: @song_request
+    assert_redirected_to root_url
+    @song_request.reload
+    assert !@song_request.is_abandoned
+  end
+
+  test "admins mark a song request as abandoned" do
+    log_in_as @admin
+    patch :toggle_abandoned, id: @song_request
+    assert_redirected_to event_url(@open_event.id)
+    @song_request.reload
+    assert @song_request.is_abandoned
+  end
+
+  test "admins cannot mark an completed song request as abandoned" do
+    log_in_as @admin
+    patch :toggle_abandoned, id: @completed
+    assert_redirected_to event_url(@open_event.id)
+    @song_request.reload
+    assert !@song_request.is_abandoned
   end
 end

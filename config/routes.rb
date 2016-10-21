@@ -45,6 +45,7 @@ Rails.application.routes.draw do
   resources :song_requests, as: 'requests', only: [:create] do
     member do
       patch 'toggle_completed'
+      patch 'toggle_abandoned'
     end
   end
 

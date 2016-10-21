@@ -1,11 +1,12 @@
 class SongRequestsController < ApplicationController
-  before_action :logged_in_user, only: [:create, :toggle_completed]
-  before_action :admin_user,     only: [:toggle_completed]
+  before_action :logged_in_user, only: [:create, :toggle_completed, :toggle_abandoned]
+  before_action :admin_user,     only: [:toggle_completed, :toggle_abandoned]
   before_action :correct_params, only: [:create]
   before_action :open_event,     only: [:create]
 
   def create
     @request = SongRequest.new(request_params)
+
     if @request.save
       flash[:success] = "Song added successfully!"
       redirect_to event_url(params[:song_request][:event_id])
@@ -18,9 +19,32 @@ class SongRequestsController < ApplicationController
   def toggle_completed
     @request = SongRequest.find(params[:id])
 
-    @request.update(is_completed: true)
+    if @request.is_abandoned
+      flash[:danger] = "The song is already abandoned."
+    elsif @request.is_completed
+      flash[:danger] = "The song is already completed."
+    else
+      @request.update(is_completed: true)
 
-    flash[:success] = "Song Completed!"
+      flash[:success] = "Song Completed!"
+    end
+
+    redirect_to event_url(@request.event_id)
+  end
+
+  # Toggles a song request being abandoned.
+  def toggle_abandoned
+    @request = SongRequest.find(params[:id])
+
+    if @request.is_abandoned
+      flash[:danger] = "The song is already abandoned."
+    elsif @request.is_completed
+      flash[:danger] = "The song is already completed."
+    else
+      @request.update(is_abandoned: true)
+
+      flash[:success] = "Song marked as abandoned!"
+    end
 
     redirect_to event_url(@request.event_id)
   end
