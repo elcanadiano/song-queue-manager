@@ -7,6 +7,16 @@
   </div>
 <% end %>
 
-<ul class="users">
-  <%= render partial: "event_requests", collection: @requests, as: "song_request" %>
-</ul>
+<div class="row">
+  <div class="col-md-8">
+    <ul class="users">
+      <%= render partial: "event_requests", collection: @requests, as: "song_request" %>
+    </ul>
+  </div>
+
+  <div class="col-md-4">
+    <ul class="users">
+      <%= render partial: "request_counts", collection: @request_counts, as: "request_count" %>
+    </ul>
+  </div>
+</div>

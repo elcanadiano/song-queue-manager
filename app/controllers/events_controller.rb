@@ -23,10 +23,15 @@ class EventsController < ApplicationController
   end
 
   def show
-    @event    = Event.find(params[:id])
-    @requests = SongRequest.where({
+    @event          = Event.find(params[:id])
+    @requests       = SongRequest.where({
       event_id: params[:id]
     })
+    @request_counts = SongRequest.select("bands.id, bands.name, count(is_completed) AS request_count")
+                                 .joins("INNER JOIN bands ON bands.id = song_requests.band_id")
+                                 .where("is_completed = true AND is_abandoned = false AND event_id = #{params[:id]}")
+                                 .group("bands.id")
+                                 .reorder("bands.id")
   end
 
   def edit

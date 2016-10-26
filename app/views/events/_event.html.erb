@@ -1,6 +1,6 @@
 <li>
     <%= link_to event.name,event_path(event.id) %>
-  | <%= event.date.strftime("%A %B %l, %Y") %>
+  | <%= event.date.strftime("%A %B %e, %Y") %>
   <% if admin? %>
     | <%= link_to "Edit", edit_event_path(event.id) %>
     <% if event.is_open? %>
