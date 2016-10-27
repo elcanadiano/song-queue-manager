@@ -1,12 +1,14 @@
-<li>
-    <%= link_to event.name,event_path(event.id) %>
-  | <%= event.date.strftime("%A %B %e, %Y") %>
+<tr>
+  <td><%= link_to event.name, event_path(event.id) %></td>
+  <td><%= event.date.strftime("%A %B %e, %Y") %></td>
   <% if admin? %>
-    | <%= link_to "Edit", edit_event_path(event.id) %>
-    <% if event.is_open? %>
-      | <%= link_to "Close Event", toggle_open_event_path(event.id), method: :patch %>
-    <% else %>
-      | <%= link_to "Open Event", toggle_open_event_path(event.id), method: :patch %>
-    <% end %>
+    <td><%= link_to "Edit", edit_event_path(event.id), class: "btn btn-primary btn-block" %></td>
+    <td>
+      <% if event.is_open? %>
+        <%= link_to "Close", toggle_open_event_path(event.id), method: :patch, class: "btn btn-danger btn-block" %>
+      <% else %>
+        <%= link_to "Open", toggle_open_event_path(event.id), method: :patch, class: "btn btn-success btn-block" %>
+      <% end %>
+    </td>
   <% end %>
-</li>
+</tr>

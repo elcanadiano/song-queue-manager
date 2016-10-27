@@ -7,10 +7,24 @@
   </div>
 <% end %>
 
-<%= will_paginate %>
-
-<ul class="users">
-  <%= render @events %>
-</ul>
-
-<%= will_paginate %>
+<div class="row">
+  <div class="col-md-12">
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Date</th>
+            <% if admin? %>
+              <th>Edit</th>
+              <th>Open/Close</th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <%= render partial: "event", collection: @events, as: "event" %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
