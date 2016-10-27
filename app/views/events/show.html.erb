@@ -8,39 +8,45 @@
 <% end %>
 
 <div class="row">
-  <div class="col-md-8">
-    <div class="table-responsive">
-      <table class="table table-hover table-bordered">
-        <thead>
-          <tr>
-            <th>Band Name</th>
-            <th>Song</th>
-            <th>Artist</th>
-            <% if admin? %>
-              <th>Admin</th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
-          <%= render partial: "event_requests", collection: @requests, as: "song_request" %>
-        </tbody>
-      </table>
+  <% if @requests.blank? %>
+    <div class="col-md-12">
+      <p>There are currently no requests. Why don't you make the first one?</p>
     </div>
-  </div>
+  <% else %>
+    <div class="col-md-8">
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th>Band Name</th>
+              <th>Song</th>
+              <th>Artist</th>
+              <% if admin? %>
+                <th>Admin</th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <%= render partial: "event_requests", collection: @requests, as: "song_request" %>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-  <div class="col-md-4">
-    <div class="table-responsive">
-      <table class="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th>Band Name</th>
-            <th>Song Count</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%= render partial: "request_counts", collection: @request_counts, as: "request_count" %>
-        </tbody>
-      </table>
+    <div class="col-md-4">
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th>Band Name</th>
+              <th>Song Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= render partial: "request_counts", collection: @request_counts, as: "request_count" %>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  <% end %>
 </div>
