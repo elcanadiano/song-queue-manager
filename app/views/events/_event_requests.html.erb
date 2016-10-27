@@ -1,12 +1,21 @@
-<li>
-  Request: <%= song_request.band.name %>
-  | <%= song_request.song %> by <%= song_request.artist %>
+<% if admin? || !song_request.is_abandoned %>
   <% if song_request.is_abandoned %>
-    | Abandoned
+    <tr class="danger">
   <% elsif song_request.is_completed %>
-    | Completed
-  <% elsif admin? %>
-    | <%= link_to "Mark as Completed", toggle_completed_request_path(song_request.id), method: :patch %>
-    | <%= link_to "Mark as Abandoned", toggle_abandoned_request_path(song_request.id), method: :patch %>
+    <tr class="success">
+  <% else %>
+    <tr>
   <% end %>
-</li>
+    <td><%= song_request.band.name %></td>
+    <td><%= song_request.song %></td>
+    <td><%= song_request.artist %></td>
+    <% if admin? %>
+      <td>
+        <% if !song_request.is_abandoned && !song_request.is_completed %>
+          <%= link_to "Complete", toggle_completed_request_path(song_request.id), method: :patch, class: "btn btn-success btn-block" %>
+          <%= link_to "Abandon", toggle_abandoned_request_path(song_request.id), method: :patch, class: "btn btn-danger btn-block" %>
+        <% end %>
+      </td>
+    <% end %>
+  </tr>
+<% end %>

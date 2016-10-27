@@ -9,9 +9,23 @@
 
 <div class="row">
   <div class="col-md-8">
-    <ul class="users">
-      <%= render partial: "event_requests", collection: @requests, as: "song_request" %>
-    </ul>
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th>Band Name</th>
+            <th>Song</th>
+            <th>Artist</th>
+            <% if admin? %>
+              <th>Admin</th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <%= render partial: "event_requests", collection: @requests, as: "song_request" %>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="col-md-4">
