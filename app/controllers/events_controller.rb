@@ -5,7 +5,16 @@ class EventsController < ApplicationController
   before_action :open_event,     only: [:song_request]
 
   def index
-    @events = Event.paginate(page: params[:page])
+    @open     = Event.where("is_open = true")
+
+    # Admins can see recently-created events on top whereas regular users won't
+    # see it as recently-created.
+    if admin?
+      @recent = Event.where("is_open = false AND created_at >= ?", Time.now - 1.hours)
+      @closed = Event.where("is_open = false AND created_at < ?", Time.now - 1.hours)
+    else
+      @closed = Event.where("is_open = false")
+    end
   end
 
   def new

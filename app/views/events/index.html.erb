@@ -7,24 +7,22 @@
   </div>
 <% end %>
 
-<div class="row">
-  <div class="col-md-12">
-    <div class="table-responsive">
-      <table class="table table-hover table-bordered">
-        <thead>
-          <tr>
-            <th>Event</th>
-            <th>Date</th>
-            <% if admin? %>
-              <th>Edit</th>
-              <th>Open/Close</th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
-          <%= render partial: "event", collection: @events, as: "event" %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+<% if admin? && !@recent.blank? %>
+  <h2>Recently-created Events</h2>
+
+  <%= render partial: "event_table", locals: {events: @recent} %>
+<% end %>
+
+<h2>Open Events</h2>
+
+<% if !@open.blank? %>
+  <%= render partial: "event_table", locals: {events: @open} %>
+<% else %>
+  <p>There are currently no open events.</p>
+<% end %>
+
+<% if !@closed.blank? %>
+  <h2>Closed Events</h2>
+
+  <%= render partial: "event_table", locals: {events: @closed} %>
+<% end %>
