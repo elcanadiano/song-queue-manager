@@ -13,7 +13,7 @@ class NotificationsController < ApplicationController
 
     @notification = Notification.find_by(id: params[:id])
 
-    @notification.update(has_expired: true)
+    @notification.update!(has_expired: true)
 
     @member = Member.create!({
       user_id: @user.id,
@@ -27,7 +27,7 @@ class NotificationsController < ApplicationController
 
   def decline
     @notification = Notification.find_by(id: params[:id])
-    @notification.update(has_expired: true)
+    @notification.update!(has_expired: true)
 
     flash[:success] = "You have declined to join #{@notification.band.name}!"
 

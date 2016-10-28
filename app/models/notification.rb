@@ -1,6 +1,6 @@
 class Notification < ActiveRecord::Base
   # If there is a notification for the user and it was not accepted/declined
-  validates_each :user_id, :band_id  do |record, attr, value|
+  validates_each :user_id, :band_id, on: :create  do |record, attr, value|
     if Notification.exists?(user_id: record.user_id, band_id: record.band_id, has_expired: false)
       record.errors.add attr, 'This user already has an unexpired band invite for this band.'
     end
