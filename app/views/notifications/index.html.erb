@@ -2,6 +2,10 @@
 
 <div class="row">
   <ul class="users">
-    <%= render @notifications %>
+    <% if @notifications.blank? %>
+      <li>You currently have no notifications.</li>
+    <% else %>
+      <%= render @notifications %>
+    <% end %>
   </ul>
 </div>
