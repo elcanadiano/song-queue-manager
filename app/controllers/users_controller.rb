@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
-  before_action :correct_user,   only: [:edit, :update, :bands]
-  before_action :admin_user,     only: :destroy
+  before_action :logged_in_user,  only: [:index, :edit, :update, :destroy]
+  before_action :logged_out_user, only: [:new]
+  before_action :correct_user,    only: [:edit, :update, :bands]
+  before_action :admin_user,      only: :destroy
 
   def index
     @open_events = Event.where("is_open = true")

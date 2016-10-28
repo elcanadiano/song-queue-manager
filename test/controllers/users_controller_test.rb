@@ -11,6 +11,13 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test "logged in users should not get new" do
+    log_in_as(@user)
+    get :new
+    assert_equal "You are already logged in.", flash[:danger]
+    assert_redirected_to root_url
+  end
+
   test "should redirect edit when not logged in" do
     get :edit, id: @user
     assert_not flash.empty?

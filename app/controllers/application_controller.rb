@@ -5,6 +5,14 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
 
   private
+    # Confirms a logged-out user.
+    def logged_out_user
+      if logged_in?
+        flash[:danger] = "You are already logged in."
+        redirect_to root_url
+      end
+    end
+
     # Confirms a logged-in user.
     def logged_in_user
       unless logged_in?
