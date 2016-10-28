@@ -4,14 +4,23 @@
     <nav>
       <ul class="nav navbar-nav navbar-right">
         <li><%= link_to "Home",     root_path %></li>
-        <% if admin? %>
+        <% if admin? || !@open_events.blank? %>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               Events <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
               <li><%= link_to "View All",  events_path %></li>
-              <li><%= link_to "New Event", new_event_path %></li>
+              <% if admin? %>
+                <li><%= link_to "New Event", new_event_path %></li>
+              <% end %>
+              <% if !@open_events.blank? %>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Current Events</li>
+                <% @open_events.each do |event| %>
+                  <li><%= link_to event.name, event_path(event) %></li>
+                <% end %>
+              <% end %>
             </ul>
           </li>
         <% else %>

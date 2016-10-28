@@ -1,6 +1,6 @@
 class SongRequestsController < ApplicationController
   before_action :logged_in_user, only: [:create, :toggle_completed, :toggle_abandoned]
-  before_action :admin_user,     only: [:toggle_completed, :toggle_abandoned]
+  before_action :admin_user,     only: [         :toggle_completed, :toggle_abandoned]
   before_action :correct_params, only: [:create]
   before_action :open_event,     only: [:create]
 

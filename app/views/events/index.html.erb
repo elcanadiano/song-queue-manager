@@ -15,8 +15,8 @@
 
 <h2>Open Events</h2>
 
-<% if !@open.blank? %>
-  <%= render partial: "event_table", locals: {events: @open} %>
+<% if !@open_events.blank? %>
+  <%= render partial: "event_table", locals: {events: @open_events} %>
 <% else %>
   <p>There are currently no open events.</p>
 <% end %>

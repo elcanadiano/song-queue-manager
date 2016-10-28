@@ -5,20 +5,21 @@ class EventsController < ApplicationController
   before_action :open_event,     only: [:song_request]
 
   def index
-    @open     = Event.where("is_open = true")
+    @open_events = Event.where("is_open = true")
 
     # Admins can see recently-created events on top whereas regular users won't
     # see it as recently-created.
     if admin?
-      @recent = Event.where("is_open = false AND created_at >= ?", Time.now - 1.hours)
-      @closed = Event.where("is_open = false AND created_at < ?", Time.now - 1.hours)
+      @recent    = Event.where("is_open = false AND created_at >= ?", Time.now - 1.hours)
+      @closed    = Event.where("is_open = false AND created_at < ?", Time.now - 1.hours)
     else
-      @closed = Event.where("is_open = false")
+      @closed    = Event.where("is_open = false")
     end
   end
 
   def new
-    @event = Event.new
+    @open_events = Event.where("is_open = true")
+    @event       = Event.new
   end
 
   def create
@@ -32,6 +33,7 @@ class EventsController < ApplicationController
   end
 
   def show
+    @open_events    = Event.where("is_open = true")
     @event          = Event.find(params[:id])
     @requests       = SongRequest.where({
       event_id: params[:id]
@@ -44,7 +46,8 @@ class EventsController < ApplicationController
   end
 
   def edit
-    @event = Event.find(params[:id])
+    @open_events = Event.where("is_open = true")
+    @event       = Event.find(params[:id])
   end
 
   def update
@@ -59,8 +62,9 @@ class EventsController < ApplicationController
 
   # Song request page.
   def song_request
-    @event = Event.find(params[:id])
-    @bands = current_user.bands
+    @open_events  = Event.where("is_open = true")
+    @event        = Event.find(params[:id])
+    @bands        = current_user.bands
     @song_request = SongRequest.new
   end
 

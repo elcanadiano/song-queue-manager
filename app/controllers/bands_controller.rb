@@ -7,7 +7,8 @@ class BandsController < ApplicationController
   before_action :correct_params,  only: [:create_invite]
 
   def new
-    @band = Band.new
+    @open_events = Event.where("is_open = true")
+    @band        = Band.new
   end
 
   def create
@@ -27,6 +28,7 @@ class BandsController < ApplicationController
   end
 
   def edit
+    @open_events = Event.where("is_open = true")
   end
 
   def update
@@ -41,8 +43,9 @@ class BandsController < ApplicationController
   end
 
   def show
-    @band = Band.find(params[:id])
-    @members = Member.where({
+    @open_events    = Event.where("is_open = true")
+    @band           = Band.find(params[:id])
+    @members        = Member.where({
       band_id: @band.id
     })
     @current_member = Member.find_by({
@@ -52,7 +55,8 @@ class BandsController < ApplicationController
   end
 
   def invite
-    @band = Band.find(params[:id])
+    @open_events  = Event.where("is_open = true")
+    @band         = Band.find(params[:id])
     @notification = Notification.new
   end
 

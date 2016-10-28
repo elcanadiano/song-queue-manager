@@ -4,7 +4,8 @@ class NotificationsController < ApplicationController
   before_action :check_expired_notification, only: [:accept, :decline]
 
   def index
-    @user = current_user
+    @open_events   = Event.where("is_open = true")
+    @user          = current_user
     @notifications = Notification.where(user_id: current_user.id).order(:has_expired)
   end
 
