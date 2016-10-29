@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   def new
+    @open_events = Event.where("is_open = true")
   end
 
   def create

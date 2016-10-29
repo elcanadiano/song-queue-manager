@@ -1,5 +1,82 @@
 <% provide(:title, "Help") %>
 <h1>Help</h1>
-<p>
-  todo.
-</p>
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <p>
+      The following page will guide you on how to use the Song Queue Manager. It
+      will define terms both from a user's perspective and a developer's
+      perspective as well. Such key terms will be in bold for this document.
+    </p>
+
+    <h2>User</h2>
+
+    <p>
+      You are a <b>user</b>. Well, that is if you signed up. You have basic
+      information about yourself, such as your email attached to it. The Song
+      Queue Manager is dependent on these users, as this is a very
+      user-dependent application. The Song Queue Manager is also ran by special
+      users known as <b>admins</b>. A User is an Admin if it has a special
+      attribute attached to it.
+    </p>
+
+    <h2>Forming Bands</h2>
+
+    <p>
+      Another key component of this app is the concept of a <b>band</b>. As a
+      user, you will form bands - effectively groups. The relationship between
+      a user and a band is a <b>membership</b> or a <b>member</b> in development
+      terms. There also exists a notion of an <b>admin</b> for a band, which is
+      separate from a "User" admin. A Band admin gives a user permission to
+      manage a certain band. Band administratorship is managed as part of a
+      membership.
+    </p>
+
+    <p>
+      As a user, you have several options. Users can create a band, which will
+      first create the band. It then adds you as a member with band admin
+      privileges. As a band admin, you may invite other users to join you.
+      If so, an invite <b>notification</b> will be sent to the other user.
+      The current notification system only has invites but other types may
+      appear in the future.
+     </p>
+
+    <p>
+      Users who receive a notification to join the band can choose to either
+      accept or decline the invite. A member record is created for the user and
+      the band if the user chooses to accept. If a member declines, then the
+      notification will be <b>expired</b>. Such a member will not be an admin
+      for the band. Users can be part of, and can administrate multiple bands.
+    </p>
+
+    <p>
+     At any time, a band admin can remove non-admin members from the band.
+     They can also appoint members to be admins, and step down as an admin
+     should there exist another one.
+    </p>
+
+    <h2>Joining Events</h2>
+
+    <p>
+      The last key component of Song Queue Manager is the notion of an
+      <b>event</b>. Events are created by User admins, and they are for members
+      of various bands to put in <b>song requests</b> for events. In addition,
+      User admins can open and close events for requests, irrespective of the
+      event's date.
+    </p>
+
+    <p>
+      As mentioned earlier, band members can put in song requests during open
+      events. If a user is part of various bands, they can choose which of their
+      bands can put in song requests. In addition, any member of a band can put
+      in a song request.
+    </p>
+
+    <p>
+      A user admin can then manage the song requests queue. When a band goes up
+      and plays their song, the user admin can mark their request as
+      "Completed." In addition, in the event a band leaves the event, user
+      admins can also mark a band's request as "Abandoned."
+    </p>
+  </div>
+</div>
