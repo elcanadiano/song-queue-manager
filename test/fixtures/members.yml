@@ -29,3 +29,8 @@ ray:
   is_admin: false
   user: ray
   band: h4h
+
+anne:
+  is_admin: true
+  user: anne
+  band: h4h

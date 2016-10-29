@@ -2,11 +2,13 @@ require 'test_helper'
 
 class BandsControllerTest < ActionController::TestCase
   def setup
-    @non_member = users(:lana)
-    @member     = users(:erin)
-    @admin      = users(:alexander)
-    @invited    = users(:chris)
-    @band       = bands(:h4h)
+    @non_member   = users(:lana)
+    @member       = users(:erin)
+    @other_member = users(:andrew)
+    @admin        = users(:alexander)
+    @other_admin  = users(:anne)
+    @invited      = users(:chris)
+    @band         = bands(:h4h)
   end
 
   test "guests cannot see band info" do
@@ -118,5 +120,58 @@ class BandsControllerTest < ActionController::TestCase
     post :create_invite, id: @band, notification: {band_id: @band.id, user_id: @member.id, creator_id: @admin.id}
     assert_not flash.empty?
     assert_redirected_to invite_band_url
+  end
+
+  test "remove member from band" do
+    log_in_as(@admin)
+    assert_difference 'Member.count', -1, 'A member should be removed.' do
+      delete :remove_member, id: @band, user_id: @member.id
+    end
+    assert_equal "The user is no longer part of the band!", flash[:success]
+    assert_redirected_to band_url(@band)
+  end
+
+  test "guests cannot remove member from band" do
+    assert_no_difference 'Member.count', 'A guest cannot remove a member.' do
+      delete :remove_member, id: @band, user_id: @member.id
+    end
+    assert_equal "Please log in.", flash[:danger]
+    assert_redirected_to login_url
+  end
+
+  test "non-admin members cannot remove member from band" do
+    log_in_as(@other_member)
+    assert_no_difference 'Member.count', 'A non-admin cannot remove a member.' do
+      delete :remove_member, id: @band, user_id: @member.id
+    end
+    assert_equal "You are not authorized to manage this band.", flash[:danger]
+    assert_redirected_to root_url
+  end
+
+  test "cannot remove non-member from band" do
+    log_in_as(@admin)
+    assert_no_difference 'Member.count', 'Cannot remove a non-member.' do
+      delete :remove_member, id: @band, user_id: @non_member.id
+    end
+    assert_equal "This user not a member of the band.", flash[:danger]
+    assert_redirected_to band_url(@band)
+  end
+
+  test "cannot remove yourself from a band" do
+    log_in_as(@admin)
+    assert_no_difference 'Member.count', 'Cannot remove yourself.' do
+      delete :remove_member, id: @band, user_id: @admin.id
+    end
+    assert_equal "You cannot remove yourself from the band.", flash[:danger]
+    assert_redirected_to band_url(@band)
+  end
+
+  test "cannot remove an admin from a band" do
+    log_in_as(@admin)
+    assert_no_difference 'Member.count', 'Cannot remove yourself.' do
+      delete :remove_member, id: @band, user_id: @other_admin.id
+    end
+    assert_equal "You cannot remove an admin from the band. They must step down first.", flash[:danger]
+    assert_redirected_to band_url(@band)
   end
 end

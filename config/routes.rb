@@ -50,8 +50,9 @@ Rails.application.routes.draw do
 
   resources :bands, except: [:index, :destroy] do
     member do
-      get  'invite'
-      post 'create_invite'
+      get    'invite'
+      post   'create_invite'
+      delete 'remove/:user_id' => 'bands#remove_member', as: "remove_member"
     end
   end
 end

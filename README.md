@@ -28,7 +28,17 @@ run the following command.
     bundle exec rake test
 
 Song Queue Manager contains Controller, Helper, Integration, and Mailer tests, and a set of fixtures
-for each model.
+for each model. You can individually run these test categories using the following functions.
+
+    bundle exec rake test:controllers
+    bundle exec rake test:units
+    bundle exec rake test:integration
+    bundle exec rake test:mailers
+    bundle exec rake test:helpers
+
+You can also run an individual test cases as follows.
+
+    bundle exec rake test TEST=path_to_test_file
 
 ## LICENSE
 

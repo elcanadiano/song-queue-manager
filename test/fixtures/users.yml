@@ -93,3 +93,17 @@ chris:
   password_digest: <%= User.digest('password') %>
   activated: true
   activated_at: <%= Time.zone.now %>
+
+norman:
+  name: Norman Neilson
+  email: norman.neilson@gmail.com
+  password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
+
+anne:
+  name: Anne Anderson
+  email: aanderson1989@gmail.com
+  password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>

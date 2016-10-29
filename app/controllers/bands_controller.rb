@@ -1,10 +1,13 @@
 class BandsController < ApplicationController
-  before_action :logged_in_user,  only: [:new, :create, :edit, :update, :show, :invite, :create_invite]
-  before_action :band_admin_user, only: [:edit, :update, :invite, :create_invite]
-  before_action :existing_user,   only: [:create_invite]
-  before_action :existing_member, only: [:create_invite]
-  before_action :existing_invite, only: [:create_invite]
-  before_action :correct_params,  only: [:create_invite]
+  before_action :logged_in_user,      only: [:new, :create, :edit, :update, :show, :invite, :create_invite, :remove_member]
+  before_action :band_admin_user,     only: [               :edit, :update,        :invite, :create_invite, :remove_member]
+  before_action :existing_user,       only: [                                               :create_invite]
+  before_action :existing_member,     only: [                                                               :remove_member]
+  before_action :nonexisting_member,  only: [                                               :create_invite]
+  before_action :cannot_remove_self,  only: [                                                               :remove_member]
+  before_action :cannot_remove_admin, only: [                                                               :remove_member]
+  before_action :nonexisting_invite,  only: [                                               :create_invite]
+  before_action :correct_params,      only: [                                               :create_invite]
 
   def new
     @open_events = Event.where("is_open = true")
@@ -54,12 +57,14 @@ class BandsController < ApplicationController
     })
   end
 
+  # Invite User Page
   def invite
     @open_events  = Event.where("is_open = true")
     @band         = Band.find(params[:id])
     @notification = Notification.new
   end
 
+  # Creates an invite notification to the user.
   def create_invite
     @notification = Notification.new(notification_params)
     @notification.notification_type = 'invite'
@@ -70,6 +75,15 @@ class BandsController < ApplicationController
     else
       render 'invite'
     end
+  end
+
+  # Removes member from band.
+  def remove_member
+    Member.find_by(band_id: params[:id], user_id: params[:user_id]).destroy
+
+    flash[:success] = "The user is no longer part of the band!"
+
+    redirect_to band_url(params[:id])
   end
 
   private
@@ -91,6 +105,7 @@ class BandsController < ApplicationController
       end
     end
 
+    # Checks to see if the user exists. Barks if the user doesn't exist.
     def existing_user
       user = User.find_by(id: params[:notification][:user_id])
 
@@ -100,7 +115,45 @@ class BandsController < ApplicationController
       end
     end
 
+    # Checks to see if the member does not exist. Barks if the member is NOT
+    # part of the band (ie. pass if the member exists)
     def existing_member
+      member = Member.find_by({
+        band_id: @band.id,
+        user_id: params[:user_id]
+      })
+
+      if member.nil?
+        flash[:danger] = "This user not a member of the band."
+        redirect_to band_url(@band)
+      end
+    end
+
+    # Barks if you try to remove a fellow admin from the band.
+    def cannot_remove_admin
+      member = Member.find_by({
+        band_id: @band.id,
+        user_id: params[:user_id]
+      })
+
+      if member.is_admin?
+        flash[:danger] = "You cannot remove an admin from the band. They must" +
+        " step down first."
+        redirect_to band_url(@band)
+      end
+    end
+
+    # Barks if you try to remove yourself from the band.
+    def cannot_remove_self
+      if params[:user_id].to_i == current_user.id
+        flash[:danger] = "You cannot remove yourself from the band."
+        redirect_to band_url(@band)
+      end
+    end
+
+    # Checks to see if the member exists. Barks if the member IS part of the
+    # band (ie. pass if the member does not exist)
+    def nonexisting_member
       member = Member.find_by({
         band_id: @band.id,
         user_id: params[:notification][:user_id]
@@ -112,7 +165,7 @@ class BandsController < ApplicationController
       end
     end
 
-    def existing_invite
+    def nonexisting_invite
       notifications = Notification.find_by({
         band_id:           @band.id,
         user_id:           params[:notification][:user_id],
