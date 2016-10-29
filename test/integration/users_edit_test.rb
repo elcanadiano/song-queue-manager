@@ -27,7 +27,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
                                     email: email,
                                     password:              "",
                                     password_confirmation: "" }
-    assert_not flash.empty?
+    assert_equal "Profile updated", flash[:success]
     assert_redirected_to @user
     @user.reload
     assert_equal name,  @user.name

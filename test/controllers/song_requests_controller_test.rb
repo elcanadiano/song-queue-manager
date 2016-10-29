@@ -23,6 +23,8 @@ class SongRequestsControllerTest < ActionController::TestCase
         event_id: @open_event.id
       }
     end
+
+    assert_equal "Please log in.", flash[:danger]
     assert_redirected_to login_url
   end
 
@@ -37,6 +39,8 @@ class SongRequestsControllerTest < ActionController::TestCase
         event_id: @open_event.id
       }
     end
+
+    assert_equal "This user is not a member of the band.", flash[:danger]
     assert_redirected_to events_url
   end
 
@@ -51,6 +55,8 @@ class SongRequestsControllerTest < ActionController::TestCase
         event_id: @open_event.id
       }
     end
+
+    assert_equal "Song added successfully!", flash[:success]
     assert_redirected_to event_url(@open_event.id)
   end
 
@@ -65,6 +71,8 @@ class SongRequestsControllerTest < ActionController::TestCase
         event_id: @closed_event.id
       }
     end
+
+    assert_equal "We're sorry, but this event is not open for requests.", flash[:danger]
     assert_redirected_to events_url
   end
 
@@ -72,6 +80,7 @@ class SongRequestsControllerTest < ActionController::TestCase
     patch :toggle_completed, id: @song_request
     assert_redirected_to login_url
     @song_request.reload
+    assert_equal "Please log in.", flash[:danger]
     assert !@song_request.is_completed
   end
 
@@ -80,6 +89,7 @@ class SongRequestsControllerTest < ActionController::TestCase
     patch :toggle_completed, id: @song_request
     assert_redirected_to root_url
     @song_request.reload
+    assert_equal "This function requires administrator privileges.", flash[:danger]
     assert !@song_request.is_completed
   end
 
@@ -88,6 +98,7 @@ class SongRequestsControllerTest < ActionController::TestCase
     patch :toggle_completed, id: @song_request
     assert_redirected_to event_url(@open_event.id)
     @song_request.reload
+    assert_equal "Song Completed!", flash[:success]
     assert @song_request.is_completed
   end
 
@@ -96,6 +107,7 @@ class SongRequestsControllerTest < ActionController::TestCase
     patch :toggle_completed, id: @abandoned
     assert_redirected_to event_url(@open_event.id)
     @song_request.reload
+    assert_equal "The song is already abandoned.", flash[:danger]
     assert !@song_request.is_completed
   end
 
@@ -103,6 +115,7 @@ class SongRequestsControllerTest < ActionController::TestCase
     patch :toggle_abandoned, id: @song_request
     assert_redirected_to login_url
     @song_request.reload
+    assert_equal "Please log in.", flash[:danger]
     assert !@song_request.is_abandoned
   end
 
@@ -111,6 +124,7 @@ class SongRequestsControllerTest < ActionController::TestCase
     patch :toggle_abandoned, id: @song_request
     assert_redirected_to root_url
     @song_request.reload
+    assert_equal "This function requires administrator privileges.", flash[:danger]
     assert !@song_request.is_abandoned
   end
 
@@ -119,6 +133,7 @@ class SongRequestsControllerTest < ActionController::TestCase
     patch :toggle_abandoned, id: @song_request
     assert_redirected_to event_url(@open_event.id)
     @song_request.reload
+    assert_equal "Song Abandoned!", flash[:success]
     assert @song_request.is_abandoned
   end
 
@@ -127,6 +142,7 @@ class SongRequestsControllerTest < ActionController::TestCase
     patch :toggle_abandoned, id: @completed
     assert_redirected_to event_url(@open_event.id)
     @song_request.reload
+    assert_equal "The song is already completed.", flash[:danger]
     assert !@song_request.is_abandoned
   end
 end

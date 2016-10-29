@@ -59,7 +59,7 @@ abandoned:
 completed:
   song: Closing Time
   artist: Semisonic
-  is_completed: false
+  is_completed: true
   is_abandoned: false
   event: brs8
   band: nbam

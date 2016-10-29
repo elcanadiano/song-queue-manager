@@ -110,7 +110,7 @@ class BandsController < ApplicationController
       user = User.find_by(id: params[:notification][:user_id])
 
       if user.nil?
-        flash[:danger] = "User not found or does not exist."
+        flash[:danger] = "User not found."
         redirect_to invite_band_url
       end
     end

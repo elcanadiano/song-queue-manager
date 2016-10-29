@@ -43,7 +43,7 @@ class SongRequestsController < ApplicationController
     else
       @request.update(is_abandoned: true)
 
-      flash[:success] = "Song marked as abandoned!"
+      flash[:success] = "Song Abandoned!"
     end
 
     redirect_to event_url(@request.event_id)

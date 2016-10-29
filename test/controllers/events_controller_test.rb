@@ -15,40 +15,40 @@ class EventsControllerTest < ActionController::TestCase
 
   test "should redirect new when not logged in" do
     get :new
-    assert_not flash.empty?
+    assert_equal "Please log in.", flash[:danger]
     assert_redirected_to login_url
   end
 
   test "should redirect edit when not logged in" do
     get :edit, id: @rebar
-    assert_not flash.empty?
+    assert_equal "Please log in.", flash[:danger]
     assert_redirected_to login_url
   end
 
   test "should redirect update when not logged in" do
     patch :update, id: @rebar, event: { name: "Name", date: Date.new(2015, 06, 02) }
-    assert_not flash.empty?
+    assert_equal "Please log in.", flash[:danger]
     assert_redirected_to login_url
   end
 
   test "should redirect new when logged in as non-admin" do
     log_in_as(@other_user)
     get :new
-    assert_not flash.empty?
+    assert_equal "This function requires administrator privileges.", flash[:danger]
     assert_redirected_to root_url
   end
 
   test "should redirect edit when logged in as non-admin" do
     log_in_as(@other_user)
     get :edit, id: @rebar
-    assert_not flash.empty?
+    assert_equal "This function requires administrator privileges.", flash[:danger]
     assert_redirected_to root_url
   end
 
   test "should redirect update when logged in as non-admin" do
     log_in_as(@other_user)
     patch :update, id: @rebar, event: { name: "Name", date: Date.new(2015, 06, 02) }
-    assert_not flash.empty?
+    assert_equal "This function requires administrator privileges.", flash[:danger]
     assert_redirected_to root_url
   end
 
@@ -70,7 +70,7 @@ class EventsControllerTest < ActionController::TestCase
     patch :toggle_open, id: @rebar
     @rebar.reload
     assert @rebar.is_open
-    assert_not flash.empty?
+    assert_equal "Please log in.", flash[:danger]
     assert_redirected_to login_url
   end
 
@@ -79,7 +79,7 @@ class EventsControllerTest < ActionController::TestCase
     patch :toggle_open, id: @rebar
     @rebar.reload
     assert @rebar.is_open
-    assert_not flash.empty?
+    assert_equal "This function requires administrator privileges.", flash[:danger]
     assert_redirected_to root_url
   end
 
@@ -89,7 +89,7 @@ class EventsControllerTest < ActionController::TestCase
     patch :toggle_open, id: @rebar
     @rebar.reload
     assert !@rebar.is_open
-    assert_not flash.empty?
+    assert_equal "#{@rebar.name} is now closed for requests!", flash[:success]
     assert_redirected_to events_url
   end
 
@@ -99,13 +99,13 @@ class EventsControllerTest < ActionController::TestCase
     patch :toggle_open, id: @closed_event
     @closed_event.reload
     assert @closed_event.is_open
-    assert_not flash.empty?
+    assert_equal "#{@closed_event.name} is now open for requests!", flash[:success]
     assert_redirected_to events_url
   end
 
   test "guests should not be able to visit song request page" do
     get :song_request, id: @rebar
-    assert_not flash.empty?
+    assert_equal "Please log in.", flash[:danger]
     assert_redirected_to login_url
   end
 

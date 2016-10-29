@@ -11,6 +11,7 @@ class NotificationsControllerTest < ActionController::TestCase
 
   test "guests cannot access notifications page" do
     get :index
+    assert_equal "Please log in.", flash[:danger]
     assert_redirected_to login_url
   end
 
@@ -22,11 +23,13 @@ class NotificationsControllerTest < ActionController::TestCase
 
   test "guests cannot accept notificiation" do
     patch :accept, id: @notification
+    assert_equal "Please log in.", flash[:danger]
     assert_redirected_to login_url
   end
 
   test "guests cannot decline notificiation" do
     patch :decline, id: @notification
+    assert_equal "Please log in.", flash[:danger]
     assert_redirected_to login_url
   end
 
