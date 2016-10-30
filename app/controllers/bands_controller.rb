@@ -1,13 +1,14 @@
 class BandsController < ApplicationController
-  before_action :logged_in_user,      only: [:new, :create, :edit, :update, :show, :invite, :create_invite, :remove_member]
-  before_action :band_admin_user,     only: [               :edit, :update,        :invite, :create_invite, :remove_member]
-  before_action :existing_user,       only: [                                               :create_invite]
-  before_action :existing_member,     only: [                                                               :remove_member]
-  before_action :nonexisting_member,  only: [                                               :create_invite]
-  before_action :cannot_remove_self,  only: [                                                               :remove_member]
-  before_action :cannot_remove_admin, only: [                                                               :remove_member]
-  before_action :nonexisting_invite,  only: [                                               :create_invite]
-  before_action :correct_params,      only: [                                               :create_invite]
+  before_action :logged_in_user,       only: [:new, :create, :edit, :update, :show, :invite, :create_invite, :remove_member, :promote_to_admin]
+  before_action :band_admin_user,      only: [               :edit, :update,        :invite, :create_invite, :remove_member, :promote_to_admin]
+  before_action :existing_user,        only: [                                               :create_invite                                   ]
+  before_action :existing_member,      only: [                                                               :remove_member, :promote_to_admin]
+  before_action :nonexisting_member,   only: [                                               :create_invite                                   ]
+  before_action :cannot_remove_self,   only: [                                                               :remove_member                   ]
+  before_action :cannot_remove_admin,  only: [                                                               :remove_member                   ]
+  before_action :cannot_promote_admin, only: [                                                                               :promote_to_admin]
+  before_action :nonexisting_invite,   only: [                                               :create_invite                                   ]
+  before_action :correct_params,       only: [                                               :create_invite                                   ]
 
   def new
     @open_events = Event.where("is_open = true")
@@ -86,6 +87,16 @@ class BandsController < ApplicationController
     redirect_to band_url(params[:id])
   end
 
+  # Promotes a member to admin.
+  def promote_to_admin
+    @member = Member.find_by(band_id: params[:id], user_id: params[:user_id])
+    @member.update!(is_admin: true)
+
+    flash[:success] = "The user has been promoted to admin!"
+
+    redirect_to band_url(params[:id])
+  end
+
   private
 
     def band_params
@@ -139,6 +150,19 @@ class BandsController < ApplicationController
       if member.is_admin?
         flash[:danger] = "You cannot remove an admin from the band. They must" +
         " step down first."
+        redirect_to band_url(@band)
+      end
+    end
+
+    # Barks if you try to remove a fellow admin from the band.
+    def cannot_promote_admin
+      member = Member.find_by({
+        band_id: @band.id,
+        user_id: params[:user_id]
+      })
+
+      if member.is_admin?
+        flash[:danger] = "The user is already an admin."
         redirect_to band_url(@band)
       end
     end

@@ -2,13 +2,16 @@ require 'test_helper'
 
 class BandsControllerTest < ActionController::TestCase
   def setup
-    @non_member   = users(:lana)
-    @member       = users(:erin)
-    @other_member = users(:andrew)
-    @admin        = users(:alexander)
-    @other_admin  = users(:anne)
-    @invited      = users(:chris)
-    @band         = bands(:h4h)
+    @non_member             = users(:lana)
+    @member                 = users(:erin)
+    @other_member           = users(:andrew)
+    @admin                  = users(:alexander)
+    @other_admin            = users(:anne)
+    @invited                = users(:chris)
+    @membership             = members(:erin)
+    @other_membership       = members(:andrew)
+    @other_admin_membership = members(:andrew)
+    @band                   = bands(:h4h)
   end
 
   test "guests cannot see band info" do
@@ -172,6 +175,49 @@ class BandsControllerTest < ActionController::TestCase
       delete :remove_member, id: @band, user_id: @other_admin.id
     end
     assert_equal "You cannot remove an admin from the band. They must step down first.", flash[:danger]
+    assert_redirected_to band_url(@band)
+  end
+
+  test "promote member to admin" do
+    log_in_as(@admin)
+    assert !@membership.is_admin?
+    patch :promote_to_admin, id: @band, user_id: @member.id
+    @membership.reload
+    assert @membership.is_admin?
+    assert_equal "The user has been promoted to admin!", flash[:success]
+    assert_redirected_to band_url(@band)
+  end
+
+  test "guests cannot promote member to admin" do
+    assert !@membership.is_admin?
+    patch :promote_to_admin, id: @band, user_id: @member.id
+    @membership.reload
+    assert !@membership.is_admin?
+    assert_equal "Please log in.", flash[:danger]
+    assert_redirected_to login_url
+  end
+
+  test "non-members cannot promote member to admin" do
+    log_in_as(@other_member)
+    assert !@membership.is_admin?
+    patch :promote_to_admin, id: @band, user_id: @member.id
+    @membership.reload
+    assert !@membership.is_admin?
+    assert_equal "You are not authorized to manage this band.", flash[:danger]
+    assert_redirected_to root_url
+  end
+
+  test "promote nonmember to admin" do
+    log_in_as(@admin)
+    patch :promote_to_admin, id: @band, user_id: @non_member.id
+    assert_equal "This user not a member of the band.", flash[:danger]
+    assert_redirected_to band_url(@band)
+  end
+
+  test "cannot promote an admin" do
+    log_in_as(@admin)
+    patch :promote_to_admin, id: @band, user_id: @other_admin.id
+    assert_equal "The user is already an admin.", flash[:danger]
     assert_redirected_to band_url(@band)
   end
 end

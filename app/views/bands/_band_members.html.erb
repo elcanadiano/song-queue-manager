@@ -1,7 +1,11 @@
 <li>
   <%= gravatar_for member.user, size: 50 %>
   <%= link_to member.user.name, member.user %>
+  <% if member.is_admin? %>
+    (Admin)
+  <% end %>
   <% if @current_member && @current_member.is_admin? && !current_user?(member.user) && !member.is_admin? %>
-    | <%= link_to "Remove from Band", remove_member_band_url(user_id: member.user_id), method: :patch %>
+    | <%= link_to "Remove from Band", remove_member_band_url(user_id: member.user_id), method: :delete %>
+    | <%= link_to "Promote to Admin", promote_to_admin_band_url(user_id: member.user_id), method: :patch %>
   <% end %>
 </li>
