@@ -1,14 +1,15 @@
 class BandsController < ApplicationController
-  before_action :logged_in_user,       only: [:new, :create, :edit, :update, :show, :invite, :create_invite, :remove_member, :promote_to_admin]
-  before_action :band_admin_user,      only: [               :edit, :update,        :invite, :create_invite, :remove_member, :promote_to_admin]
-  before_action :existing_user,        only: [                                               :create_invite                                   ]
-  before_action :existing_member,      only: [                                                               :remove_member, :promote_to_admin]
-  before_action :nonexisting_member,   only: [                                               :create_invite                                   ]
-  before_action :cannot_remove_self,   only: [                                                               :remove_member                   ]
-  before_action :cannot_remove_admin,  only: [                                                               :remove_member                   ]
-  before_action :cannot_promote_admin, only: [                                                                               :promote_to_admin]
-  before_action :nonexisting_invite,   only: [                                               :create_invite                                   ]
-  before_action :correct_params,       only: [                                               :create_invite                                   ]
+  before_action :logged_in_user,       only: [:new, :create, :edit, :update, :show, :invite, :create_invite, :remove_member, :promote_to_admin            ]
+  before_action :band_admin_user,      only: [               :edit, :update,        :invite, :create_invite, :remove_member, :promote_to_admin, :step_down]
+  before_action :existing_user,        only: [                                               :create_invite                                               ]
+  before_action :existing_member,      only: [                                                               :remove_member, :promote_to_admin            ]
+  before_action :nonexisting_member,   only: [                                               :create_invite                                               ]
+  before_action :cannot_remove_self,   only: [                                                               :remove_member                               ]
+  before_action :cannot_remove_admin,  only: [                                                               :remove_member                               ]
+  before_action :cannot_promote_admin, only: [                                                                               :promote_to_admin            ]
+  before_action :multiple_admins,      only: [                                                                                                  :step_down]
+  before_action :nonexisting_invite,   only: [                                               :create_invite                                               ]
+  before_action :correct_params,       only: [                                               :create_invite                                               ]
 
   def new
     @open_events = Event.where("is_open = true")
@@ -49,12 +50,16 @@ class BandsController < ApplicationController
   def show
     @open_events    = Event.where("is_open = true")
     @band           = Band.find(params[:id])
+    @num_admins     = Member.where({
+      band_id:  @band.id,
+      is_admin: true
+    }).count
     @members        = Member.where({
-      band_id: @band.id
+      band_id:  @band.id
     })
     @current_member = Member.find_by({
-      band_id: @band.id,
-      user_id: current_user.id
+      band_id:  @band.id,
+      user_id:  current_user.id
     })
   end
 
@@ -93,6 +98,16 @@ class BandsController < ApplicationController
     @member.update!(is_admin: true)
 
     flash[:success] = "The user has been promoted to admin!"
+
+    redirect_to band_url(params[:id])
+  end
+
+  # Step down as an admin.
+  def step_down
+    @member = Member.find_by(band_id: params[:id], user_id: current_user)
+    @member.update!(is_admin: false)
+
+    flash[:success] = "You have stepped down as an admin."
 
     redirect_to band_url(params[:id])
   end
@@ -163,6 +178,19 @@ class BandsController < ApplicationController
 
       if member.is_admin?
         flash[:danger] = "The user is already an admin."
+        redirect_to band_url(@band)
+      end
+    end
+
+    # Barks if there is not another admin.
+    def multiple_admins
+      num_admins = Member.where({
+        band_id: params[:id],
+        is_admin: true
+      }).count
+
+      if num_admins < 2
+        flash[:danger] = "There needs to be another admin before you step down."
         redirect_to band_url(@band)
       end
     end

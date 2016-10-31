@@ -52,6 +52,7 @@ Rails.application.routes.draw do
     member do
       get    'invite'
       post   'create_invite'
+      patch  'step_down'
       patch  'promote_to_admin/:user_id' => 'bands#promote_to_admin', as: "promote_to_admin"
       delete 'remove/:user_id'           => 'bands#remove_member',    as: "remove_member"
     end
