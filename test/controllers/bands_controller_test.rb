@@ -12,7 +12,6 @@ class BandsControllerTest < ActionController::TestCase
     @single_admin_membership = members(:dankey)
     @admin_membership        = members(:alexander)
     @membership              = members(:erin)
-    @other_membership        = members(:andrew)
     @other_admin_membership  = members(:anne)
     @band                    = bands(:h4h)
     @single_admin_band       = bands(:dankey)

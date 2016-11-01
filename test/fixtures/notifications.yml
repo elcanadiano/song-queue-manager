@@ -31,7 +31,7 @@ ray_h4h:
 lana_h4h:
   notification_type: invite
   user:              ray
-  creator:           lana
+  creator:           alexander
   band:              h4h
   has_expired:       true
 
