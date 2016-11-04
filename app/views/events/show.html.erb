@@ -9,11 +9,11 @@
 
 <div class="row">
   <% if @requests.blank? %>
-    <div class="col-md-12">
+    <div class="col-md-12" id="request-main">
       <p>There are currently no requests. Why don't you make the first one?</p>
     </div>
   <% else %>
-    <div class="col-md-8">
+    <div class="col-md-8"  id="request-main">
       <div class="table-responsive">
         <table class="table table-hover table-bordered" id="song-requests">
           <thead>
@@ -33,20 +33,24 @@
       </div>
     </div>
 
-    <div class="col-md-4">
-      <div class="table-responsive">
-        <table class="table table-striped table-bordered" id="song-request-count">
-          <thead>
-            <tr>
-              <th>Band Name</th>
-              <th>Song Count</th>
-            </tr>
-          </thead>
-          <tbody>
-            <%= render partial: "request_counts", collection: @request_counts, as: "request_count" %>
-          </tbody>
-        </table>
-      </div>
+    <div class="col-md-4" id="request-sidebar">
+      <% if @request_counts.blank? %>
+        There have been no completed songs.
+      <% else %>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered" id="song-request-count">
+            <thead>
+              <tr>
+                <th>Band Name</th>
+                <th>Song Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= render partial: "request_counts", collection: @request_counts, as: "request_count" %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
     </div>
   <% end %>
 </div>
