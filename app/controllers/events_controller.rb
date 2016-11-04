@@ -42,7 +42,7 @@ class EventsController < ApplicationController
                                  .joins("INNER JOIN bands ON bands.id = song_requests.band_id")
                                  .where("is_completed = true AND is_abandoned = false AND event_id = #{params[:id]}")
                                  .group("bands.id")
-                                 .reorder("bands.id")
+                                 .reorder("request_count DESC, bands.name ASC")
   end
 
   def edit

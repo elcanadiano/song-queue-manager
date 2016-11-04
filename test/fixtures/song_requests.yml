@@ -63,3 +63,67 @@ completed:
   is_abandoned: false
   event: brs8
   band: nbam
+
+completed2:
+  song: The Pretender
+  artist: Foo Fighters
+  is_completed: true
+  is_abandoned: false
+  event: brs8
+  band: dankey
+
+completed3:
+  song: Sweet Disposition
+  artist: The Temper Trap
+  is_completed: true
+  is_abandoned: false
+  event: brs8
+  band: h4h
+
+abandoned2:
+  song: More Than a Feeling
+  artist: Boston
+  is_completed: false
+  is_abandoned: true
+  event: brs8
+  band: nbam
+
+completed4:
+  song: Closer To the Edge
+  artist: 30 Seconds to Mars
+  is_completed: true
+  is_abandoned: false
+  event: brs8
+  band: dankey
+
+completed5:
+  song: Sweet Child o' Mine
+  artist: Guns n' Roses
+  is_completed: true
+  is_abandoned: false
+  event: brs8
+  band: dankey
+
+completed6:
+  song: ¿Viva La Gloria? (Little Girl)
+  artist: Green Day
+  is_completed: true
+  is_abandoned: false
+  event: brs8
+  band: nbam
+
+completed7:
+  song: Need You Now
+  artist: Lady Antebellum
+  is_completed: true
+  is_abandoned: false
+  event: brs8
+  band: h4h
+
+completed8:
+  song: Paradise By the Dashboard Light
+  artist: Meat Loaf
+  is_completed: true
+  is_abandoned: false
+  event: brs8
+  band: h4h
