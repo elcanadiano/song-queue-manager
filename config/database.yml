@@ -15,3 +15,8 @@ test:
   host: localhost
   username: myapp
   password: password1
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
