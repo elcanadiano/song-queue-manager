@@ -71,10 +71,18 @@ p {
   letter-spacing: -1px;
   padding-top: 9px;
   font-weight: bold;
+  line-height: normal;
   &:hover {
     color: white;
     text-decoration: none;
   }
+}
+
+@media (max-width: 767px) {
+    #logo {
+      padding: 13px 0 0 13px;
+      font-size: 1.3em;
+    }
 }
 
 /* footer */
