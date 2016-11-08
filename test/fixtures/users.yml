@@ -107,3 +107,10 @@ anne:
   password_digest: <%= User.digest('password') %>
   activated: true
   activated_at: <%= Time.zone.now %>
+
+bandless:
+  name: Bandless Bandit
+  email: bandlessbandit2001@gmail.com
+  password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>

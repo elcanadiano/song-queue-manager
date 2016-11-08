@@ -66,6 +66,13 @@ class EventsController < ApplicationController
     @event        = Event.find(params[:id])
     @bands        = current_user.bands
     @song_request = SongRequest.new
+
+    # Redirect to the bands page for the user if said user is not part of a
+    # band.
+    if @bands.blank?
+      flash[:warning] = "You must create or be part of a band in order to make a request."
+      redirect_to bands_user_url(current_user)
+    end
   end
 
   # PATCH function to toggle an event being open/closed for requests.
