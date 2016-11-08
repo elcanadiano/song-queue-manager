@@ -3,7 +3,9 @@
 
 <% if admin? %>
   <div class="row">
-    <%= link_to "New Event", new_event_url, class: "btn btn-primary" %>
+    <div class="col-md-12">
+      <%= link_to "New Event", new_event_url, class: "btn btn-primary" %>
+    </div>
   </div>
 <% end %>
 

@@ -3,7 +3,9 @@
 
 <% if @event.is_open %>
   <div class="row">
-    <%= link_to "New Request", request_event_url(@event.id), class: "btn btn-primary" %>
+    <div class="col-md-12">
+      <%= link_to "New Request", request_event_url(@event.id), class: "btn btn-primary" %>
+    </div>
   </div>
 <% end %>
 
