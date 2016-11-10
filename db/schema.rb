@@ -11,10 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161021203751) do
+ActiveRecord::Schema.define(version: 20161110014445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "artists", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "artists_songs", id: false, force: :cascade do |t|
+    t.integer "song_id"
+    t.integer "artist_id"
+  end
+
+  add_index "artists_songs", ["artist_id"], name: "index_artists_songs_on_artist_id", using: :btree
+  add_index "artists_songs", ["song_id"], name: "index_artists_songs_on_song_id", using: :btree
 
   create_table "bands", force: :cascade do |t|
     t.string   "name",       null: false
@@ -73,6 +87,26 @@ ActiveRecord::Schema.define(version: 20161021203751) do
   add_index "song_requests", ["band_id"], name: "index_song_requests_on_band_id", using: :btree
   add_index "song_requests", ["event_id"], name: "index_song_requests_on_event_id", using: :btree
   add_index "song_requests", ["order"], name: "index_song_requests_on_order", using: :btree
+
+  create_table "songs", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "songs_soundtracks", id: false, force: :cascade do |t|
+    t.integer "song_id"
+    t.integer "soundtrack_id"
+  end
+
+  add_index "songs_soundtracks", ["song_id"], name: "index_songs_soundtracks_on_song_id", using: :btree
+  add_index "songs_soundtracks", ["soundtrack_id"], name: "index_songs_soundtracks_on_soundtrack_id", using: :btree
+
+  create_table "soundtracks", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "name"

@@ -1,0 +1,113 @@
+devilinherheart:
+  name: Devil In Her Heart
+  artists: beatles
+
+rain:
+  name: rain
+  artists: beatles
+
+something:
+  name: something
+  artists: beatles
+
+dontletmedown:
+  name: Don't Let Me Down
+  artists: beatles
+
+turntostone:
+  name: Turn To Stone
+  artists: elo
+
+tightrope:
+  name: Tightrope
+  artists: elo
+
+telephoneline:
+  name: Telephone Line
+  artists: elo
+
+mrbluesky:
+  name: Mr. Blue Sky
+  artists: elo
+
+schizophrenia:
+  name: Schizophrenia
+  artists: jukebox
+
+halfcrazy:
+  name: Half Crazy
+  artists: jukebox
+
+empire:
+  name: Empire
+  artists: jukebox
+
+bhorap:
+  name: Bohemian Rhapsody
+  artists: queen
+
+hammer:
+  name: Hammer to Fall
+  artists: queen
+
+iwantitall:
+  name: I Want it All
+  artists: queen
+
+morethanafeeling:
+  name: More Than a Feeling
+  artists: boston
+
+peaceofmind:
+  name: Peace of Mind
+  artists: boston
+
+corporateamerica:
+  name: Corporate America
+  artists: boston
+
+holiday_gd:
+  name: holiday
+  artists: Green Day
+
+boulevard:
+  name: Boulevard of Broken Dreams
+  artists: Green Day
+
+homecoming:
+  name: homecoming
+  artists: Green Day
+
+brainstew:
+  name: Brain Stew/Jaded
+  artists: Green Day
+
+makedamnsure:
+  name: MakeDamnSure
+  artists: takingbacksunday
+
+liar:
+  name: Liar (It Takes One to Know One)
+  artists: takingbacksunday
+
+whatsitfeelliketobeaghost:
+  name: What's It Feel Like to Be a Ghost?
+  artists: takingbacksunday
+
+pretender:
+  name: The Pretender
+  artists: foofighters
+
+bestofyou:
+  name: Best of You
+  artists: foofighters
+
+# A song with multiple artists.
+recession:
+  name: recession
+  artists: jeffallen, noelleleblanc, naokotakamoto
+
+# Example of a duplicate song name.
+holiday_bg:
+  name: Holiday
+  artists: beegees
