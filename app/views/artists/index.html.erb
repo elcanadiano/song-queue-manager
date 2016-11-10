@@ -1,0 +1,16 @@
+<% provide(:title, 'Artists') %>
+<h1>Artists</h1>
+
+<div class="row">
+  <div class="col-md-12">
+    <%= link_to "New Artist", new_artist_url, class: "btn btn-primary" %>
+  </div>
+</div>
+
+<%= will_paginate %>
+
+<ul class="users">
+  <%= render @artists %>
+</ul>
+
+<%= will_paginate %>

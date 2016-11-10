@@ -1,0 +1,5 @@
+<li>
+  <%= link_to artist.name, edit_artist_url(artist) %>
+  | <%= link_to "Delete", artist_url(artist), method: :delete, data:
+  {confirm: "WARNING: All songs associated with this artist will be deleted! Are you sure?"} %>
+</li>

@@ -41,6 +41,7 @@ Rails.application.routes.draw do
       get   'request'     => 'events#song_request'
     end
   end
+
   resources :song_requests, as: 'requests', only: [:create] do
     member do
       patch 'toggle_completed'
@@ -48,7 +49,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :bands, except: [:index, :destroy] do
+  resources :artists, except: [:show]
+
+  resources :bands,   except: [:index, :destroy] do
     member do
       get    'invite'
       post   'create_invite'
