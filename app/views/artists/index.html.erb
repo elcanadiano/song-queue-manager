@@ -7,10 +7,18 @@
   </div>
 </div>
 
-<%= will_paginate %>
+<div class="row">
+  <div class="col-md-12">
+    <% if @artists.blank? %>
+      <p>There are currently no artists in the system.</p>
+    <% else %>
+      <%= will_paginate %>
 
-<ul class="users">
-  <%= render @artists %>
-</ul>
+      <ul class="users">
+        <%= render @artists %>
+      </ul>
 
-<%= will_paginate %>
+      <%= will_paginate %>
+    <% end %>
+  </div>
+</div>
