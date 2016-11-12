@@ -49,8 +49,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :artists, except: [:show]
-  resources :songs,   except: [:show]
+  resources :artists,     except: [:show]
+  resources :songs,       except: [:show]
+  resources :soundtracks, except: [:show]
 
   resources :bands,   except: [:index, :destroy] do
     member do

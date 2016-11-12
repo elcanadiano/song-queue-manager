@@ -11,7 +11,6 @@ class SongsController < ApplicationController
   def new
     @open_events = Event.where("is_open = true")
     @song        = Song.new
-    #@artists     = Artist.all
   end
 
   def create

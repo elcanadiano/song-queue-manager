@@ -1,0 +1,5 @@
+<%= f.label :name %>
+<%= f.text_field :name, class: 'form-control' %>
+
+<%= f.label :songs, "Song(s)" %>
+<%= f.select :songs, @songs, {}, {multiple: true} %>

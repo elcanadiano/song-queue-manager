@@ -1,0 +1,14 @@
+<% provide(:title, 'Edit Soundtrack') %>
+<h1>Edit Soundtrack</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for(@soundtrack) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <%= render 'soundtrack_fields', f: f %>
+
+      <%= f.submit "Edit Soundtrack", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

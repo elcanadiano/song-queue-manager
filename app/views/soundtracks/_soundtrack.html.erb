@@ -1,0 +1,5 @@
+<li>
+  <%= link_to soundtrack.name, edit_soundtrack_url(soundtrack) %>
+  | <%= link_to "Delete", soundtrack_url(soundtrack), method: :delete, data:
+  {confirm: "Are you sure? Songs and artists will not be deleted."} %>
+</li>
