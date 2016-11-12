@@ -1,0 +1,5 @@
+<li>
+  <%= link_to song.name, edit_song_url(song) %>
+  | <%= link_to "Delete", song_url(song), method: :delete, data:
+  {confirm: "WARNING: All song requests associated with this song will be deleted! Are you sure?"} %>
+</li>

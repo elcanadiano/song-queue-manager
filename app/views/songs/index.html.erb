@@ -1,0 +1,24 @@
+<% provide(:title, 'Songs') %>
+<h1>Songs</h1>
+
+<div class="row">
+  <div class="col-md-12">
+    <%= link_to "New Song", new_song_url, class: "btn btn-primary" %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <% if @songs.blank? %>
+      <p>There are currently no songs in the system.</p>
+    <% else %>
+      <%= will_paginate %>
+
+      <ul class="users">
+        <%= render @songs %>
+      </ul>
+
+      <%= will_paginate %>
+    <% end %>
+  </div>
+</div>

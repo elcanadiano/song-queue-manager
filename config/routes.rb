@@ -50,6 +50,7 @@ Rails.application.routes.draw do
   end
 
   resources :artists, except: [:show]
+  resources :songs,   except: [:show]
 
   resources :bands,   except: [:index, :destroy] do
     member do

@@ -1,0 +1,5 @@
+<%= f.label :name %>
+<%= f.text_field :name, class: 'form-control' %>
+
+<%= f.label :artists, "Artist(s) (separate multiple by semicolons, no trailing spaces)" %>
+<%= f.text_field :artists, class: 'form-control', value: @artist_names %>
