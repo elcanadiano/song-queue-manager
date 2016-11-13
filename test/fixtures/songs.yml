@@ -1,113 +1,119 @@
 devilinherheart:
-  name: Devil In Her Heart
+  name:    Devil In Her Heart
   artists: beatles
 
 rain:
-  name: rain
+  name:    rain
   artists: beatles
 
 something:
-  name: something
+  name:    something
   artists: beatles
 
 dontletmedown:
-  name: Don't Let Me Down
+  name:    Don't Let Me Down
   artists: beatles
 
 turntostone:
-  name: Turn To Stone
+  name:    Turn To Stone
   artists: elo
 
 tightrope:
-  name: Tightrope
+  name:    Tightrope
   artists: elo
 
 telephoneline:
-  name: Telephone Line
+  name:    Telephone Line
   artists: elo
 
 mrbluesky:
-  name: Mr. Blue Sky
+  name:    Mr. Blue Sky
   artists: elo
 
 schizophrenia:
-  name: Schizophrenia
+  name:    Schizophrenia
   artists: jukebox
 
 halfcrazy:
-  name: Half Crazy
+  name:    Half Crazy
   artists: jukebox
 
 empire:
-  name: Empire
+  name:    Empire
   artists: jukebox
 
-bhorap:
-  name: Bohemian Rhapsody
+bhorhap:
+  name:    Bohemian Rhapsody
   artists: queen
 
 hammer:
-  name: Hammer to Fall
+  name:    Hammer to Fall
   artists: queen
 
 iwantitall:
-  name: I Want it All
+  name:    I Want it All
   artists: queen
 
 morethanafeeling:
-  name: More Than a Feeling
+  name:    More Than a Feeling
   artists: boston
 
 peaceofmind:
-  name: Peace of Mind
+  name:    Peace of Mind
   artists: boston
 
 corporateamerica:
-  name: Corporate America
+  name:    Corporate America
   artists: boston
 
 holiday_gd:
-  name: holiday
+  name:    holiday
   artists: Green Day
 
 boulevard:
-  name: Boulevard of Broken Dreams
+  name:    Boulevard of Broken Dreams
   artists: Green Day
 
 homecoming:
-  name: homecoming
+  name:    homecoming
   artists: Green Day
 
 brainstew:
-  name: Brain Stew/Jaded
+  name:    Brain Stew/Jaded
   artists: Green Day
 
 makedamnsure:
-  name: MakeDamnSure
+  name:    MakeDamnSure
   artists: takingbacksunday
 
 liar:
-  name: Liar (It Takes One to Know One)
+  name:    Liar (It Takes One to Know One)
   artists: takingbacksunday
 
 whatsitfeelliketobeaghost:
-  name: What's It Feel Like to Be a Ghost?
+  name:    What's It Feel Like to Be a Ghost?
   artists: takingbacksunday
 
 pretender:
-  name: The Pretender
+  name:    The Pretender
   artists: foofighters
 
 bestofyou:
-  name: Best of You
+  name:    Best of You
   artists: foofighters
+
+# This is spelt wrong intentionally. The actual song title is in fact,
+# "Stop Draggin' My Heart Around"
+stopdragging:
+  name:    Stop Dragging My Heart Around
+  artists: stevienicks
 
 # A song with multiple artists.
 recession:
-  name: recession
+  name:    recession
   artists: jeffallen, noelleleblanc, naokotakamoto
 
 # Example of a duplicate song name.
 holiday_bg:
-  name: Holiday
+  name:    Holiday
   artists: beegees

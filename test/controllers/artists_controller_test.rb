@@ -75,13 +75,13 @@ class ArtistsControllerTest < ActionController::TestCase
     assert_template 'new'
   end
 
-  test "guests cannot see edit artists page" do
+  test "guests cannot see edit artist page" do
     get :edit, id: @artist
     assert_equal "Please log in.", flash[:danger]
     assert_redirected_to login_url
   end
 
-  test "non-admin can see edit artists page" do
+  test "non-admin can see edit artist page" do
     log_in_as(@non_admin)
     get :edit, id: @artist
     assert_equal "This function requires administrator privileges.", flash[:danger]

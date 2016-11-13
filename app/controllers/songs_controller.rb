@@ -14,8 +14,9 @@ class SongsController < ApplicationController
   end
 
   def create
+    @artists      = params[:song][:artists] || ""
     @song         = Song.new(song_params)
-    @song.artists = Artist.where(name: params[:song][:artists].split(";"))
+    @song.artists = Artist.where(name: @artists.split(";"))
     if @song.save
       flash[:success] = "Song created successfully!"
       redirect_to songs_url
@@ -31,8 +32,9 @@ class SongsController < ApplicationController
   end
 
   def update
+    @artists      = params[:song][:artists] || ""
     @song         = Song.find(params[:id])
-    @song.artists = Artist.where(name: params[:song][:artists].split(";"))
+    @song.artists = Artist.where(name: @artists.split(";"))
     if @song.update_attributes(song_params)
       flash[:success] = "Song Updated!"
       redirect_to songs_url
