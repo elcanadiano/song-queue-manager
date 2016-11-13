@@ -13,20 +13,20 @@ class ArtistsControllerTest < ActionController::TestCase
     assert_redirected_to login_url
   end
 
-  test "non-admin can see artists index page" do
+  test "non-admins cannot see artists index page" do
     log_in_as(@non_admin)
     get :index
     assert_equal "This function requires administrator privileges.", flash[:danger]
     assert_redirected_to root_url
   end
 
-  test "guests cannot see new artists page" do
+  test "guests cannot see new artist page" do
     get :new
     assert_equal "Please log in.", flash[:danger]
     assert_redirected_to login_url
   end
 
-  test "non-admin can see new artists page" do
+  test "non-admins cannot see new artist page" do
     log_in_as(@non_admin)
     get :new
     assert_equal "This function requires administrator privileges.", flash[:danger]

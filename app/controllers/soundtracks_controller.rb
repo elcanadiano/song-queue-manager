@@ -14,8 +14,9 @@ class SoundtracksController < ApplicationController
   end
 
   def create
+    @songs            = params[:soundtrack][:songs] || []
     @soundtrack       = Soundtrack.new(soundtrack_params)
-    @soundtrack.songs = Song.where(id: params[:soundtrack][:songs].map{|song_id| song_id.to_i})
+    @soundtrack.songs = Song.where(id: @songs.map{|song_id| song_id.to_i})
     if @soundtrack.save
       flash[:success] = "Soundtrack created successfully!"
       redirect_to soundtracks_url
@@ -37,8 +38,9 @@ class SoundtracksController < ApplicationController
   end
 
   def update
+    @songs            = params[:soundtrack][:songs] || []
     @soundtrack       = Soundtrack.find(params[:id])
-    @soundtrack.songs = Song.where(id: params[:soundtrack][:songs].map{|song_id| song_id.to_i})
+    @soundtrack.songs = Song.where(id: @songs.map{|song_id| song_id.to_i})
     if @soundtrack.update_attributes(soundtrack_params)
       flash[:success] = "Soundtrack Updated!"
       redirect_to soundtracks_url
