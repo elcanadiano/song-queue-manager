@@ -19,6 +19,7 @@ class BandsControllerTest < ActionController::TestCase
 
   test "guests cannot see band info" do
     get :show, id: @band.id
+    assert_equal "Please log in.", flash[:danger]
     assert_redirected_to login_url
   end
 
