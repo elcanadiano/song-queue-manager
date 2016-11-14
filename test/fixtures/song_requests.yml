@@ -139,3 +139,11 @@ brs7_four:
   is_abandoned: false
   event:        brs7
   band:         nbam
+
+# Request for the purposes of testing song deletion.
+request_to_delete:
+  song:         song_to_delete
+  is_completed: false
+  is_abandoned: false
+  event:        brs7
+  band:         nbam

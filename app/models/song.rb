@@ -1,7 +1,7 @@
 class Song < ActiveRecord::Base
   has_and_belongs_to_many :artists
   has_and_belongs_to_many :soundtracks
-  has_many                :song_requests
+  has_many                :song_requests, dependent: :destroy
   default_scope -> { order(name: :asc) }
 
   validates :name, presence: true

@@ -185,3 +185,8 @@ recession:
 holiday_bg:
   name:    Holiday
   artists: beegees
+
+# Test song for the purposes of deletion.
+song_to_delete:
+  name:    Song to Delete
+  artists: u2

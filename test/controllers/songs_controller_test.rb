@@ -2,11 +2,12 @@ require 'test_helper'
 
 class SongsControllerTest < ActionController::TestCase
   def setup
-    @admin     = users(:alexander)
-    @non_admin = users(:donnie)
-    @song      = songs(:stopdragging)
-    @artist1   = artists(:stevienicks)
-    @artist2   = artists(:tompetty)
+    @admin          = users(:alexander)
+    @non_admin      = users(:donnie)
+    @song           = songs(:stopdragging)
+    @song_to_delete = songs(:song_to_delete)
+    @artist1        = artists(:stevienicks)
+    @artist2        = artists(:tompetty)
   end
 
   test "guests cannot see songs index page" do
@@ -150,26 +151,49 @@ class SongsControllerTest < ActionController::TestCase
 
   test "delete a song" do
     log_in_as(@admin)
+
+    # Song to Delete has one song request associated with it.
+    assert !SongRequest.find_by(song_id: @song_to_delete.id).blank?
+
     assert_difference 'Song.count', -1, 'Deleting an song subtracts one.' do
-      delete :destroy, id: @song
+      delete :destroy, id: @song_to_delete
     end
+
+    # Because the song was deleted, all associated requests were too.
+    assert SongRequest.find_by(song_id: @song_to_delete.id).blank?
+
     assert_equal "Song Deleted.", flash[:success]
     assert_redirected_to songs_url
   end
 
   test "guests cannot delete a song" do
+    # Song to Delete has one song request associated with it.
+    assert !SongRequest.find_by(song_id: @song_to_delete.id).blank?
+
     assert_no_difference 'Song.count', 'Guests cannot delete a song.' do
-      delete :destroy, id: @song
+      delete :destroy, id: @song_to_delete
     end
+
+    # Because the song was not deleted, the request wasn't either.
+    assert !SongRequest.find_by(song_id: @song_to_delete.id).blank?
+
     assert_equal "Please log in.", flash[:danger]
     assert_redirected_to login_url
   end
 
   test "non-admins cannot delete a song" do
     log_in_as(@non_admin)
+
+    # Song to Delete has one song request associated with it.
+    assert !SongRequest.find_by(song_id: @song_to_delete.id).blank?
+
     assert_no_difference 'Song.count', 'Non-admins cannot delete a song.' do
-      delete :destroy, id: @song
+      delete :destroy, id: @song_to_delete
     end
+
+    # Because the song was not deleted, the request wasn't either.
+    assert !SongRequest.find_by(song_id: @song_to_delete.id).blank?
+
     assert_equal "This function requires administrator privileges.", flash[:danger]
     assert_redirected_to root_url
   end
