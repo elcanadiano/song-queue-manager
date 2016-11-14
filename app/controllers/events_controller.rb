@@ -1,7 +1,6 @@
 class EventsController < ApplicationController
   before_action :logged_in_user, only: [:new, :create, :edit, :update, :show, :toggle_open, :song_request]
   before_action :admin_user,     only: [:new, :create, :edit, :update, :toggle_open]
-  before_action :correct_params, only: [:create_invite]
   before_action :open_event,     only: [:song_request]
 
   def index
@@ -20,10 +19,13 @@ class EventsController < ApplicationController
   def new
     @open_events = Event.where("is_open = true")
     @event       = Event.new
+    @soundtracks = soundtrack_list
   end
 
   def create
-    @event       = Event.new(event_params)
+    @event            = Event.new(event_params)
+    @event.soundtrack = Soundtrack.find_by(id: params[:event][:soundtrack].to_i)
+    @soundtracks      = soundtrack_list
     if @event.save
       flash[:success] = "Event created successfully!"
       redirect_to events_url
@@ -48,10 +50,13 @@ class EventsController < ApplicationController
   def edit
     @open_events = Event.where("is_open = true")
     @event       = Event.find(params[:id])
+    @soundtracks = soundtrack_list
   end
 
   def update
-    @event = Event.find(params[:id])
+    @event            = Event.find(params[:id])
+    @event.soundtrack = Soundtrack.find_by(id: params[:event][:soundtrack].to_i)
+    @soundtracks      = soundtrack_list
     if @event.update_attributes(event_params)
       flash[:success] = "Event Updated!"
       redirect_to events_url
@@ -97,6 +102,17 @@ class EventsController < ApplicationController
       if !@event.is_open
         flash[:danger] = "We're sorry, but this event is not open for requests."
         redirect_to events_url
+      end
+    end
+
+    # Returns a selection for song list.
+    def soundtrack_list
+      Soundtrack.all.collect do |s|
+        if @event.soundtrack == s
+          ["#{s.id} - #{s.name}", s.id, {selected: true}]
+        else
+          ["#{s.id} - #{s.name}", s.id]
+        end
       end
     end
 end

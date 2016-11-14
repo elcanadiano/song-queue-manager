@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161111004832) do
+ActiveRecord::Schema.define(version: 20161114005521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,11 +41,12 @@ ActiveRecord::Schema.define(version: 20161111004832) do
   add_index "bands", ["name"], name: "index_bands_on_name", using: :btree
 
   create_table "events", force: :cascade do |t|
-    t.string   "name",                       null: false
-    t.date     "date",                       null: false
-    t.boolean  "is_open",    default: false, null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.string   "name",                          null: false
+    t.date     "date",                          null: false
+    t.boolean  "is_open",       default: false, null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "soundtrack_id"
   end
 
   add_index "events", ["is_open", "date"], name: "index_events_on_is_open_and_date", using: :btree

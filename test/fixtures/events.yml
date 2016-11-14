@@ -1,16 +1,19 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 rebar:
-  name:    ReBar - January 2016
-  is_open: true
-  date:    2016-01-04
+  name:       ReBar - January 2016
+  is_open:    true
+  date:       2016-01-04
+  soundtrack: brspast
 
 brs7:
-  name:    Battle Rock Seattle 7
-  is_open: false
-  date:    2015-12-08
+  name:       Battle Rock Seattle 7
+  is_open:    false
+  date:       2015-12-08
+  soundtrack: brspast
 
 brs8:
-  name:    Battle Rock Seattle 8
-  is_open: true
-  date:    2016-05-15
+  name:       Battle Rock Seattle 8
+  is_open:    true
+  date:       2016-05-15
+  soundtrack: brspast

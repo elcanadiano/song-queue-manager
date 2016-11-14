@@ -7,6 +7,7 @@ class EventsControllerTest < ActionController::TestCase
     @bandless_user = users(:bandless)
     @rebar         = events(:rebar)
     @closed_event  = events(:brs7)
+    @soundtrack    = soundtracks(:brspast)
   end
 
   test "should get index" do
@@ -20,23 +21,60 @@ class EventsControllerTest < ActionController::TestCase
     assert_redirected_to login_url
   end
 
-  test "should redirect edit when not logged in" do
-    get :edit, id: @rebar
-    assert_equal "Please log in.", flash[:danger]
-    assert_redirected_to login_url
-  end
-
-  test "should redirect update when not logged in" do
-    patch :update, id: @rebar, event: { name: "Name", date: Date.new(2015, 06, 02) }
-    assert_equal "Please log in.", flash[:danger]
-    assert_redirected_to login_url
-  end
-
   test "should redirect new when logged in as non-admin" do
     log_in_as(@other_user)
     get :new
     assert_equal "This function requires administrator privileges.", flash[:danger]
     assert_redirected_to root_url
+  end
+
+  test "should not create when not logged in" do
+    assert_no_difference 'Event.count', 'An event should be created if you are not logged in.' do
+      post :create, event: {
+        name: "Name",
+        date: Date.new(2015, 06, 02),
+        soundtrack: @soundtrack.id
+      }
+    end
+
+    assert_equal "Please log in.", flash[:danger]
+    assert_redirected_to login_url
+  end
+
+  test "should not create when logged in as non-admin" do
+    log_in_as(@other_user)
+
+    assert_no_difference 'Event.count', 'An event should be created if you are not logged in.' do
+      post :create, event: {
+        name: "Name",
+        date: Date.new(2015, 06, 02),
+        soundtrack: @soundtrack.id
+      }
+    end
+
+    assert_equal "This function requires administrator privileges.", flash[:danger]
+    assert_redirected_to root_url
+  end
+
+  test "should create when logged in as admin" do
+    log_in_as(@admin)
+
+    assert_difference 'Event.count', 1, 'Creating an event adds one.' do
+      post :create, event: {
+        name: "Name",
+        date: Date.new(2015, 06, 02),
+        soundtrack: @soundtrack.id
+      }
+    end
+
+    assert_equal "Event created successfully!", flash[:success]
+    assert_redirected_to events_url
+  end
+
+  test "should redirect edit when not logged in" do
+    get :edit, id: @rebar
+    assert_equal "Please log in.", flash[:danger]
+    assert_redirected_to login_url
   end
 
   test "should redirect edit when logged in as non-admin" do
@@ -46,11 +84,54 @@ class EventsControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
 
+  test "should redirect update when not logged in" do
+    patch :update, id: @rebar, event: {name: "Name", date: Date.new(2015, 06, 02), soundtrack: @soundtrack.id}
+
+    # Ensure that the fields did not change.
+    @rebar.reload
+    assert_equal "ReBar - January 2016", @rebar.name
+    assert_equal Date.new(2016, 01, 04), @rebar.date
+
+    assert_equal "Please log in.", flash[:danger]
+    assert_redirected_to login_url
+  end
+
   test "should redirect update when logged in as non-admin" do
     log_in_as(@other_user)
-    patch :update, id: @rebar, event: { name: "Name", date: Date.new(2015, 06, 02) }
+    patch :update, id: @rebar, event: {name: "Name", date: Date.new(2015, 06, 02), soundtrack: @soundtrack.id}
+
+    # Ensure that the fields did not change.
+    @rebar.reload
+    assert_equal "ReBar - January 2016", @rebar.name
+    assert_equal Date.new(2016, 01, 04), @rebar.date
+
     assert_equal "This function requires administrator privileges.", flash[:danger]
     assert_redirected_to root_url
+  end
+
+  test "should not update without a soundtrack when admin" do
+    log_in_as(@admin)
+    patch :update, id: @rebar, event: {name: "Name", date: Date.new(2015, 06, 02)}
+
+    # Ensure that the fields did not change.
+    @rebar.reload
+    assert_equal "ReBar - January 2016", @rebar.name
+    assert_equal Date.new(2016, 01, 04), @rebar.date
+
+    assert_template 'edit'
+  end
+
+  test "should update when logged in as admin" do
+    log_in_as(@admin)
+    patch :update, id: @rebar, event: {name: "Name", date: Date.new(2015, 06, 02), soundtrack: @soundtrack.id}
+
+    # Ensure that the fields did change.
+    @rebar.reload
+    assert_equal "Name",                 @rebar.name
+    assert_equal Date.new(2015, 06, 02), @rebar.date
+
+    assert_equal "Event Updated!", flash[:success]
+    assert_redirected_to events_url
   end
 
   test "should get new when logged in as admin" do

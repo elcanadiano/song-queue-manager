@@ -3,3 +3,6 @@
 
 <%= f.label :date %>
 <%= f.date_field :date, class: 'form-control' %>
+
+<%= f.label :soundtrack %>
+<%= f.select :soundtrack, @soundtracks, include_blank: "Select Soundtrack" %>
