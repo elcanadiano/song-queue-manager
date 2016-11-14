@@ -56,6 +56,19 @@ class EventsControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
 
+  test "should not create without soundtrack" do
+    log_in_as(@admin)
+
+    assert_no_difference 'Event.count', 'An event should be created if you are not logged in.' do
+      post :create, event: {
+        name: "Name",
+        date: Date.new(2015, 06, 02)
+      }
+    end
+
+    assert_template 'new'
+  end
+
   test "should create when logged in as admin" do
     log_in_as(@admin)
 

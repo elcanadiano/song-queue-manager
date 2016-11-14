@@ -5,13 +5,16 @@ class SongRequestsController < ApplicationController
   before_action :open_event,     only: [:create]
 
   def create
-    @request = SongRequest.new(request_params)
+    @song              = params[:song_request][:song].to_i || 0
+    @song_request      = SongRequest.new(request_params)
+    @bands             = current_user.bands
+    @song_request.song = Song.find_by(id: @song)
 
-    if @request.save
+    if @song_request.save
       flash[:success] = "Song added successfully!"
       redirect_to event_url(params[:song_request][:event_id])
     else
-      redirect_to events_url
+      render 'events/song_request'
     end
   end
 
@@ -64,7 +67,7 @@ class SongRequestsController < ApplicationController
     end
 
     def request_params
-      params.require(:song_request).permit(:song, :artist, :band_id, :event_id)
+      params.require(:song_request).permit(:band_id, :event_id)
     end
 
     # Confirms an event is open.

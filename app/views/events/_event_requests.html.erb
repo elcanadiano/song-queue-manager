@@ -7,8 +7,7 @@
     <tr>
   <% end %>
     <td><%= song_request.band.name %></td>
-    <td><%= song_request.song %></td>
-    <td><%= song_request.artist %></td>
+    <td><%= song_request.song.song_by_artist %></td>
     <% if admin? %>
       <td>
         <% if !song_request.is_abandoned && !song_request.is_completed %>

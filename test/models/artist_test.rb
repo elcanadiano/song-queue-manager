@@ -5,7 +5,7 @@ class ArtistTest < ActiveSupport::TestCase
   end
 
   test "is valid" do
-    a = Artist.new(name: "The Rutles")
+    a = Artist.new(name: "Rutland Weekend Television")
     assert a.valid?
   end
 

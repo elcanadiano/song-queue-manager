@@ -8,6 +8,7 @@ class SongRequestsControllerTest < ActionController::TestCase
     @song_request = song_requests(:one)
     @completed    = song_requests(:completed)
     @abandoned    = song_requests(:abandoned)
+    @song         = songs(:pretender)
     @admin        = users(:michael)
     @nonadmin     = users(:malory)
     @member       = users(:ray)
@@ -17,8 +18,7 @@ class SongRequestsControllerTest < ActionController::TestCase
   test "guests cannot create a song request" do
     assert_no_difference 'SongRequest.count', 'There should be no request added.' do
       post :create, request: {
-        song:     "The Test Song",
-        artist:   "Doesn't Matter",
+        song:     @song.id,
         band_id:  @band.id,
         event_id: @open_event.id
       }
@@ -33,8 +33,7 @@ class SongRequestsControllerTest < ActionController::TestCase
 
     assert_no_difference 'SongRequest.count', 'There should be no request added.' do
       post :create, song_request: {
-        song:     "The Test Song",
-        artist:   "Doesn't Matter",
+        song:     @song.id,
         band_id:  @band.id,
         event_id: @open_event.id
       }
@@ -44,13 +43,25 @@ class SongRequestsControllerTest < ActionController::TestCase
     assert_redirected_to events_url
   end
 
+  test "song requests need songs" do
+    log_in_as @member
+
+    assert_no_difference 'SongRequest.count', 'There should be no request added.' do
+      post :create, song_request: {
+        band_id:  @band.id,
+        event_id: @open_event.id
+      }
+    end
+
+    assert_template 'events/song_request'
+  end
+
   test "members can create a song request" do
     log_in_as @member
 
     assert_difference 'SongRequest.count', 1, 'Creating a request adds one.' do
       post :create, song_request: {
-        song:     "The Test Song",
-        artist:   "Doesn't Matter",
+        song:     @song.id,
         band_id:  @band.id,
         event_id: @open_event.id
       }
@@ -65,8 +76,7 @@ class SongRequestsControllerTest < ActionController::TestCase
 
     assert_no_difference 'SongRequest.count', 'There should be no request added.' do
       post :create, song_request: {
-        song:     "The Test Song",
-        artist:   "Doesn't Matter",
+        song:     @song.id,
         band_id:  @band.id,
         event_id: @closed_event.id
       }

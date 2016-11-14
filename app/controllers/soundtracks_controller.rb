@@ -10,7 +10,7 @@ class SoundtracksController < ApplicationController
   def new
     @open_events = Event.where("is_open = true")
     @soundtrack  = Soundtrack.new
-    @songs       = Song.all.collect{|s| [s.name, s.id]}
+    @songs       = Song.all.collect{|s| [s.song_by_artist, s.id]}
   end
 
   def create
@@ -30,9 +30,9 @@ class SoundtracksController < ApplicationController
     @soundtrack   = Soundtrack.find(params[:id])
     @songs        = Song.all.collect do |s|
       if @soundtrack.songs.include? s
-        [s.name, s.id, {selected: true}]
+        [s.song_by_artist, s.id, {selected: true}]
       else
-        [s.name, s.id]
+        [s.song_by_artist, s.id]
       end
     end
   end

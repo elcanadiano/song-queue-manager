@@ -18,6 +18,10 @@ getback:
   name:    Get Back
   artists: beatles
 
+cantbuymelove:
+  name:    Can't Buy Me Love
+  artists: beatles
+
 turntostone:
   name:    Turn To Stone
   artists: elo
@@ -72,19 +76,19 @@ corporateamerica:
 
 holiday_gd:
   name:    holiday
-  artists: Green Day
+  artists: greenday
 
 boulevard:
   name:    Boulevard of Broken Dreams
-  artists: Green Day
+  artists: greenday
 
 homecoming:
   name:    homecoming
-  artists: Green Day
+  artists: greenday
 
 brainstew:
   name:    Brain Stew/Jaded
-  artists: Green Day
+  artists: greenday
 
 makedamnsure:
   name:    MakeDamnSure
@@ -105,6 +109,66 @@ pretender:
 bestofyou:
   name:    Best of You
   artists: foofighters
+
+song1:
+  name:    Song 1
+  artists: blur
+
+song2:
+  name:    Song 1
+  artists: blur
+
+imustbeinlove:
+  name:    I Must Be in Love
+  artists: rutles
+
+chandelier:
+  name:    chandelier
+  artists: sia
+
+closingtime:
+  name:    Closing Time
+  artists: semisonic
+
+sweetdisposition:
+  name:    Sweet Disposition
+  artists: tempertrap
+
+closertotheedge:
+  name:    Closer to the Edge
+  artists: 30secondstomars
+
+sweetchild:
+  name:    Sweet Child O' Mine
+  artists: gunsnroses
+
+vlglg:
+  name:    ¿Viva La Gloria? (Little Girl)
+  artists: greenday
+
+needyounow:
+  name:    Need You Now
+  artists: ladyantebellum
+
+paradise:
+  name:    Paradise by the Dashboard Light
+  artists: meatloaf
+
+eyeofthetiger:
+  name:    Eye of the Tiger
+  artists: survivor
+
+firstdate:
+  name:    First Date
+  artists: blink182
+
+defector:
+  name:    Defector
+  artists: muse
+
+madness:
+  name:    madness
+  artists: muse
 
 # This is spelt wrong intentionally. The actual song title is in fact,
 # "Stop Draggin' My Heart Around"

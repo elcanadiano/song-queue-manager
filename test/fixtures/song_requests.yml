@@ -1,161 +1,141 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  song: Song 1
-  artist: Blur
+  song:         song1
   is_completed: false
   is_abandoned: false
-  event: brs8
-  band: nbam
+  event:        brs8
+  band:         nbam
 
 two:
-  song: I Must Be In Love
-  artist: The Rutles
+  song:         imustbeinlove
   is_completed: false
   is_abandoned: false
-  event: brs8
-  band: h4h
+  event:        brs8
+  band:         h4h
 
 three:
-  song: Song 2
-  artist: Blur
+  song:         song2
   is_completed: false
   is_abandoned: false
-  event: brs8
-  band: dankey
+  event:        brs8
+  band:         dankey
 
 four:
-  song: Can't Buy Me Love
-  artist: The Beatles
+  song:         cantbuymelove
   is_completed: false
   is_abandoned: false
-  event: brs8
-  band: h4h
+  event:        brs8
+  band:         h4h
 
 five:
-  song: MakeDamnSure
-  artist: Taking Back Sunday
+  song:         makedamnsure
   is_completed: false
   is_abandoned: false
-  event: brs8
-  band: dankey
+  event:        brs8
+  band:         dankey
 
 six:
-  song: Song 2
-  artist: Blur
+  song:         song2
   is_completed: false
   is_abandoned: false
-  event: brs8
-  band: nbam
+  event:        brs8
+  band:         nbam
 
 abandoned:
-  song: Chandelier
-  artist: Sia
+  song:         chandelier
   is_completed: false
   is_abandoned: true
-  event: brs8
-  band: nbam
+  event:        brs8
+  band:         nbam
 
 completed:
-  song: Closing Time
-  artist: Semisonic
+  song:         closingtime
   is_completed: true
   is_abandoned: false
-  event: brs8
-  band: nbam
+  event:        brs8
+  band:         nbam
 
 completed2:
-  song: The Pretender
-  artist: Foo Fighters
+  song:         pretender
   is_completed: true
   is_abandoned: false
-  event: brs8
-  band: dankey
+  event:        brs8
+  band:         dankey
 
 completed3:
-  song: Sweet Disposition
-  artist: The Temper Trap
+  song:         sweetdisposition
   is_completed: true
   is_abandoned: false
-  event: brs8
-  band: h4h
+  event:        brs8
+  band:         h4h
 
 abandoned2:
-  song: More Than a Feeling
-  artist: Boston
+  song:         morethanafeeling
   is_completed: false
   is_abandoned: true
-  event: brs8
-  band: nbam
+  event:        brs8
+  band:         nbam
 
 completed4:
-  song: Closer To the Edge
-  artist: 30 Seconds to Mars
+  song:         closertotheedge
   is_completed: true
   is_abandoned: false
-  event: brs8
-  band: dankey
+  event:        brs8
+  band:         dankey
 
 completed5:
-  song: Sweet Child o' Mine
-  artist: Guns n' Roses
+  song:         sweetchild
   is_completed: true
   is_abandoned: false
-  event: brs8
-  band: dankey
+  event:        brs8
+  band:         dankey
 
 completed6:
-  song: ¿Viva La Gloria? (Little Girl)
-  artist: Green Day
+  song:         vlglg
   is_completed: true
   is_abandoned: false
-  event: brs8
-  band: nbam
+  event:        brs8
+  band:         nbam
 
 completed7:
-  song: Need You Now
-  artist: Lady Antebellum
+  song:         needyounow
   is_completed: true
   is_abandoned: false
-  event: brs8
-  band: h4h
+  event:        brs8
+  band:         h4h
 
 completed8:
-  song: Paradise By the Dashboard Light
-  artist: Meat Loaf
+  song:         paradise
   is_completed: true
   is_abandoned: false
-  event: brs8
-  band: h4h
+  event:        brs8
+  band:         h4h
 
 brs7_one:
-  song: Eye of the Tiger
-  artist: Survivor
+  song:         eyeofthetiger
   is_completed: false
   is_abandoned: false
-  event: brs7
-  band: h4h
+  event:        brs7
+  band:         h4h
 
 brs7_two:
-  song: First Date
-  artist: Blink-182
+  song:         firstdate
   is_completed: false
   is_abandoned: false
-  event: brs7
-  band: h4h
+  event:        brs7
+  band:         h4h
 
 brs7_three:
-  song: Defector
-  artist: Muse
+  song:         defector
   is_completed: false
   is_abandoned: false
-  event: brs7
-  band: dankey
+  event:        brs7
+  band:         dankey
 
 brs7_four:
-  song: Madness
-  artist: Muse
+  song:         madness
   is_completed: false
   is_abandoned: false
-  event: brs7
-  band: nbam
+  event:        brs7
+  band:         nbam
