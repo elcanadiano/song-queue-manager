@@ -28,6 +28,16 @@ class EventsControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
 
+  test "should redirect new when there are no soundtracks" do
+    log_in_as(@admin)
+    assert !Soundtrack.all.blank?
+    Soundtrack.delete_all
+    assert Soundtrack.all.blank?
+    get :new
+    assert_equal "You cannot create an event unless you have a soundtrack.", flash[:warning]
+    assert_redirected_to soundtracks_url
+  end
+
   test "should not create when not logged in" do
     assert_no_difference 'Event.count', 'An event should be created if you are not logged in.' do
       post :create, event: {

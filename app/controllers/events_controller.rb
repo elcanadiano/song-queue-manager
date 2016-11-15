@@ -20,6 +20,11 @@ class EventsController < ApplicationController
     @open_events = Event.where("is_open = true")
     @event       = Event.new
     @soundtracks = soundtrack_list
+
+    if soundtrack_list.blank?
+      flash[:warning] = "You cannot create an event unless you have a soundtrack."
+      redirect_to soundtracks_url
+    end
   end
 
   def create
