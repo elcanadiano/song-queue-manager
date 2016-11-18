@@ -7,10 +7,10 @@
       <%= render 'shared/error_messages', object: f.object %>
 
       <%= f.label :song %>
-      <%= f.collection_select :song, @event.soundtrack.songs, :id, :song_by_artist, {include_blank: "Select Song"} %>
+      <%= f.collection_select :song, @event.soundtrack.songs, :id, :song_by_artist, {include_blank: "Select Song"}, {class: 'form-control'} %>
 
       <%= f.label :band_id, "Your Band" %>
-      <%= f.collection_select(:band_id, @bands, :id, :name, {include_blank: "Select Band"}) %>
+      <%= f.collection_select(:band_id, @bands, :id, :name, {include_blank: "Select Band"}, {class: 'form-control'}) %>
 
       <%= f.hidden_field :event_id, value: @event.id %>
 

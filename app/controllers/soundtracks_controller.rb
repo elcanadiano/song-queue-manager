@@ -1,4 +1,6 @@
 class SoundtracksController < ApplicationController
+  require 'set'
+
   before_action :logged_in_user
   before_action :admin_user
 
@@ -26,9 +28,10 @@ class SoundtracksController < ApplicationController
   end
 
   def edit
-    @open_events  = Event.where("is_open = true")
-    @soundtrack   = Soundtrack.find(params[:id])
-    @songs        = Song.all.collect do |s|
+    @open_events      = Event.where("is_open = true")
+    @soundtrack       = Soundtrack.find(params[:id])
+    @soundtrack_songs = Set.new(@soundtrack.songs)
+    @songs            = Song.all.collect do |s|
       if @soundtrack.songs.include? s
         [s.song_by_artist, s.id, {selected: true}]
       else
@@ -52,6 +55,15 @@ class SoundtracksController < ApplicationController
   def destroy
     Soundtrack.find(params[:id]).destroy
     flash[:success] = "Soundtrack Deleted."
+    redirect_to soundtracks_url
+  end
+
+  def import
+  end
+
+  def process_import
+    Soundtrack.import(params[:file], params[:soundtrack])
+    flash[:success] = "Songs imported!"
     redirect_to soundtracks_url
   end
 

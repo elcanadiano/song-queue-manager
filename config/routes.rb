@@ -51,7 +51,12 @@ Rails.application.routes.draw do
 
   resources :artists,     except: [:show]
   resources :songs,       except: [:show]
-  resources :soundtracks, except: [:show]
+  resources :soundtracks, except: [:show] do
+    collection do
+      get  'import'
+      post 'import' => 'soundtracks#process_import', as: "process_import"
+    end
+  end
 
   resources :bands,   except: [:index, :destroy] do
     member do
