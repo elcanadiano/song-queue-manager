@@ -5,6 +5,7 @@ class SoundtracksControllerTest < ActionController::TestCase
     @admin      = users(:alexander)
     @non_admin  = users(:donnie)
     @soundtrack = soundtracks(:notinrockband)
+    @testimport = soundtracks(:testexistingsoundtrack)
     @song1      = songs(:devilinherheart)
     @song2      = songs(:rain)
     @song3      = songs(:something)
@@ -176,5 +177,89 @@ class SoundtracksControllerTest < ActionController::TestCase
     end
     assert_equal "This function requires administrator privileges.", flash[:danger]
     assert_redirected_to root_url
+  end
+
+  test "guests cannot visit import soundtrack" do
+    get :import
+    assert_equal "Please log in.", flash[:danger]
+    assert_redirected_to login_url
+  end
+
+  test "non-admins cannot visit import soundtrack" do
+    log_in_as(@non_admin)
+    get :import
+    assert_equal "This function requires administrator privileges.", flash[:danger]
+    assert_redirected_to root_url
+  end
+
+  test "admins can visit import soundtrack" do
+    log_in_as(@admin)
+    get :import
+    assert flash.empty?
+    assert_response :success
+  end
+
+  test "guests cannot import a soundtrack" do
+    assert_no_difference ['Soundtrack.count', 'Song.count'], "No soundtracks or songs should be added" do
+      post :process_import, file: fixture_file_upload('/spreadsheets/elcanadiano2-dlc-11-23-16.csv', 'text/csv'), soundtrack: "new soundtrack"
+    end
+
+    assert_equal "Please log in.", flash[:danger]
+    assert_redirected_to login_url
+  end
+
+  test "non-admins cannot import a soundtrack" do
+    log_in_as(@non_admin)
+
+    assert_no_difference ['Soundtrack.count', 'Song.count'], "No soundtracks or songs should be added" do
+      post :process_import, file: fixture_file_upload('/spreadsheets/elcanadiano2-dlc-11-23-16.csv', 'text/csv'), soundtrack: "new soundtrack"
+    end
+
+    assert_equal "This function requires administrator privileges.", flash[:danger]
+    assert_redirected_to root_url
+  end
+
+  # Testing an import. There are nine songs in the CSV, of which six songs are
+  # new (three are existing already). Given the soundtrack name is not found,
+  # a new soundtrack should be created with the nine songs, but only six new
+  # songs should be added.
+  test "admins can import to a new soundtrack" do
+    log_in_as(@admin)
+
+    assert_equal 3,  Soundtrack.count
+    assert_equal 47, Song.count
+    assert           Soundtrack.where(name: "new soundtrack").empty?
+
+    post :process_import, file: fixture_file_upload('/spreadsheets/elcanadiano2-dlc-11-23-16.csv', 'text/csv'), soundtrack: "new soundtrack"
+
+    assert           !Soundtrack.where(name: "new soundtrack").empty?
+    new_soundtrack = Soundtrack.find_by(name: "new soundtrack")
+
+    assert_equal 9,  new_soundtrack.songs.count
+    assert_equal 4,  Soundtrack.count
+    assert_equal 53, Song.count
+
+    assert_equal "Songs imported!", flash[:success]
+    assert_redirected_to soundtracks_url
+  end
+
+  # Testing an import to an existing soundtrack. Of the nine songs in the
+  # spreadsheet, two exist in the existing soundtrack already so the song count
+  # should then become 11.
+  test "admins can import to an existing soundtrack" do
+    log_in_as(@admin)
+
+    assert_equal 3,  Soundtrack.count
+    assert_equal 47, Song.count
+    assert_equal 4,  @testimport.songs.count
+
+    post :process_import, file: fixture_file_upload('/spreadsheets/elcanadiano2-dlc-11-23-16.csv', 'text/csv'), soundtrack: "Test Existing Soundtrack"
+
+    @testimport.reload
+
+    assert_equal 11, @testimport.songs.count
+
+    assert_equal "Songs imported!", flash[:success]
+    assert_redirected_to soundtracks_url
   end
 end

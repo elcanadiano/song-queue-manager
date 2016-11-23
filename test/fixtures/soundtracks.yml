@@ -6,3 +6,7 @@ brspast:
   name: Songs previously performed in Battle Rock Seattle
   songs: iwantitall, brainstew, makedamnsure, pretender
 
+testexistingsoundtrack:
+  name: Test Existing Soundtrack
+  songs: tightrope, mrbluesky, peaceofmind, boulevard
+

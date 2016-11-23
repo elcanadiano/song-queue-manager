@@ -75,7 +75,7 @@ corporateamerica:
   artists: boston
 
 holiday_gd:
-  name:    holiday
+  name:    Holiday
   artists: greenday
 
 boulevard:
@@ -83,7 +83,7 @@ boulevard:
   artists: greenday
 
 homecoming:
-  name:    homecoming
+  name:    Homecoming
   artists: greenday
 
 brainstew:
@@ -115,7 +115,7 @@ song1:
   artists: blur
 
 song2:
-  name:    Song 1
+  name:    Song 2
   artists: blur
 
 imustbeinlove:

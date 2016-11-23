@@ -11,13 +11,13 @@ class Soundtrack < ActiveRecord::Base
 
     soundtrack = self.find_or_create_by(name: soundtrack_name)
 
-    puts "Soundtrack: #{soundtrack} - Name: #{soundtrack_name}"
+    #puts "Soundtrack: #{soundtrack} - Name: #{soundtrack_name}"
 
     CSV.foreach(file.path, headers: true, encoding: "windows-1252:utf-8") do |row|
       artist_name = row["Artist"].strip
       song_name   = (row["Title"] || row["Song Title"]).strip
 
-      puts "Song: #{song_name} by #{artist_name}"
+      #puts "Song: #{song_name} by #{artist_name}"
       artist = Artist.find_or_create_by(name: artist_name)
       songs  = Song.where(name: song_name)
       chosen_song = nil
@@ -31,7 +31,7 @@ class Soundtrack < ActiveRecord::Base
       soundtrack.songs << chosen_song if !soundtrack.songs.include?(chosen_song)
     end
 
-    puts "Songs: #{soundtrack.songs.length}"
+    #puts "Songs: #{soundtrack.songs.length}"
 
     soundtrack.save
     soundtrack
