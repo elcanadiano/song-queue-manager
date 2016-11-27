@@ -1,15 +1,22 @@
 class BandsController < ApplicationController
-  before_action :logged_in_user,       only: [:new, :create, :edit, :update, :show, :invite, :create_invite, :remove_member, :promote_to_admin            ]
-  before_action :band_admin_user,      only: [               :edit, :update,        :invite, :create_invite, :remove_member, :promote_to_admin, :step_down]
-  before_action :existing_user,        only: [                                               :create_invite                                               ]
-  before_action :existing_member,      only: [                                                               :remove_member, :promote_to_admin            ]
-  before_action :nonexisting_member,   only: [                                               :create_invite                                               ]
-  before_action :cannot_remove_self,   only: [                                                               :remove_member                               ]
-  before_action :cannot_remove_admin,  only: [                                                               :remove_member                               ]
-  before_action :cannot_promote_admin, only: [                                                                               :promote_to_admin            ]
-  before_action :multiple_admins,      only: [                                                                                                  :step_down]
-  before_action :nonexisting_invite,   only: [                                               :create_invite                                               ]
-  before_action :correct_params,       only: [                                               :create_invite                                               ]
+  before_action :logged_in_user,       only: [        :new, :create, :edit, :update, :show, :destroy, :invite, :create_invite, :remove_member, :promote_to_admin            ]
+  before_action :admin_user,           only: [:index,                                       :destroy,                                                                       ]
+  before_action :band_admin_user,      only: [                       :edit, :update,                  :invite, :create_invite, :remove_member, :promote_to_admin, :step_down]
+  before_action :existing_user,        only: [                                                                 :create_invite                                               ]
+  before_action :existing_member,      only: [                                                                                 :remove_member, :promote_to_admin            ]
+  before_action :nonexisting_member,   only: [                                                                 :create_invite                                               ]
+  before_action :cannot_remove_self,   only: [                                                                                 :remove_member                               ]
+  before_action :cannot_remove_admin,  only: [                                                                                 :remove_member                               ]
+  before_action :cannot_promote_admin, only: [                                                                                                 :promote_to_admin            ]
+  before_action :multiple_admins,      only: [                                                                                                                    :step_down]
+  before_action :nonexisting_invite,   only: [                                                                 :create_invite                                               ]
+  before_action :correct_params,       only: [                                                                 :create_invite                                               ]
+
+  # NOTE: Designed to be a page for user admins only.
+  def index
+    @open_events = Event.where("is_open = true")
+    @bands       = Band.paginate(page: params[:page])
+  end
 
   def new
     @open_events = Event.where("is_open = true")
@@ -61,6 +68,13 @@ class BandsController < ApplicationController
       band_id:  @band.id,
       user_id:  current_user.id
     })
+  end
+
+  # NOTE: Only an admin can delete a band.
+  def destroy
+    Band.find(params[:id]).destroy
+    flash[:success] = "Band Deleted."
+    redirect_to bands_url
   end
 
   # Invite User Page

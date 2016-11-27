@@ -147,3 +147,11 @@ request_to_delete:
   is_abandoned: false
   event:        brs7
   band:         nbam
+
+# Request for the purposes of "band delete"
+band_delete:
+  song:         song_to_delete
+  is_completed: false
+  is_abandoned: false
+  event:        brs7
+  band:         delete

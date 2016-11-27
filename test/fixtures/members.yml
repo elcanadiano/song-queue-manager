@@ -2,35 +2,40 @@
 
 dankey:
   is_admin: true
-  user: dankey
-  band: dankey
+  user:     dankey
+  band:     dankey
 
 archer:
   is_admin: false
-  user: archer
-  band: dankey
+  user:     archer
+  band:     dankey
 
 alexander:
   is_admin: true
-  user: alexander
-  band: h4h
+  user:     alexander
+  band:     h4h
 
 erin:
   is_admin: false
-  user: erin
-  band: h4h
+  user:     erin
+  band:     h4h
 
 andrew:
   is_admin: false
-  user: andrew
-  band: h4h
+  user:     andrew
+  band:     h4h
 
 ray:
   is_admin: false
-  user: ray
-  band: h4h
+  user:     ray
+  band:     h4h
 
 anne:
   is_admin: true
-  user: anne
-  band: h4h
+  user:     anne
+  band:     h4h
+
+deedee:
+  is_admin: true
+  user:     deedee
+  band:     delete

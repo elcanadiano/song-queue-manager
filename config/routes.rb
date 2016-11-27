@@ -58,7 +58,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :bands,   except: [:index, :destroy] do
+  resources :bands do
     member do
       get    'invite'
       post   'create_invite'
