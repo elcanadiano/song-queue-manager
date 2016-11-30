@@ -26,6 +26,7 @@ class UsersController < ApplicationController
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url
     else
+      @open_events = Event.where("is_open = true")
       render 'new'
     end
   end
@@ -41,6 +42,7 @@ class UsersController < ApplicationController
       flash[:success] = "Profile updated"
       redirect_to @user
     else
+      @open_events = Event.where("is_open = true")
       render 'edit'
     end
   end
@@ -49,12 +51,6 @@ class UsersController < ApplicationController
     User.find(params[:id]).destroy
     flash[:success] = "User deleted"
     redirect_to users_url
-  end
-
-  def bands
-    @open_events = Event.where("is_open = true")
-    @user        = User.find(params[:id])
-    @memberships = Member.where(user_id: @user.id)
   end
 
   private

@@ -17,6 +17,7 @@ class SessionsController < ApplicationController
         redirect_to root_url
       end
     else
+      @open_events = Event.where("is_open = true")
       flash.now[:danger] = 'Invalid email/password combination'
       render 'new'
     end

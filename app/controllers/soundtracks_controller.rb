@@ -23,6 +23,8 @@ class SoundtracksController < ApplicationController
       flash[:success] = "Soundtrack created successfully!"
       redirect_to soundtracks_url
     else
+      @open_events    = Event.where("is_open = true")
+      @songs          = Song.all.collect{|s| [s.song_by_artist, s.id]}
       render 'new'
     end
   end
@@ -59,6 +61,7 @@ class SoundtracksController < ApplicationController
   end
 
   def import
+    @open_events      = Event.where("is_open = true")
   end
 
   def process_import

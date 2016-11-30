@@ -50,8 +50,9 @@ class BandsController < ApplicationController
 
     if @band.update_attributes(band_params)
       flash[:success] = "Band updated!"
-      redirect_to bands_user_url @user.id
+      redirect_to band_url(@band)
     else
+      @open_events = Event.where("is_open = true")
       render 'edit'
     end
   end

@@ -224,7 +224,7 @@ class EventsControllerTest < ActionController::TestCase
     log_in_as(@bandless_user)
     get :song_request, id: @rebar
     assert_equal "You must create or be part of a band in order to make a request.", flash[:warning]
-    assert_redirected_to bands_user_url(@bandless_user)
+    assert_redirected_to event_url(@rebar)
   end
 
   test "members should not be able to visit song request page of closed event" do

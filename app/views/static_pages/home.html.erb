@@ -3,9 +3,9 @@
     <h1>Welcome back, <%= current_user.name %>.</h1>
     <h2>
       Have you created a band? Check to see if you were invited to join one or
-      create your own! Check out <%= link_to "your notifications", notifications_url %>
-      or the <%= link_to "bands page", bands_user_url(current_user) %>. Both are
-      under "Account" on the top-right corner.
+      create your own! Check out
+      <%= link_to "your notifications", notifications_url %>. If not, create a
+      band under the Bands header above!
     </h2>
   <% else %>
     <h1>Welcome to Song Queue Manager.</h1>

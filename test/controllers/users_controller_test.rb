@@ -63,16 +63,4 @@ class UsersControllerTest < ActionController::TestCase
     end
     assert_redirected_to root_url
   end
-
-  test "user can see their own bands" do
-    log_in_as(@user)
-    get :bands, id: @user
-    assert_response :success
-  end
-
-  test "user cannot see other bands" do
-    log_in_as(@other_user)
-    get :bands, id: @user
-    assert_redirected_to root_url
-  end
 end

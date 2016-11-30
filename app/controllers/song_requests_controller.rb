@@ -14,6 +14,7 @@ class SongRequestsController < ApplicationController
       flash[:success] = "Song added successfully!"
       redirect_to event_url(params[:song_request][:event_id])
     else
+      @open_events = Event.where("is_open = true")
       render 'events/song_request'
     end
   end

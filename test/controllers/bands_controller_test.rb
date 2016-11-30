@@ -117,7 +117,7 @@ class BandsControllerTest < ActionController::TestCase
     log_in_as(@band_admin)
     patch :update, id: @band, band: { name: "Harmonies for Hire Starship" }
     assert_equal "Band updated!", flash[:success]
-    assert_redirected_to bands_user_url(@band_admin)
+    assert_redirected_to band_url(@band)
   end
 
   test "should update if user admin" do
@@ -128,9 +128,7 @@ class BandsControllerTest < ActionController::TestCase
 
     patch :update, id: @band, band: { name: "Harmonies for Hire Starship" }
     assert_equal "Band updated!", flash[:success]
-
-    # This is poorly-designed but this is how it works for now.
-    assert_redirected_to bands_user_url(@user_admin)
+    assert_redirected_to band_url(@band)
   end
 
   test "guests cannot delete a band" do

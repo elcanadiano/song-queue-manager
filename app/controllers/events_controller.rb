@@ -35,6 +35,7 @@ class EventsController < ApplicationController
       flash[:success] = "Event created successfully!"
       redirect_to events_url
     else
+      @open_events = Event.where("is_open = true")
       render 'new'
     end
   end
@@ -66,6 +67,7 @@ class EventsController < ApplicationController
       flash[:success] = "Event Updated!"
       redirect_to events_url
     else
+      @open_events = Event.where("is_open = true")
       render 'edit'
     end
   end
@@ -81,7 +83,7 @@ class EventsController < ApplicationController
     # band.
     if @bands.blank?
       flash[:warning] = "You must create or be part of a band in order to make a request."
-      redirect_to bands_user_url(current_user)
+      redirect_to event_url(@event)
     end
   end
 

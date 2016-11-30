@@ -21,12 +21,7 @@ Rails.application.routes.draw do
   post   'login'   => 'sessions#create'
   delete 'logout'  => 'sessions#destroy'
 
-  resources :users do
-    member do
-      get 'bands'
-    end
-  end
-
+  resources :users
   resources :account_activations, only:   [:edit]
   resources :password_resets,     only:   [:new, :create, :edit, :update]
   resources :notifications,       only:   [:index] do

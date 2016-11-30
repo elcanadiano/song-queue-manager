@@ -13,11 +13,12 @@ class ArtistsController < ApplicationController
   end
 
   def create
-    @artist      = Artist.new(artist_params)
+    @artist        = Artist.new(artist_params)
     if @artist.save
       flash[:success] = "Artist created successfully!"
       redirect_to artists_url
     else
+      @open_events = Event.where("is_open = true")
       render 'new'
     end
   end

@@ -1,6 +1,14 @@
 <% provide(:title, "Showing Members of #{@band.name}") %>
 <h1>Showing Members of <%= @band.name %></h1>
 
+<% if is_band_admin? %>
+  <div class="row">
+    <div class="col-md-12">
+      <%= link_to "Edit", edit_band_url, class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
+
 <div class="row">
   <ul class="users">
     <%= render partial: 'band_members', collection: @members, as: :member %>

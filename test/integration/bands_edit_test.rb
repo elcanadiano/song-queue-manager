@@ -22,8 +22,8 @@ class BandsEditTest < ActionDispatch::IntegrationTest
     name  = "The Left Behind"
     patch band_path(@band), band: { name:  name }
     assert_equal "Band updated!", flash[:success]
-    assert_redirected_to bands_user_path(@user)
+    assert_redirected_to band_url(@band)
     @band.reload
-    assert_equal name,  @band.name
+    assert_equal name, @band.name
   end
 end

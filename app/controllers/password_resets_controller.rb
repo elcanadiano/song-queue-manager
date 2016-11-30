@@ -4,6 +4,7 @@ class PasswordResetsController < ApplicationController
   before_action :check_expiration, only: [:edit, :update]
 
   def new
+    @open_events = Event.where("is_open = true")
   end
 
   def create
@@ -14,16 +15,19 @@ class PasswordResetsController < ApplicationController
       flash[:info] = "Email sent with password reset instructions"
       redirect_to root_url
     else
+      @open_events = Event.where("is_open = true")
       flash.now[:danger] = "Email address not found"
       render 'new'
     end
   end
 
   def edit
+    @open_events = Event.where("is_open = true")
   end
 
   def update
     if params[:user][:password].empty?
+      @open_events = Event.where("is_open = true")
       @user.errors.add(:password, "can't be empty")
       render 'edit'
     elsif @user.update_attributes(user_params)
@@ -31,6 +35,7 @@ class PasswordResetsController < ApplicationController
       flash[:success] = "Password has been reset."
       redirect_to @user
     else
+      @open_events = Event.where("is_open = true")
       render 'edit'
     end
   end

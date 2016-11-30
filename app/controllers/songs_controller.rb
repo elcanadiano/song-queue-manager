@@ -14,13 +14,14 @@ class SongsController < ApplicationController
   end
 
   def create
-    @artists      = params[:song][:artists] || ""
-    @song         = Song.new(song_params)
-    @song.artists = Artist.where(name: @artists.split(";"))
+    @artists       = params[:song][:artists] || ""
+    @song          = Song.new(song_params)
+    @song.artists  = Artist.where(name: @artists.split(";"))
     if @song.save
       flash[:success] = "Song created successfully!"
       redirect_to songs_url
     else
+      @open_events = Event.where("is_open = true")
       render 'new'
     end
   end
