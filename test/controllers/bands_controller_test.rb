@@ -7,17 +7,20 @@ class BandsControllerTest < ActionController::TestCase
     @other_member                = users(:andrew)
     @user_admin                  = users(:michael)
     @non_admin                   = users(:archer)
-    @band_admin                  = users(:alexander)
+    @band_admin                  = users(:roger)
     @other_band_admin            = users(:anne)
     @invited                     = users(:chris)
     @single_admin                = users(:dankey)
+    @band_user_admin             = users(:band_user_admin)
+    @band_user_admin_membership  = members(:band_user_admin)
     @single_admin_membership     = members(:dankey)
-    @band_admin_membership       = members(:alexander)
+    @band_admin_membership       = members(:roger)
     @membership                  = members(:erin)
     @other_band_admin_membership = members(:anne)
     @band                        = bands(:h4h)
     @single_admin_band           = bands(:dankey)
     @delete_band                 = bands(:delete)
+    @band_user_band              = bands(:band_user_admin)
   end
 
   # Usually the "Please log in." error would show but this is the preferred
@@ -79,6 +82,24 @@ class BandsControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
 
+  test "should reach edit when band admin" do
+    log_in_as(@band_admin)
+    get :edit, id: @band
+    assert flash.empty?
+    assert_response :success
+  end
+
+  test "should reach edit when user admin" do
+    log_in_as(@user_admin)
+
+    # Michael, the user admin is not supposed to be part of the band.
+    assert !Member.exists?(band_id: @band, user_id: @user_admin)
+
+    get :edit, id: @band
+    assert flash.empty?
+    assert_response :success
+  end
+
   test "should not update if not logged in" do
     patch :update, id: @band, band: { name: "Harmonies for Hire Starship" }
     assert_equal "Please log in.", flash[:danger]
@@ -92,11 +113,24 @@ class BandsControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
 
-  test "should update if admin" do
+  test "should update if band admin" do
     log_in_as(@band_admin)
     patch :update, id: @band, band: { name: "Harmonies for Hire Starship" }
     assert_equal "Band updated!", flash[:success]
     assert_redirected_to bands_user_url(@band_admin)
+  end
+
+  test "should update if user admin" do
+    log_in_as(@user_admin)
+
+    # Michael, the user admin is not supposed to be part of the band.
+    assert !Member.exists?(band_id: @band, user_id: @user_admin)
+
+    patch :update, id: @band, band: { name: "Harmonies for Hire Starship" }
+    assert_equal "Band updated!", flash[:success]
+
+    # This is poorly-designed but this is how it works for now.
+    assert_redirected_to bands_user_url(@user_admin)
   end
 
   test "guests cannot delete a band" do
@@ -116,6 +150,24 @@ class BandsControllerTest < ActionController::TestCase
 
   test "non-admins cannot delete a band" do
     log_in_as(@non_admin)
+    assert SongRequest.exists?(band_id: @delete_band.id)
+    assert Member.exists?(band_id: @delete_band.id)
+
+    assert_no_difference "Band.count" do
+      delete :destroy, id: @delete_band
+    end
+
+    assert SongRequest.exists?(band_id: @delete_band.id)
+    assert Member.exists?(band_id: @delete_band.id)
+
+    assert_equal "This function requires administrator privileges.", flash[:danger]
+    assert_redirected_to root_url
+  end
+
+  test "band admins cannot delete a band" do
+    # This assumes that Roger, the band admin, is NOT a user admin. He should
+    # not be.
+    log_in_as(@band_admin)
     assert SongRequest.exists?(band_id: @delete_band.id)
     assert Member.exists?(band_id: @delete_band.id)
 
@@ -160,9 +212,34 @@ class BandsControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
 
+  test "should reach invite when band admin" do
+    log_in_as(@band_admin)
+    get :invite, id: @band
+    assert flash.empty?
+    assert_response :success
+  end
+
+  test "should reach invite when user admin" do
+    log_in_as(@user_admin)
+
+    # Michael, the user admin is not supposed to be part of the band.
+    assert !Member.exists?(band_id: @band, user_id: @user_admin)
+
+    get :invite, id: @band
+    assert flash.empty?
+    assert_response :success
+  end
+
   test "send invite" do
     log_in_as(@band_admin)
     post :create_invite, id: @band, notification: {band_id: @band.id, user_id: @non_member.id, creator_id: @band_admin.id}
+    assert_equal "Invite sent!", flash[:success]
+    assert_redirected_to band_url(@band)
+  end
+
+  test "user admins can send invite" do
+    log_in_as(@user_admin)
+    post :create_invite, id: @band, notification: {band_id: @band.id, user_id: @non_member.id, creator_id: @user_admin.id}
     assert_equal "Invite sent!", flash[:success]
     assert_redirected_to band_url(@band)
   end
@@ -197,6 +274,19 @@ class BandsControllerTest < ActionController::TestCase
 
   test "remove member from band" do
     log_in_as(@band_admin)
+    assert_difference 'Member.count', -1, 'A member should be removed.' do
+      delete :remove_member, id: @band, user_id: @member.id
+    end
+    assert_equal "The user is no longer part of the band!", flash[:success]
+    assert_redirected_to band_url(@band)
+  end
+
+  test "user admins can remove member from band" do
+    log_in_as(@user_admin)
+
+    # Michael, the user admin is not supposed to be part of the band.
+    assert !Member.exists?(band_id: @band, user_id: @user_admin)
+
     assert_difference 'Member.count', -1, 'A member should be removed.' do
       delete :remove_member, id: @band, user_id: @member.id
     end
@@ -239,6 +329,15 @@ class BandsControllerTest < ActionController::TestCase
     assert_redirected_to band_url(@band)
   end
 
+  test "can remove yourself from a band if you are an admin" do
+    log_in_as(@band_user_admin)
+    assert_difference 'Member.count', -1, 'A member should be removed.' do
+      delete :remove_member, id: @band_user_band, user_id: @band_user_admin
+    end
+    assert_equal "The user is no longer part of the band!", flash[:success]
+    assert_redirected_to band_url(@band_user_band)
+  end
+
   test "cannot remove an admin from a band" do
     log_in_as(@band_admin)
     assert_no_difference 'Member.count', 'Cannot remove yourself.' do
@@ -250,7 +349,7 @@ class BandsControllerTest < ActionController::TestCase
     assert_redirected_to band_url(@band)
   end
 
-  test "promote member to admin" do
+  test "promote member to band admin" do
     log_in_as(@band_admin)
     assert !@membership.is_admin?
     patch :promote_to_admin, id: @band, user_id: @member.id
@@ -260,7 +359,21 @@ class BandsControllerTest < ActionController::TestCase
     assert_redirected_to band_url(@band)
   end
 
-  test "guests cannot promote member to admin" do
+  test "user admins can promote member to band admin" do
+    log_in_as(@user_admin)
+
+    # Michael, the user admin is not supposed to be part of the band.
+    assert !Member.exists?(band_id: @band, user_id: @user_admin)
+
+    assert !@membership.is_admin?
+    patch :promote_to_admin, id: @band, user_id: @member.id
+    @membership.reload
+    assert @membership.is_admin?
+    assert_equal "The user has been promoted to admin!", flash[:success]
+    assert_redirected_to band_url(@band)
+  end
+
+  test "guests cannot promote member to band admin" do
     assert !@membership.is_admin?
     patch :promote_to_admin, id: @band, user_id: @member.id
     @membership.reload
@@ -269,7 +382,7 @@ class BandsControllerTest < ActionController::TestCase
     assert_redirected_to login_url
   end
 
-  test "non-members cannot promote member to admin" do
+  test "non-members cannot promote member to band admin" do
     log_in_as(@other_member)
     assert !@membership.is_admin?
     patch :promote_to_admin, id: @band, user_id: @member.id
@@ -279,24 +392,38 @@ class BandsControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
 
-  test "promote nonmember to admin" do
+  test "promote nonmember to band admin" do
     log_in_as(@band_admin)
     patch :promote_to_admin, id: @band, user_id: @non_member.id
     assert_equal "This user not a member of the band.", flash[:danger]
     assert_redirected_to band_url(@band)
   end
 
-  test "cannot promote an admin" do
+  test "cannot promote an band admin" do
     log_in_as(@band_admin)
     patch :promote_to_admin, id: @band, user_id: @other_band_admin.id
     assert_equal "The user is already an admin.", flash[:danger]
     assert_redirected_to band_url(@band)
   end
 
-  test "step down as admin" do
+  test "step down as band admin" do
     log_in_as(@band_admin)
     assert @band_admin_membership.is_admin?
-    patch :step_down, id: @band
+    patch :step_down, id: @band, user_id: @band_admin
+    assert_equal "You have stepped down as an admin.", flash[:success]
+    @band_admin_membership.reload
+    assert !@band_admin_membership.is_admin?
+    assert_redirected_to band_url(@band)
+  end
+
+  test "user admins can force a step down" do
+    log_in_as(@user_admin)
+
+    # Michael, the user admin is not supposed to be part of the band.
+    assert !Member.exists?(band_id: @band, user_id: @user_admin)
+
+    assert @band_admin_membership.is_admin?
+    patch :step_down, id: @band, user_id: @band_admin
     assert_equal "You have stepped down as an admin.", flash[:success]
     @band_admin_membership.reload
     assert !@band_admin_membership.is_admin?
@@ -305,7 +432,7 @@ class BandsControllerTest < ActionController::TestCase
 
   test "non-admins cannot step down" do
     log_in_as(@member)
-    patch :step_down, id: @band
+    patch :step_down, id: @band, user_id: @member
     assert_equal "You are not authorized to manage this band.", flash[:danger]
     assert_redirected_to root_url
   end
@@ -313,10 +440,20 @@ class BandsControllerTest < ActionController::TestCase
   test "cannot step down if there does not exist another admin" do
     log_in_as(@single_admin)
     assert @single_admin_membership.is_admin?
-    patch :step_down, id: @single_admin_band
+    patch :step_down, id: @single_admin_band, user_id: @single_admin
     assert_equal "There needs to be another admin before you step down.", flash[:danger]
     @single_admin_membership.reload
     assert @single_admin_membership.is_admin?
+    assert_redirected_to band_url(@single_admin_band)
+  end
+
+  test "user admins can force a step down even if there does not exist another admin" do
+    log_in_as(@user_admin)
+    assert @single_admin_membership.is_admin?
+    patch :step_down, id: @single_admin_band, user_id: @single_admin
+    assert_equal "You have stepped down as an admin.", flash[:success]
+    @single_admin_membership.reload
+    assert !@single_admin_membership.is_admin?
     assert_redirected_to band_url(@single_admin_band)
   end
 end

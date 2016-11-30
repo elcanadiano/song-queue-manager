@@ -17,3 +17,6 @@ h4h:
 
 delete:
   name: The Band to Delete
+
+band_user_admin:
+  name: The Band with an Admin

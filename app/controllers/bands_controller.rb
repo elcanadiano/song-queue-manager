@@ -41,10 +41,12 @@ class BandsController < ApplicationController
 
   def edit
     @open_events = Event.where("is_open = true")
+    @band        = Band.find(params[:id])
   end
 
   def update
-    @user = current_user
+    @user        = current_user
+    @band        = Band.find(params[:id])
 
     if @band.update_attributes(band_params)
       flash[:success] = "Band updated!"
@@ -91,7 +93,7 @@ class BandsController < ApplicationController
 
     if @notification.save
       flash[:success] = "Invite sent!"
-      redirect_to band_url(@band)
+      redirect_to band_url(params[:id])
     else
       render 'invite'
     end
@@ -118,7 +120,7 @@ class BandsController < ApplicationController
 
   # Step down as an admin.
   def step_down
-    @member = Member.find_by(band_id: params[:id], user_id: current_user)
+    @member = Member.find_by(band_id: params[:id], user_id: params[:user_id])
     @member.update!(is_admin: false)
 
     flash[:success] = "You have stepped down as an admin."
@@ -136,6 +138,7 @@ class BandsController < ApplicationController
       params.require(:notification).permit(:user_id, :band_id, :creator_id)
     end
 
+    # Barks if the band ID parameter or the creator_id parameter was changed.
     def correct_params
       @band = Band.find(params[:id])
 
@@ -159,61 +162,66 @@ class BandsController < ApplicationController
     # part of the band (ie. pass if the member exists)
     def existing_member
       member = Member.find_by({
-        band_id: @band.id,
+        band_id: params[:id],
         user_id: params[:user_id]
       })
 
       if member.nil?
         flash[:danger] = "This user not a member of the band."
-        redirect_to band_url(@band)
+        redirect_to band_url(params[:id])
       end
     end
 
     # Barks if you try to remove a fellow admin from the band.
     def cannot_remove_admin
       member = Member.find_by({
-        band_id: @band.id,
+        band_id: params[:id],
         user_id: params[:user_id]
       })
 
       if member.is_admin?
         flash[:danger] = "You cannot remove an admin from the band. They must" +
         " step down first."
-        redirect_to band_url(@band)
+        redirect_to band_url(params[:id])
       end
     end
 
     # Barks if you try to remove a fellow admin from the band.
     def cannot_promote_admin
       member = Member.find_by({
-        band_id: @band.id,
+        band_id: params[:id],
         user_id: params[:user_id]
       })
 
       if member.is_admin?
         flash[:danger] = "The user is already an admin."
-        redirect_to band_url(@band)
+        redirect_to band_url(params[:id])
       end
     end
 
-    # Barks if there is not another admin.
+    # Barks if there is not another admin. Skip the check if you are a user
+    # admin.
     def multiple_admins
-      num_admins = Member.where({
-        band_id: params[:id],
-        is_admin: true
-      }).count
+      if !admin?
+        num_admins = Member.where({
+          band_id: params[:id],
+          is_admin: true
+        }).count
 
-      if num_admins < 2
-        flash[:danger] = "There needs to be another admin before you step down."
-        redirect_to band_url(@band)
+        if num_admins < 2
+          flash[:danger] = "There needs to be another admin before you step down."
+          redirect_to band_url(params[:id])
+        end
       end
     end
 
     # Barks if you try to remove yourself from the band.
     def cannot_remove_self
-      if params[:user_id].to_i == current_user.id
-        flash[:danger] = "You cannot remove yourself from the band."
-        redirect_to band_url(@band)
+      if !admin?
+        if params[:user_id].to_i == current_user.id
+          flash[:danger] = "You cannot remove yourself from the band."
+          redirect_to band_url(params[:id])
+        end
       end
     end
 
@@ -221,7 +229,7 @@ class BandsController < ApplicationController
     # band (ie. pass if the member does not exist)
     def nonexisting_member
       member = Member.find_by({
-        band_id: @band.id,
+        band_id: params[:id],
         user_id: params[:notification][:user_id]
       })
 
@@ -233,7 +241,7 @@ class BandsController < ApplicationController
 
     def nonexisting_invite
       notifications = Notification.find_by({
-        band_id:           @band.id,
+        band_id:           params[:id],
         user_id:           params[:notification][:user_id],
         notification_type: 'invite',
         has_expired:       false
@@ -246,17 +254,20 @@ class BandsController < ApplicationController
     end
 
     # Checks to see if the user has administration privileges as part of its
-    # membership.
+    # membership. User admins are allowed to manage any band.
     def band_admin_user
-      @band = Band.find(params[:id])
-      @member = Member.find_by({
-        band_id: @band.id,
-        user_id: current_user.id
-      })
+      # If a current user is an admin, pass. If not, check.
+      if !admin?
+        @band = Band.find(params[:id])
+        @member = Member.find_by({
+          band_id: params[:id],
+          user_id: current_user.id
+        })
 
-      if !@member || !@member.is_admin?
-        flash[:danger] = "You are not authorized to manage this band."
-        redirect_to root_url
+        if !@member || !@member.is_admin?
+          flash[:danger] = "You are not authorized to manage this band."
+          redirect_to root_url
+        end
       end
     end
 end

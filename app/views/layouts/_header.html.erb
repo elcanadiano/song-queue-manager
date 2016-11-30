@@ -16,7 +16,8 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               Soundtrack Manager <b class="caret"></b>
-            </a>            <ul class="dropdown-menu">
+            </a>
+            <ul class="dropdown-menu">
               <li class="dropdown-header">Soundtracks</li>
               <li><%= link_to "View All",       soundtracks_path %></li>
               <li><%= link_to "New Soundtrack", new_soundtrack_path %></li>
@@ -34,7 +35,7 @@
             </ul>
           </li>
         <% end %>
-        <% if admin? || !@open_events.blank? %>
+        <% if admin? || !@open_events.empty? %>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               Events <b class="caret"></b>
@@ -44,7 +45,7 @@
               <% if admin? %>
                 <li><%= link_to "New Event", new_event_path %></li>
               <% end %>
-              <% if !@open_events.blank? %>
+              <% if !@open_events.empty? %>
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Current Events</li>
                 <% @open_events.each do |event| %>
@@ -56,8 +57,27 @@
         <% else %>
           <li><%= link_to "Events",   events_path %></li>
         <% end %>
-        <li><%= link_to "Help",     help_path %></li>
         <% if logged_in? %>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              Bands <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <% if admin? %>
+                <li><%= link_to "View All", bands_path %></li>
+              <% end %>
+              <li><%= link_to "New Band", new_band_path %></li>
+              <li role="separator" class="divider"></li>
+              <li class="dropdown-header">My Bands</li>
+              <% if current_user.bands.empty? %>
+                <li>No bands</li>
+              <% else %>
+                <% current_user.bands.each do |band| %>
+                  <li><%= link_to band.name, band_url(band) %></li>
+                <% end %>
+              <% end %>
+            </ul>
+          </li>
           <li><%= link_to "Users", users_path %></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">

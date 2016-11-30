@@ -121,3 +121,18 @@ deedee:
   password_digest:  <%= User.digest('password') %>
   activated:       true
   activated_at:    <%= Time.zone.now %>
+
+roger:
+  name:            Roger Rogers
+  email:           roger@rockbandforums.com
+  password_digest:  <%= User.digest('password') %>
+  activated:       true
+  activated_at:    <%= Time.zone.now %>
+
+band_user_admin:
+  name:            User And Band Admin
+  email:           user_band_admin@rockbandforums.com
+  password_digest:  <%= User.digest('password') %>
+  admin:           true
+  activated:       true
+  activated_at:    <%= Time.zone.now %>

@@ -35,7 +35,17 @@ anne:
   user:     anne
   band:     h4h
 
+roger:
+  is_admin: true
+  user:     roger
+  band:     h4h
+
 deedee:
   is_admin: true
   user:     deedee
   band:     delete
+
+band_user_admin:
+  is_admin: false
+  user:     band_user_admin
+  band:     band_user_admin

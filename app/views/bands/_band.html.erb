@@ -1,5 +1,6 @@
 <li>
   <%= link_to band.name, band_url(band) %>
+  | <%= link_to "Edit",   edit_band_url(band) %>
   | <%= link_to "Delete", band_url(band), method: :delete, data:
   {confirm: "WARNING: All song requests associated with the band in any event will be deleted! Are you sure?"} %>
 </li>
