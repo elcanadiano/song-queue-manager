@@ -38,6 +38,86 @@ class BandsControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
 
+  test "guests cannot see new band page" do
+    get :new
+    assert_equal "Please log in.", flash[:danger]
+    assert_redirected_to login_url
+  end
+
+  test "logged in users can see new band page" do
+    log_in_as(@non_member)
+    get :new
+    assert flash.empty?
+    assert_response :success
+  end
+
+  test "guests cannot create a band" do
+    band_name = "The Left Ahead"
+
+    assert !Band.exists?(name: band_name)
+
+    assert_no_difference 'Band.count', "There should not be a band created" do
+      post :create, band: {
+        name: band_name
+      }
+    end
+
+    assert !Band.exists?(name: band_name)
+
+    assert_equal "Please log in.", flash[:danger]
+    assert_redirected_to login_url
+  end
+
+  test "logged in members can create a band" do
+    band_name = "The Left Ahead"
+    log_in_as(@non_member)
+
+    assert !Band.exists?(name: band_name)
+
+    assert_difference 'Band.count', 1, "There should be a band created" do
+      post :create, band: {
+        name: band_name
+      }
+    end
+
+    assert     Band.exists?(name: band_name)
+    new_band = Band.find_by(name: band_name)
+
+    assert_equal "#{band_name} created!", flash[:success]
+    assert_redirected_to band_url(new_band)
+  end
+
+  test "cannot create a band with existing name case insensitive" do
+    band_name = "HarmONIes for HiRE"
+    log_in_as(@non_member)
+
+    assert !Band.exists?(name: band_name)
+
+    assert_no_difference 'Band.count', "There already exists a band called Harmonies for Hire." do
+      post :create, band: {
+        name: band_name
+      }
+    end
+
+    assert     !Band.exists?(name: band_name)
+
+    assert flash.empty?
+    assert_template 'new'
+  end
+
+  test "cannot create a band without a name" do
+    log_in_as(@non_member)
+
+    assert_no_difference 'Band.count', "There already exists a band called Harmonies for Hire." do
+      post :create, band: {
+        name: ''
+      }
+    end
+
+    assert flash.empty?
+    assert_template 'new'
+  end
+
   test "guests cannot see band info" do
     get :show, id: @band.id
     assert_equal "Please log in.", flash[:danger]

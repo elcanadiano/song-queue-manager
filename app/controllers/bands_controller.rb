@@ -33,8 +33,9 @@ class BandsController < ApplicationController
       Member.find_by({band_id: @band.id, user_id: @user.id}).toggle! :is_admin
 
       flash[:success] = "#{@band.name} created!"
-      redirect_to bands_user_url @user.id
+      redirect_to band_url(@band)
     else
+      @open_events = Event.where("is_open = true")
       render 'new'
     end
   end
