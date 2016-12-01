@@ -43,19 +43,6 @@ class SongRequestsControllerTest < ActionController::TestCase
     assert_redirected_to events_url
   end
 
-  test "song requests need songs" do
-    log_in_as @member
-
-    assert_no_difference 'SongRequest.count', 'There should be no request added.' do
-      post :create, song_request: {
-        band_id:  @band.id,
-        event_id: @open_event.id
-      }
-    end
-
-    assert_template 'events/song_request'
-  end
-
   test "members can create a song request" do
     log_in_as @member
 
@@ -69,6 +56,36 @@ class SongRequestsControllerTest < ActionController::TestCase
 
     assert_equal "Song added successfully!", flash[:success]
     assert_redirected_to event_url(@open_event.id)
+  end
+
+  test "admins can create a song request on behalf of a member" do
+    log_in_as @admin
+
+    assert !Member.exists?(user_id: @admin, band_id: @band)
+
+    assert_difference 'SongRequest.count', 1, 'Creating a request adds one.' do
+      post :create, song_request: {
+        song:     @song.id,
+        band_id:  @band.id,
+        event_id: @open_event.id
+      }
+    end
+
+    assert_equal "Song added successfully!", flash[:success]
+    assert_redirected_to event_url(@open_event.id)
+  end
+
+  test "song requests need songs" do
+    log_in_as @member
+
+    assert_no_difference 'SongRequest.count', 'There should be no request added.' do
+      post :create, song_request: {
+        band_id:  @band.id,
+        event_id: @open_event.id
+      }
+    end
+
+    assert_template 'events/song_request'
   end
 
   test "cannot create a song request when event is closed" do

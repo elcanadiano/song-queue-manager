@@ -1,8 +1,8 @@
 class SongRequestsController < ApplicationController
-  before_action :logged_in_user, only: [:create, :toggle_completed, :toggle_abandoned]
-  before_action :admin_user,     only: [         :toggle_completed, :toggle_abandoned]
-  before_action :correct_params, only: [:create]
-  before_action :open_event,     only: [:create]
+  before_action :logged_in_user,     only: [:create, :toggle_completed, :toggle_abandoned]
+  before_action :admin_user,         only: [         :toggle_completed, :toggle_abandoned]
+  before_action :is_member_or_admin, only: [:create]
+  before_action :open_event,         only: [:create]
 
   def create
     @song              = params[:song_request][:song].to_i || 0
@@ -54,16 +54,18 @@ class SongRequestsController < ApplicationController
   end
 
   private
-    # Checks to see if the current user is in fact a member of the band.
-    def correct_params
-      @member = Member.find_by({
-        band_id: params[:song_request][:band_id],
-        user_id: current_user.id
-      })
+    # Throws an error if the user is not an admin and is not part of the band.
+    def is_member_or_admin
+      if !admin?
+        @member = Member.find_by({
+          band_id: params[:song_request][:band_id],
+          user_id: current_user.id
+        })
 
-      if @member.nil?
-        flash[:danger] = "This user is not a member of the band."
-        redirect_to events_url
+        if @member.nil?
+          flash[:danger] = "This user is not a member of the band."
+          redirect_to events_url
+        end
       end
     end
 

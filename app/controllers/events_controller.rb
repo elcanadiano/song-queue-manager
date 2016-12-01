@@ -76,7 +76,7 @@ class EventsController < ApplicationController
   def song_request
     @open_events  = Event.where("is_open = true")
     @event        = Event.find(params[:id])
-    @bands        = current_user.bands
+    @bands        = admin? ? Band.all : current_user.bands
     @song_request = SongRequest.new
 
     # Redirect to the bands page for the user if said user is not part of a

@@ -28,6 +28,13 @@ class EventsControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
 
+  test "should get new when logged in as admin" do
+    log_in_as(@admin)
+    get :new
+    assert flash.empty?
+    assert_response :success
+  end
+
   test "should redirect new when there are no soundtracks" do
     log_in_as(@admin)
     assert !Soundtrack.all.blank?
@@ -107,6 +114,13 @@ class EventsControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
 
+  test "should get edit when logged in as admin" do
+    log_in_as(@admin)
+    get :edit, id: @rebar
+    assert flash.empty?
+    assert_response :success
+  end
+
   test "should redirect update when not logged in" do
     patch :update, id: @rebar, event: {name: "Name", date: Date.new(2015, 06, 02), soundtrack: @soundtrack.id}
 
@@ -155,20 +169,6 @@ class EventsControllerTest < ActionController::TestCase
 
     assert_equal "Event Updated!", flash[:success]
     assert_redirected_to events_url
-  end
-
-  test "should get new when logged in as admin" do
-    log_in_as(@admin)
-    get :new
-    assert flash.empty?
-    assert_response :success
-  end
-
-  test "should get edit when logged in as admin" do
-    log_in_as(@admin)
-    get :edit, id: @rebar
-    assert flash.empty?
-    assert_response :success
   end
 
   test "guests should not be able to toggle an event opening" do
@@ -230,6 +230,32 @@ class EventsControllerTest < ActionController::TestCase
   test "members should not be able to visit song request page of closed event" do
     log_in_as(@other_user)
     get :song_request, id: @closed_event
+    assert_equal "We're sorry, but this event is not open for requests.", flash[:danger]
     assert_redirected_to events_url
+  end
+
+  test "members should be able to visit song request page of open event" do
+    log_in_as(@other_user)
+    get :song_request, id: @rebar
+
+    # Archer, the "other user", should be part of one band. Therefore, there
+    # should be two options, the second being "Select Band".
+    assert_select "#song_request_band_id > option", 2
+
+    assert flash.empty?
+    assert_response :success
+  end
+
+  test "admins should be able to visit song request page of open event" do
+    log_in_as(@admin)
+    get :song_request, id: @rebar
+
+    # An admin should have the ability to create a song request for any band.
+    # Therefore, there should be one option for each band, plus one more for
+    # "Select Band".
+    assert_select "#song_request_band_id > option", Band.count + 1
+
+    assert flash.empty?
+    assert_response :success
   end
 end
