@@ -1,6 +1,18 @@
 <% provide(:title, "Song Request for #{@event.name}") %>
 <h1>Song Request for <%= @event.name %></h1>
 
+<% if admin? %>
+  <div class="row">
+    <div class="col-md-12">
+      <p>
+        NOTE: As an admin, you are able to create a song request for any band,
+        not just yours. If you need to create a song request for a new band,
+        select the New Band and enter in a new band name in the New Band field.
+       </p>
+    </div>
+  </div>
+<% end %>
+
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
     <%= form_for(@song_request, url: requests_url) do |f| %>
@@ -10,11 +22,28 @@
       <%= f.collection_select :song, @event.soundtrack.songs, :id, :song_by_artist, {include_blank: "Select Song"}, {class: 'form-control'} %>
 
       <%= f.label :band_id, "Your Band" %>
-      <%= f.collection_select(:band_id, @bands, :id, :name, {include_blank: "Select Band"}, {class: 'form-control'}) %>
+      <%= f.select(:band_id, @bands, {include_blank: bands_default_blank}, {class: 'form-control'}) %>
 
       <%= f.hidden_field :event_id, value: @event.id %>
+
+      <% if admin? %>
+        <div id="hidden-admin">
+          <%= label_tag      'new_band', "New Band Name" %>
+          <%= text_field_tag 'new_band', nil, placeholder: 'New Band Name', class: 'form-control' %>
+        </div>
+      <% end %>
 
       <%= f.submit "Create my account", class: "btn btn-primary" %>
     <% end %>
   </div>
 </div>
+
+<% if admin? %>
+  <%= javascript_tag do %>
+    $(function() {
+      $('#song_request_band_id').change(function() {
+        $('#hidden-admin').toggle($('#song_request_band_id').val() == '0');
+      });
+    });
+  <% end %>
+<% end %>

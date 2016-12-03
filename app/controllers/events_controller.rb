@@ -85,6 +85,10 @@ class EventsController < ApplicationController
       flash[:warning] = "You must create or be part of a band in order to make a request."
       redirect_to event_url(@event)
     end
+
+    extra_zero = admin? ? [["New Band", 0]] : []
+
+    @bands = extra_zero + @bands.collect{|b| [b.name, b.id]}
   end
 
   # PATCH function to toggle an event being open/closed for requests.

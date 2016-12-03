@@ -4,17 +4,31 @@ class SongRequestsController < ApplicationController
   before_action :is_member_or_admin, only: [:create]
   before_action :open_event,         only: [:create]
 
+  #{"utf8"=>"✓", "authenticity_token"=>"8PyZ5j9vS8iT6Mkz+D1p2TnkMEZ77QfRdraVr/yaOD3logj7r18WHq6SpFd2fbY2lL4+KTHjXVkRuwruz/eL0A==",
+  #"song_request"=>{"song"=>"535", "band_id"=>"3", "event_id"=>"1"}, "new_band"=>"assfdgsfgsergsergsergers", "commit"=>"Create my account",
+  #"controller"=>"song_requests", "action"=>"create"}
+
   def create
     @song              = params[:song_request][:song].to_i || 0
     @song_request      = SongRequest.new(request_params)
-    @bands             = current_user.bands
     @song_request.song = Song.find_by(id: @song)
+
+    if admin? && params[:song_request][:band_id] == "0"
+      band = Band.find_or_create_by(name: params[:new_band])
+    else
+      band = Band.find_by(id: params[:song_request][:band_id])
+    end
+
+    @song_request.band = band
 
     if @song_request.save
       flash[:success] = "Song added successfully!"
       redirect_to event_url(params[:song_request][:event_id])
     else
+      extra_zero   = admin? ? [["New Band", 0]] : []
       @open_events = Event.where("is_open = true")
+      @bands       = admin? ? Band.all : current_user.bands
+      @bands       = extra_zero + @bands.collect{|b| [b.name, b.id]}
       render 'events/song_request'
     end
   end

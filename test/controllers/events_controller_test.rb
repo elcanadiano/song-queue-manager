@@ -252,8 +252,8 @@ class EventsControllerTest < ActionController::TestCase
 
     # An admin should have the ability to create a song request for any band.
     # Therefore, there should be one option for each band, plus one more for
-    # "Select Band".
-    assert_select "#song_request_band_id > option", Band.count + 1
+    # "Select Band", and an additional one for "".
+    assert_select "#song_request_band_id > option", Band.count + 2
 
     assert flash.empty?
     assert_response :success
