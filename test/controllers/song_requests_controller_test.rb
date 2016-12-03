@@ -58,7 +58,7 @@ class SongRequestsControllerTest < ActionController::TestCase
     assert_redirected_to event_url(@open_event.id)
   end
 
-  test "admins can create a song request on behalf of a member" do
+  test "admins can create a song request on behalf of a band" do
     log_in_as @admin
 
     assert !Member.exists?(user_id: @admin, band_id: @band)
@@ -73,6 +73,59 @@ class SongRequestsControllerTest < ActionController::TestCase
 
     assert_equal "Song added successfully!", flash[:success]
     assert_redirected_to event_url(@open_event.id)
+  end
+
+  test "nonmembers cannot create a song request on behalf of a band" do
+    log_in_as @nonmember
+
+    assert !Member.exists?(user_id: @nonmember, band_id: @band)
+
+    assert_no_difference 'SongRequest.count', 'A nonmember should not be able to create a request on behalf of another band.' do
+      post :create, song_request: {
+        song:     @song.id,
+        band_id:  @band.id,
+        event_id: @open_event.id
+      }
+    end
+
+    assert "This user is not a member of the band.", flash[:danger]
+    assert_redirected_to events_url
+  end
+
+  test "admins can create a song request on behalf of a new band" do
+    new_band_name = "The New Band Name"
+    log_in_as @admin
+
+    assert_difference ['SongRequest.count', 'Band.count'], 1, 'Creating a request adds a request and a band.' do
+      post :create, song_request: {
+        song:     @song.id,
+        band_id:  0,
+        event_id: @open_event.id
+      }, new_band: new_band_name
+    end
+
+    assert Band.exists?(name: new_band_name)
+
+    assert_equal "Song added successfully!", flash[:success]
+    assert_redirected_to event_url(@open_event.id)
+  end
+
+  test "non-admins cannot create a song request on behalf of a new band" do
+    new_band_name = "The New Band Name"
+    log_in_as @member
+
+    assert_no_difference ['SongRequest.count', 'Band.count'], 'Non-admins cannot create requests on behalf of new bands' do
+      post :create, song_request: {
+        song:     @song.id,
+        band_id:  0,
+        event_id: @open_event.id
+      }, new_band: new_band_name
+    end
+
+    assert !Band.exists?(name: new_band_name)
+
+    assert "This user is not a member of the band.", flash[:danger]
+    assert_redirected_to events_url
   end
 
   test "song requests need songs" do

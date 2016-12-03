@@ -4,10 +4,6 @@ class SongRequestsController < ApplicationController
   before_action :is_member_or_admin, only: [:create]
   before_action :open_event,         only: [:create]
 
-  #{"utf8"=>"✓", "authenticity_token"=>"8PyZ5j9vS8iT6Mkz+D1p2TnkMEZ77QfRdraVr/yaOD3logj7r18WHq6SpFd2fbY2lL4+KTHjXVkRuwruz/eL0A==",
-  #"song_request"=>{"song"=>"535", "band_id"=>"3", "event_id"=>"1"}, "new_band"=>"assfdgsfgsergsergsergers", "commit"=>"Create my account",
-  #"controller"=>"song_requests", "action"=>"create"}
-
   def create
     @song              = params[:song_request][:song].to_i || 0
     @song_request      = SongRequest.new(request_params)
