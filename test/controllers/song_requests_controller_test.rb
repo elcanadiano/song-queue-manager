@@ -110,6 +110,22 @@ class SongRequestsControllerTest < ActionController::TestCase
     assert_redirected_to event_url(@open_event.id)
   end
 
+  test "admins cannot create a song request on behalf of a new band without a name" do
+    new_band_name = ""
+    log_in_as @admin
+
+    assert_no_difference ['SongRequest.count', 'Band.count'], 'An empty band name will not create a new band.' do
+      post :create, song_request: {
+        song:     @song.id,
+        band_id:  0,
+        event_id: @open_event.id
+      }, new_band: new_band_name
+    end
+
+    assert flash.empty?
+    assert_template "events/song_request"
+  end
+
   test "non-admins cannot create a song request on behalf of a new band" do
     new_band_name = "The New Band Name"
     log_in_as @member
