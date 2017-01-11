@@ -16,22 +16,9 @@
     </div>
   <% else %>
     <div class="col-md-8"  id="request-main">
-      <div class="table-responsive">
-        <table class="table table-hover table-bordered" id="song-requests">
-          <thead>
-            <tr>
-              <th>Band Name</th>
-              <th>Song</th>
-              <% if admin? %>
-                <th>Admin</th>
-              <% end %>
-            </tr>
-          </thead>
-          <tbody>
-            <%= render partial: "event_requests", collection: @requests, as: "song_request" %>
-          </tbody>
-        </table>
-      </div>
+      <ul id="song-requests" class="requests-sortable">
+        <%= render partial: "event_requests", collection: @requests, as: "song_request" %>
+      </ul>
     </div>
 
     <div class="col-md-4" id="request-sidebar">
