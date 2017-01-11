@@ -5,8 +5,8 @@ class Member < ActiveRecord::Base
     end
   end
 
-  belongs_to :user
-  belongs_to :band
+  belongs_to    :user
+  belongs_to    :band
 
   def is_admin?
     self.is_admin
