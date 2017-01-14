@@ -15,24 +15,46 @@ class ApplicationController < ActionController::Base
 
     # Confirms a logged-in user.
     def logged_in_user
-      unless logged_in?
-        store_location
-        flash[:danger] = "Please log in."
-        redirect_to login_url
+      if !logged_in?
+        respond_to do |format|
+          format.json {
+            render json: {
+              status:  "danger",
+              message: "Please log in."
+            }.to_json,
+            status: 401
+          }
+          format.html {
+            store_location
+            flash[:danger] = "Please log in."
+            redirect_to login_url
+          }
+        end
       end
     end
 
     # Confirms an admin user.
     def admin_user
-      unless admin?
-        flash[:danger] = "This function requires administrator privileges."
-        redirect_to(root_url)
+      if !admin?
+        respond_to do |format|
+          format.json {
+            render json: {
+              status:  "danger",
+              message: "This function requires administrator privileges."
+            }.to_json,
+            status: 403
+          }
+          format.html {
+            flash[:danger] = "This function requires administrator privileges."
+            redirect_to(root_url)
+          }
+        end
       end
     end
 
     # Confirms the correct user.
     def correct_user
       @user = User.find(params[:id])
-      redirect_to(root_url) unless current_user?(@user)
+      redirect_to(root_url) if !current_user?(@user)
     end
 end

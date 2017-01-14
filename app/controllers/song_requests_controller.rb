@@ -1,6 +1,6 @@
 class SongRequestsController < ApplicationController
-  before_action :logged_in_user,     only: [:create, :toggle_completed, :toggle_abandoned]
-  before_action :admin_user,         only: [         :toggle_completed, :toggle_abandoned]
+  before_action :logged_in_user,     only: [:create, :toggle_completed, :toggle_abandoned, :reorder]
+  before_action :admin_user,         only: [         :toggle_completed, :toggle_abandoned, :reorder]
   before_action :is_member_or_admin, only: [:create]
   before_action :open_event,         only: [:create]
 
@@ -61,6 +61,55 @@ class SongRequestsController < ApplicationController
     end
 
     redirect_to event_url(@request.event_id)
+  end
+
+  # Given a Request ID and the index it should be updated to, updates the order
+  # to the new index and updates the other ones accordingly.
+  def reorder
+    request_id = params["request_id"].to_i
+    new_index  = params["new_index"].to_i
+
+    begin
+      # Get the request the ID is pertaining to.
+      request = SongRequest.find(request_id)
+
+      # Is the new index greater than the current ID's index? If so, find the
+      # records with indexes between the current's + 1 until the new_index and
+      # decrement those song_order values by 1. Set current request to the new
+      # index. Otherwise, do the opposite.
+
+      if new_index > request.song_order
+        other_requests = SongRequest.where(event_id: request.event_id, song_order: request.song_order + 1..new_index)
+        .update_all("song_order = song_order - 1")
+        request.update_columns(song_order: new_index)
+      elsif new_index < request.song_order
+        other_requests = SongRequest.where(event_id: request.event_id, song_order: new_index..request.song_order - 1)
+        .update_all("song_order = song_order + 1")
+        request.update_columns(song_order: new_index)
+      else
+      end
+
+      respond_to do |format|
+        format.json {
+          render json: {
+            status:  "success",
+            message: "Order saved successfully!"
+          }.to_json
+        }
+      end
+    rescue
+      respond_to do |format|
+        format.json {
+          render json: {
+            status:  "danger",
+            message: "An error has occured. If this error persists, please " +
+            "contact the administrator."
+          }.to_json,
+          status: 422
+        }
+      end
+
+    end
   end
 
   private

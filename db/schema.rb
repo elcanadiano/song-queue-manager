@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 20170111180323) do
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.integer  "soundtrack_id"
-    t.integer  "song_order",    default: 1,     null: false
+    t.integer  "song_order",    default: 0,     null: false
   end
 
   add_index "events", ["is_open", "date"], name: "index_events_on_is_open_and_date", using: :btree

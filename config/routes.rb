@@ -42,6 +42,10 @@ Rails.application.routes.draw do
       patch 'toggle_completed'
       patch 'toggle_abandoned'
     end
+
+    collection do
+      patch 'reorder'
+    end
   end
 
   resources :artists,     except: [:show]

@@ -1,11 +1,12 @@
 <% if admin? || !song_request.is_abandoned %>
-  <% if song_request.is_abandoned %>
-    <li class="danger">
-  <% elsif song_request.is_completed %>
-    <li class="success">
-  <% else %>
-    <li>
-  <% end %>
+  <li
+    data-request-id="<%= song_request.id %>"
+    <% if song_request.is_abandoned %>
+      class="danger"
+    <% elsif song_request.is_completed %>
+      class="success"
+    <% end %>
+  >
     <p class="song-info"><%= song_request.song.song_by_artist %></p>
     <p class="band-info">Requested by <%= song_request.band.name %></p>
     <% if admin? %>

@@ -15,3 +15,7 @@
 //= require bootstrap
 //= require turbolinks
 //= require_tree .
+
+$('.alert > button.close').click(function() {
+  $(this).parent().slideUp(200);
+});
