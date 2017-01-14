@@ -6,6 +6,8 @@ class SongRequestsControllerTest < ActionController::TestCase
     @closed_event = events(:brs7)
     @open_event   = events(:brs8)
     @song_request = song_requests(:one)
+    @two          = song_requests(:two)
+    @three        = song_requests(:three)
     @completed    = song_requests(:completed)
     @abandoned    = song_requests(:abandoned)
     @song         = songs(:pretender)
@@ -240,5 +242,64 @@ class SongRequestsControllerTest < ActionController::TestCase
     @song_request.reload
     assert_equal "The song is already completed.", flash[:danger]
     assert !@song_request.is_abandoned
+  end
+
+  test "guests cannot move song request by AJAX" do
+    patch :reorder, xhr: true, format: :json, request_id: @song_request.id, new_index: @three.song_order
+
+    @song_request.reload
+    @two.reload
+    @three.reload
+
+    assert_equal @song_request.song_order, 0
+    assert_equal @two.song_order,          1
+    assert_equal @three.song_order,        2
+
+    assert_response 401
+  end
+
+  test "non-admins cannot move song request by AJAX" do
+    log_in_as @nonadmin
+    patch :reorder, xhr: true, format: :json, request_id: @song_request.id, new_index: @three.song_order
+
+    @song_request.reload
+    @two.reload
+    @three.reload
+
+    assert_equal @song_request.song_order, 0
+    assert_equal @two.song_order,          1
+    assert_equal @three.song_order,        2
+
+    assert_response 403
+  end
+
+  test "moving down song request by AJAX" do
+    log_in_as @admin
+    patch :reorder, xhr: true, format: :json, request_id: @song_request.id, new_index: @three.song_order
+
+    @song_request.reload
+    @two.reload
+    @three.reload
+
+    assert_equal @song_request.song_order, 2
+    assert_equal @two.song_order,          0
+    assert_equal @three.song_order,        1
+
+    assert_response :success
+  end
+
+  test "moving up song request by AJAX" do
+    log_in_as @admin
+    patch :reorder, xhr: true, format: :json, request_id: @three.id, new_index: @song_request.song_order
+
+    @song_request.reload
+    @two.reload
+    @three.reload
+
+    assert_equal @song_request.song_order, 1
+    assert_equal @two.song_order,          2
+    assert_equal @three.song_order,        0
+
+    assert_response :success
   end
 end

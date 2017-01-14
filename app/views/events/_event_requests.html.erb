@@ -2,9 +2,11 @@
   <li
     data-request-id="<%= song_request.id %>"
     <% if song_request.is_abandoned %>
-      class="danger"
+      class="danger disabled"
     <% elsif song_request.is_completed %>
-      class="success"
+      class="success disabled"
+    <% elsif !admin? %>
+      class="disabled"
     <% end %>
   >
     <p class="song-info"><%= song_request.song.song_by_artist %></p>

@@ -21,7 +21,7 @@ $(function() {
         }).addClass("alert-" + data.status).slideDown(200);
       },
       error:    function(jqXHR, status, errorThrown) {
-        alert("error");
+        // TODO: Undo the reordering if error.
         $('#ajax-alert > span').text(jqXHR.responseJSON.message);
         $('#ajax-alert').removeClass(function(index, className) {
           return (className.match (/(^|\s)alert-\S+/g) || []).join(' ');

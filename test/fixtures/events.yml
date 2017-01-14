@@ -5,15 +5,21 @@ rebar:
   is_open:    true
   date:       2016-01-04
   soundtrack: brspast
+  # This must be changed if a request is added for the event in yml!
+  song_order: 0
 
 brs7:
   name:       Battle Rock Seattle 7
   is_open:    false
   date:       2015-12-08
   soundtrack: brspast
+  # This must be changed if a request is added for the event in yml!
+  song_order: 6
 
 brs8:
   name:       Battle Rock Seattle 8
   is_open:    true
   date:       2016-05-15
   soundtrack: brspast
+  # This must be changed if a request is added for the event in yml!
+  song_order: 16
