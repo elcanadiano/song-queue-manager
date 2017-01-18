@@ -2,15 +2,40 @@
   display:none
 }
 
-#song-requests > li {
-	> p {
-		margin:0
+#song-requests {
+	> li {
+		> p {
+			&.song-info {
+				font-size:13pt;
+				font-weight:bold
+			}
+			&.band-info {
+				font-size:9pt
+			}
+			margin:0
+		}
+
+		&.success {
+			background:#dff0d8 !important
+		}
+
+		&.danger {
+			background:#f2dede !important
+		}
+
+		&:nth-of-type(even) {
+			background: #f9f9f9
+		}
+
+		list-style: none;
+		border:1px solid #ddd;
+		border-width: 1px 1px 0 0;
+		padding: 1em;
+		min-height:93px;
+		color: #2C3E50
 	}
 
-	list-style: none;
-	background: #ECF0F1;
-	padding: 11px;
-	margin-bottom: 1em;
-	border-radius: 5px;
-	color: #2C3E50
+	padding: 0;
+	border: 1px solid #ddd;
+	border-width: 0 0 1px 1px
 }
