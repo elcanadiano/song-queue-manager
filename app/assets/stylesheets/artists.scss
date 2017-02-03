@@ -1,0 +1,23 @@
+#artists {
+	> li {
+		> h3.name {
+			a {
+				color: #000
+			}
+
+			margin: 0.5em 0;
+			font-size:13pt;
+			font-weight:bold
+		}
+
+		list-style: none;
+		border:1px solid #ddd;
+		border-width: 1px 1px 0 0;
+		padding: 1em;
+		color: #2C3E50
+	}
+
+	padding: 0;
+	border: 1px solid #ddd;
+	border-width: 0 0 1px 1px
+}

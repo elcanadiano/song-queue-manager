@@ -1,5 +1,11 @@
 <li>
-  <%= link_to artist.name, edit_artist_url(artist) %>
-  | <%= link_to "Delete", artist_url(artist), method: :delete, data:
-  {confirm: "WARNING: All songs associated with this artist will be deleted! Are you sure?"} %>
+  <div class="btn-group" role="group" style="float:right">
+    <%= link_to "Edit",   edit_artist_url(artist), class: "btn btn-warning" %>
+    <%= link_to "Delete", artist_url(artist),      class: "btn btn-danger",
+    method: :delete, data:
+      {confirm: "WARNING: All songs associated with this artist will be deleted! Are you sure?"} %>
+  </div>
+  <h3 class="name">
+    <%= link_to artist.name, edit_artist_url(artist) %>
+  </h3>
 </li>
