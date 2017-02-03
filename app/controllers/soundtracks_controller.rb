@@ -72,6 +72,6 @@ class SoundtracksController < ApplicationController
 
   private
     def soundtrack_params
-      params.require(:soundtrack).permit(:name)
+      params.require(:soundtrack).permit(:name, :description)
     end
 end
