@@ -1,6 +1,12 @@
 <li>
-  <%= link_to band.name, band_url(band) %>
-  | <%= link_to "Edit",   edit_band_url(band) %>
-  | <%= link_to "Delete", band_url(band), method: :delete, data:
-  {confirm: "WARNING: All song requests associated with the band in any event will be deleted! Are you sure?"} %>
+  <div class="btn-group-vertical" role="group" style="float:right">
+    <%= link_to "Edit",   edit_band_url(band), class: "btn btn-warning" %>
+    <%= link_to "Delete",band_url(band),      method: :delete, data:
+      {confirm: "WARNING: All song requests associated with the band in any event will be deleted! Are you sure?"},   class: "btn btn-danger" %>
+  </div>
+  <h3 class="name">
+    <%= link_to band.name, band_url(band) %>
+  </h3>
+
+  <p class="members">Members: <%= band.members.count %></p>
 </li>
