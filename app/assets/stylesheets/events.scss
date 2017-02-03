@@ -5,14 +5,16 @@
 #song-requests {
 	> li {
 		> p {
-			&.song-info {
-				font-size:13pt;
-				font-weight:bold
-			}
 			&.band-info {
 				font-size:9pt
 			}
 			margin:0
+		}
+
+		> h3.song-info {
+			margin: 0.5em 0;
+			font-size:13pt;
+			font-weight:bold
 		}
 
 		&.success {

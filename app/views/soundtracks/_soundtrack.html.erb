@@ -1,5 +1,15 @@
 <li>
-  <%= link_to soundtrack.name, edit_soundtrack_url(soundtrack) %>
-  | <%= link_to "Delete", soundtrack_url(soundtrack), method: :delete, data:
-  {confirm: "Are you sure? Songs and artists will not be deleted."} %>
+  <div class="btn-group-vertical" role="group" style="float:right">
+    <%= link_to "Edit",   edit_soundtrack_url(soundtrack), method: :patch, class: "btn btn-success" %>
+    <%= link_to "Delete", soundtrack_url(soundtrack),      method: :delete, data:
+      {confirm: "Are you sure? Songs and artists will not be deleted."},   class: "btn btn-danger" %>
+  </div>
+
+  <h3 class="name">
+    <%= link_to soundtrack.name, edit_soundtrack_url(soundtrack) %>
+  </h3>
+
+  <% if !soundtrack.description.nil? %>
+    <p class="description"><%= soundtrack.description %></p>
+  <% end %>
 </li>
