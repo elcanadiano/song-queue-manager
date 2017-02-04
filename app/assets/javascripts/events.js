@@ -1,3 +1,5 @@
+//= require html.sortable.min
+
 $(function() {
   sortable('#song-requests', {
     items: ':not(.disabled)'
