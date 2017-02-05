@@ -1,12 +1,15 @@
 notinrockband:
-  name: Songs not actually in Rock Band
-  songs: devilinherheart, rain, turntostone, tightrope, telephoneline, mrbluesky, corporateamerica, holiday_bg
+  name:        Songs not actually in Rock Band
+  description: Test description
+  songs:       devilinherheart, rain, turntostone, tightrope, telephoneline, mrbluesky, corporateamerica, holiday_bg
 
 brspast:
-  name: Songs previously performed in Battle Rock Seattle
-  songs: iwantitall, brainstew, makedamnsure, pretender
+  name:        Songs previously performed in Battle Rock Seattle
+  description: Test description
+  songs:       iwantitall, brainstew, makedamnsure, pretender
 
 testexistingsoundtrack:
-  name: Test Existing Soundtrack
-  songs: tightrope, mrbluesky, peaceofmind, boulevard
+  name:        Test Existing Soundtrack
+  description: Test description
+  songs:       tightrope, mrbluesky, peaceofmind, boulevard
 

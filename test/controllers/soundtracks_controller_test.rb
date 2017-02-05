@@ -47,6 +47,7 @@ class SoundtracksControllerTest < ActionController::TestCase
     assert_difference 'Soundtrack.count', 1, 'Creating a request adds one.' do
       post :create, soundtrack: {
         name:  "Songs by The Rutles",
+        description: "This is a description",
         songs: [@song1.id.to_s, @song2.id.to_s, @song3.id.to_s, @song4.id.to_s]
       }
     end
@@ -57,8 +58,9 @@ class SoundtracksControllerTest < ActionController::TestCase
   test "guests cannot create a new soundtrack" do
     assert_no_difference 'Soundtrack.count', 'Guests will not add to the tally.' do
       post :create, soundtrack: {
-        name:  "Songs by The Rutles",
-        songs: [@song1.id.to_s, @song2.id.to_s, @song3.id.to_s, @song4.id.to_s]
+        name:        "Songs by The Rutles",
+        description: "This is a description",
+        songs:       [@song1.id.to_s, @song2.id.to_s, @song3.id.to_s, @song4.id.to_s]
       }
     end
     assert_equal "Please log in.", flash[:danger]
@@ -69,8 +71,9 @@ class SoundtracksControllerTest < ActionController::TestCase
     log_in_as(@non_admin)
     assert_no_difference 'Soundtrack.count', 'Non-admins will not add to the tally.' do
       post :create, soundtrack: {
-        name:  "Songs by The Rutles",
-        songs: [@song1.id.to_s, @song2.id.to_s, @song3.id.to_s, @song4.id.to_s]
+        name:        "Songs by The Rutles",
+        description: "This is a description",
+        songs:       [@song1.id.to_s, @song2.id.to_s, @song3.id.to_s, @song4.id.to_s]
       }
     end
     assert_equal "This function requires administrator privileges.", flash[:danger]
@@ -81,8 +84,9 @@ class SoundtracksControllerTest < ActionController::TestCase
     log_in_as(@admin)
     assert_no_difference 'Soundtrack.count', 'A soundtrack requires a name.' do
       post :create, soundtrack: {
-        name:  "",
-        songs: [@song1.id.to_s, @song2.id.to_s, @song3.id.to_s, @song4.id.to_s]
+        name:        "",
+        description: "This is a description",
+        songs:       [@song1.id.to_s, @song2.id.to_s, @song3.id.to_s, @song4.id.to_s]
       }
     end
     assert_template 'new'
@@ -92,7 +96,8 @@ class SoundtracksControllerTest < ActionController::TestCase
     log_in_as(@admin)
     assert_difference 'Soundtrack.count', 1, 'Soundtracks do not actually need artists in the database.' do
       post :create, soundtrack: {
-        name:  "Songs by The Rutles",
+        name:        "Songs by The Rutles",
+        description: "This is a description",
       }
     end
     assert_equal "Soundtrack created successfully!", flash[:success]
@@ -115,8 +120,9 @@ class SoundtracksControllerTest < ActionController::TestCase
   test "updating a soundtrack" do
     log_in_as(@admin)
     patch :update, id: @soundtrack, soundtrack: {
-      name:  "Songs in Rock Band",
-      songs: [@song1.id.to_s, @song2.id.to_s, @song3.id.to_s, @song4.id.to_s, @newsong.id.to_s]
+      name:        "Songs in Rock Band",
+      description: "This is a description",
+      songs:       [@song1.id.to_s, @song2.id.to_s, @song3.id.to_s, @song4.id.to_s, @newsong.id.to_s]
     }
     @soundtrack.reload
     assert_equal "Songs in Rock Band", @soundtrack.name
@@ -128,8 +134,9 @@ class SoundtracksControllerTest < ActionController::TestCase
 
   test "guests cannot update a soundtrack" do
     patch :update, id: @soundtrack, soundtrack: {
-      name:  "Songs in Rock Band",
-      songs: [@song1.id.to_s, @song2.id.to_s, @song3.id.to_s, @song4.id.to_s, @newsong.id.to_s]
+      name:        "Songs in Rock Band",
+      description: "This is a description",
+      songs:       [@song1.id.to_s, @song2.id.to_s, @song3.id.to_s, @song4.id.to_s, @newsong.id.to_s]
     }
     @soundtrack.reload
     assert_equal "Songs not actually in Rock Band", @soundtrack.name
@@ -142,8 +149,9 @@ class SoundtracksControllerTest < ActionController::TestCase
   test "non-admins cannot update a soundtrack" do
     log_in_as(@non_admin)
     patch :update, id: @soundtrack, soundtrack: {
-      name:  "Songs in Rock Band",
-      songs: [@song1.id.to_s, @song2.id.to_s, @song3.id.to_s, @song4.id.to_s, @newsong.id.to_s]
+      name:        "Songs in Rock Band",
+      description: "This is a description",
+      songs:       [@song1.id.to_s, @song2.id.to_s, @song3.id.to_s, @song4.id.to_s, @newsong.id.to_s]
     }
     @soundtrack.reload
     assert_equal "Songs not actually in Rock Band", @soundtrack.name
