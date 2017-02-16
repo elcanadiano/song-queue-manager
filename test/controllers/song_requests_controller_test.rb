@@ -196,6 +196,10 @@ class SongRequestsControllerTest < ActionController::TestCase
     patch :toggle_completed, id: @song_request
     assert_redirected_to event_url(@open_event.id)
     @song_request.reload
+
+    last_song_position = Event.find(@song_request.event_id).song_order - 1
+    assert_equal last_song_position, @song_request.song_order
+
     assert_equal "Song Completed!", flash[:success]
     assert @song_request.is_completed
   end
@@ -231,6 +235,10 @@ class SongRequestsControllerTest < ActionController::TestCase
     patch :toggle_abandoned, id: @song_request
     assert_redirected_to event_url(@open_event.id)
     @song_request.reload
+
+    last_song_position = Event.find(@song_request.event_id).song_order - 1
+    assert_equal last_song_position, @song_request.song_order
+
     assert_equal "Song Abandoned!", flash[:success]
     assert @song_request.is_abandoned
   end

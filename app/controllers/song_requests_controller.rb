@@ -40,6 +40,9 @@ class SongRequestsController < ApplicationController
     else
       @request.update(is_completed: true)
 
+      last_song_position = Event.find(@request.event_id).song_order - 1
+      reorder_song_request(@request.id, last_song_position)
+
       flash[:success] = "Song Completed!"
     end
 
@@ -56,6 +59,11 @@ class SongRequestsController < ApplicationController
       flash[:danger] = "The song is already completed."
     else
       @request.update(is_abandoned: true)
+
+      last_song_position = Event.find(@request.event_id).song_order - 1
+      reorder_song_request(@request.id, last_song_position)
+
+      last_song = Event.find(@request.event_id).song_order - 1
 
       flash[:success] = "Song Abandoned!"
     end
