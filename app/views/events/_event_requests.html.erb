@@ -1,13 +1,13 @@
 <% if admin? || !song_request.is_abandoned %>
   <li
     data-request-id="<%= song_request.id %>"
-    <% if song_request.is_abandoned %>
+    <% if song_request.abandoned? %>
       <% if admin? %>
         class="danger"
       <% else %>
         class="danger disabled"
       <% end %>
-    <% elsif song_request.is_completed %>
+    <% elsif song_request.completed? %>
       <% if admin? %>
         class="success"
       <% else %>
@@ -18,7 +18,7 @@
     <% end %>
   >
     <% if admin? %>
-      <% if !song_request.is_abandoned && !song_request.is_completed %>
+      <% if !song_request.abandoned? && !song_request.completed? %>
         <div class="btn-group-vertical" role="group" style="float:right">
           <%= link_to "Complete", toggle_completed_request_path(song_request.id), method: :patch, class: "btn btn-success" %>
           <%= link_to "Abandon", toggle_abandoned_request_path(song_request.id), method: :patch, class: "btn btn-danger" %>

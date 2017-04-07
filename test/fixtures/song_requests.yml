@@ -2,160 +2,140 @@
 
 one:
   song:         song1
-  is_completed: false
-  is_abandoned: false
+  status:       0
   event:        brs8
   band:         nbam
   song_order:   0
 
 two:
   song:         imustbeinlove
-  is_completed: false
-  is_abandoned: false
+  status:       0
   event:        brs8
   band:         h4h
   song_order:   1
 
 three:
   song:         song2
-  is_completed: false
-  is_abandoned: false
+  status:       0
   event:        brs8
   band:         dankey
   song_order:   2
 
 four:
   song:         cantbuymelove
-  is_completed: false
-  is_abandoned: false
+  status:       0
   event:        brs8
   band:         h4h
   song_order:   3
 
 five:
   song:         makedamnsure
-  is_completed: false
-  is_abandoned: false
+  status:       0
   event:        brs8
   band:         dankey
   song_order:   4
 
 six:
   song:         song2
-  is_completed: false
-  is_abandoned: false
+  status:       0
   event:        brs8
   band:         nbam
   song_order:   5
 
 abandoned:
   song:         chandelier
-  is_completed: false
-  is_abandoned: true
+  status:       -1
   event:        brs8
   band:         nbam
   song_order:   6
 
 completed:
   song:         closingtime
-  is_completed: true
-  is_abandoned: false
+  status:       2
   event:        brs8
   band:         nbam
   song_order:   7
 
 completed2:
   song:         pretender
-  is_completed: true
-  is_abandoned: false
+  status:       2
   event:        brs8
   band:         dankey
   song_order:   8
 
 completed3:
   song:         sweetdisposition
-  is_completed: true
-  is_abandoned: false
+  status:       2
   event:        brs8
   band:         h4h
   song_order:   9
 
 abandoned2:
   song:         morethanafeeling
-  is_completed: false
-  is_abandoned: true
+  status:       -1
   event:        brs8
   band:         nbam
   song_order:   10
 
 completed4:
   song:         closertotheedge
-  is_completed: true
-  is_abandoned: false
+  status:       2
   event:        brs8
   band:         dankey
   song_order:   11
 
 completed5:
   song:         sweetchild
-  is_completed: true
-  is_abandoned: false
+  status:       2
   event:        brs8
   band:         dankey
   song_order:   12
 
 completed6:
   song:         vlglg
-  is_completed: true
-  is_abandoned: false
+  status:       2
   event:        brs8
   band:         nbam
   song_order:   13
 
 completed7:
   song:         needyounow
-  is_completed: true
-  is_abandoned: false
+  status:       2
   event:        brs8
   band:         h4h
   song_order:   14
 
 completed8:
   song:         paradise
-  is_completed: true
-  is_abandoned: false
+  status:       2
   event:        brs8
   band:         h4h
   song_order:   15
 
 brs7_one:
   song:         eyeofthetiger
-  is_completed: false
-  is_abandoned: false
+  status:       0
   event:        brs7
   band:         h4h
   song_order:   0
 
 brs7_two:
   song:         firstdate
-  is_completed: false
-  is_abandoned: false
+  status:       0
   event:        brs7
   band:         h4h
   song_order:   1
 
 brs7_three:
   song:         defector
-  is_completed: false
-  is_abandoned: false
+  status:       0
   event:        brs7
   band:         dankey
   song_order:   2
 
 brs7_four:
   song:         madness
-  is_completed: false
-  is_abandoned: false
+  status:       0
   event:        brs7
   band:         nbam
   song_order:   3
@@ -163,8 +143,7 @@ brs7_four:
 # Request for the purposes of testing song deletion.
 request_to_delete:
   song:         song_to_delete
-  is_completed: false
-  is_abandoned: false
+  status:       0
   event:        brs7
   band:         nbam
   song_order:   4
@@ -172,8 +151,7 @@ request_to_delete:
 # Request for the purposes of "band delete"
 band_delete:
   song:         song_to_delete
-  is_completed: false
-  is_abandoned: false
+  status:       0
   event:        brs7
   band:         delete
   song_order:   5

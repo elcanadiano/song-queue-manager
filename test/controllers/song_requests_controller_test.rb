@@ -175,23 +175,28 @@ class SongRequestsControllerTest < ActionController::TestCase
   end
 
   test "guests cannot mark a song request as complete" do
+    assert @song_request.request?
     patch :toggle_completed, id: @song_request
+
     assert_redirected_to login_url
     @song_request.reload
     assert_equal "Please log in.", flash[:danger]
-    assert !@song_request.is_completed
+    assert @song_request.request?
   end
 
   test "nonadmins cannot mark a song request as complete" do
+    assert @song_request.request?
     log_in_as @nonadmin
     patch :toggle_completed, id: @song_request
+
     assert_redirected_to root_url
     @song_request.reload
     assert_equal "This function requires administrator privileges.", flash[:danger]
-    assert !@song_request.is_completed
+    assert @song_request.request?
   end
 
   test "admins mark a song request as complete" do
+    assert @song_request.request?
     log_in_as @admin
     patch :toggle_completed, id: @song_request
     assert_redirected_to event_url(@open_event.id)
@@ -201,36 +206,40 @@ class SongRequestsControllerTest < ActionController::TestCase
     assert_equal last_song_position, @song_request.song_order
 
     assert_equal "Song Completed!", flash[:success]
-    assert @song_request.is_completed
+    assert @song_request.completed?
   end
 
   test "admins cannot mark an abandoned song request as complete" do
+    assert @abandoned.abandoned?
     log_in_as @admin
     patch :toggle_completed, id: @abandoned
     assert_redirected_to event_url(@open_event.id)
-    @song_request.reload
+    @abandoned.reload
     assert_equal "The song is already abandoned.", flash[:danger]
-    assert !@song_request.is_completed
+    assert !@abandoned.completed?
   end
 
   test "guests cannot mark a song request as abandoned" do
+    assert @song_request.request?
     patch :toggle_abandoned, id: @song_request
     assert_redirected_to login_url
     @song_request.reload
     assert_equal "Please log in.", flash[:danger]
-    assert !@song_request.is_abandoned
+    assert @song_request.request?
   end
 
   test "nonadmins cannot mark a song request as abandoned" do
+    assert @song_request.request?, "Song should be in request status to start."
     log_in_as @nonadmin
     patch :toggle_abandoned, id: @song_request
     assert_redirected_to root_url
     @song_request.reload
     assert_equal "This function requires administrator privileges.", flash[:danger]
-    assert !@song_request.is_abandoned
+    assert @song_request.request?
   end
 
   test "admins mark a song request as abandoned" do
+    assert @song_request.request?, "Song should be in request status to start."
     log_in_as @admin
     patch :toggle_abandoned, id: @song_request
     assert_redirected_to event_url(@open_event.id)
@@ -240,16 +249,18 @@ class SongRequestsControllerTest < ActionController::TestCase
     assert_equal last_song_position, @song_request.song_order
 
     assert_equal "Song Abandoned!", flash[:success]
-    assert @song_request.is_abandoned
+    assert @song_request.abandoned?, "Song should be abandoned."
   end
 
-  test "admins cannot mark an completed song request as abandoned" do
+  test "admins cannot mark a completed song request as abandoned" do
+    assert @completed.completed?, "Song should have a status of completed to start."
     log_in_as @admin
     patch :toggle_abandoned, id: @completed
+
     assert_redirected_to event_url(@open_event.id)
     @song_request.reload
     assert_equal "The song is already completed.", flash[:danger]
-    assert !@song_request.is_abandoned
+    assert !@completed.abandoned?, "Song should not be abandoned."
   end
 
   test "guests cannot move song request by AJAX" do

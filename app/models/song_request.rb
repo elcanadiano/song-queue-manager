@@ -4,6 +4,13 @@ class SongRequest < ActiveRecord::Base
   belongs_to :song
   default_scope -> { order(song_order: :asc) }
 
+  enum status: {
+    request:     0,
+    in_progress: 1,
+    completed:   2,
+    abandoned:   -1,
+  }
+
   # It seems to me that if you put required: true on the event/band/song, you
   # can put an invalid event/band/song into the request and it validates.
   validates  :song_id,  presence: true

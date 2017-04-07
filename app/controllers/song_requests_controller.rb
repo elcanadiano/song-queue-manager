@@ -33,12 +33,12 @@ class SongRequestsController < ApplicationController
   def toggle_completed
     @request = SongRequest.find(params[:id])
 
-    if @request.is_abandoned
+    if @request.abandoned?
       flash[:danger] = "The song is already abandoned."
-    elsif @request.is_completed
+    elsif @request.completed?
       flash[:danger] = "The song is already completed."
     else
-      @request.update(is_completed: true)
+      @request.update(status: :completed)
 
       last_song_position = Event.find(@request.event_id).song_order - 1
       reorder_song_request(@request.id, last_song_position)
@@ -53,12 +53,12 @@ class SongRequestsController < ApplicationController
   def toggle_abandoned
     @request = SongRequest.find(params[:id])
 
-    if @request.is_abandoned
+    if @request.abandoned?
       flash[:danger] = "The song is already abandoned."
-    elsif @request.is_completed
+    elsif @request.completed?
       flash[:danger] = "The song is already completed."
     else
-      @request.update(is_abandoned: true)
+      @request.update(status: :abandoned)
 
       last_song_position = Event.find(@request.event_id).song_order - 1
       reorder_song_request(@request.id, last_song_position)

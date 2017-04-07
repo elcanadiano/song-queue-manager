@@ -46,9 +46,9 @@ class EventsController < ApplicationController
     @requests       = SongRequest.where({
       event_id: params[:id]
     })
-    @request_counts = SongRequest.select("bands.id, bands.name, count(is_completed) AS request_count")
+    @request_counts = SongRequest.select("bands.id, bands.name, count(case status when 2 then 1 else 0 end) AS request_count")
                                  .joins("INNER JOIN bands ON bands.id = song_requests.band_id")
-                                 .where("is_completed = true AND is_abandoned = false AND event_id = #{params[:id]}")
+                                 .where("status = 2 AND event_id = #{params[:id]}")
                                  .group("bands.id")
                                  .reorder("request_count DESC, bands.name ASC")
   end

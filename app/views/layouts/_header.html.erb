@@ -70,7 +70,7 @@
               <li role="separator" class="divider"></li>
               <li class="dropdown-header">My Bands</li>
               <% if current_user.bands.empty? %>
-                <li>No bands</li>
+                <li><%= link_to "No bands", '#' %></li>
               <% else %>
                 <% current_user.bands.each do |band| %>
                   <li><%= link_to band.name, band_url(band) %></li>
