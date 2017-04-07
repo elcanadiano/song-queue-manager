@@ -37,13 +37,3 @@
     <% end %>
   </div>
 </div>
-
-<% if admin? %>
-  <%= javascript_tag do %>
-    $(function() {
-      $('#song_request_band_id').change(function() {
-        $('#hidden-admin').toggle($('#song_request_band_id').val() == '0');
-      });
-    });
-  <% end %>
-<% end %>

@@ -18,3 +18,7 @@
 $('.alert > button.close').click(function() {
   $(this).parent().slideUp(200);
 });
+
+$(function(){
+  $('.dropdown-toggle').dropdown();
+});

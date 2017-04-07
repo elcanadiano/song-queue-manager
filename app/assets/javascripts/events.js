@@ -1,6 +1,10 @@
 //= require html.sortable.min
 
 $(function() {
+  $('#song_request_band_id').change(function() {
+    $('#hidden-admin').toggle($('#song_request_band_id').val() == '0');
+  });
+
   sortable('#song-requests', {
     items: ':not(.disabled)'
   });
