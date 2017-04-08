@@ -9,6 +9,8 @@ class SongRequestsTest < ActionDispatch::IntegrationTest
     @band       = bands(:h4h)
     @open_event = events(:brs8)
     @song       = songs(:pretender)
+    @song2      = songs(:iwantitall)
+    @song3      = songs(:brainstew)
   end
 
   test "creating a song request" do
@@ -31,14 +33,94 @@ class SongRequestsTest < ActionDispatch::IntegrationTest
     get request_event_url(@open_event)
     assert_template 'events/song_request'
 
-    # Create a request.
-    assert_difference 'SongRequest.count', 1, 'Creating a request adds one.' do
+    # Create a request or two.
+    assert_difference 'SongRequest.count', 3, 'Creating three requests add three.' do
       post requests_url, song_request: {
         song:     @song.id,
         band_id:  @band.id,
         event_id: @open_event.id
       }
+
+      post requests_url, song_request: {
+        song:     @song2.id,
+        band_id:  @band.id,
+        event_id: @open_event.id
+      }
+
+      post requests_url, song_request: {
+        song:     @song3.id,
+        band_id:  @band.id,
+        event_id: @open_event.id
+      }
     end
+
+    # Get the three songs.
+    song1 = SongRequest.find_by({
+      song_id:  @song,
+      band_id:  @band,
+      event_id: @open_event
+    })
+
+    song2 = SongRequest.find_by({
+      song_id:  @song2,
+      band_id:  @band,
+      event_id: @open_event
+    })
+
+    song3 = SongRequest.find_by({
+      song_id:  @song3,
+      band_id:  @band,
+      event_id: @open_event
+    })
+
+    # Ensure they are all in "request" status.
+    assert song1.request?
+    assert song2.request?
+    assert song3.request?
+
+    # Login as a user admin.
+    delete logout_path
+    log_in_as @user_admin
+    assert is_logged_in?
+
+    # For song1, mark it as in progress then mark as completed.
+    patch toggle_started_request_url(song1)
+    song1.reload
+
+    assert_equal "Song Started!", flash[:success]
+    assert song1.in_progress?
+
+    patch toggle_completed_request_url(song1)
+    song1.reload
+
+    assert_equal "Song Completed!", flash[:success]
+    assert song1.completed?
+
+    # For song2, mark it as in progress then mark as abandoned.
+    patch toggle_started_request_url(song2)
+    song2.reload
+
+    assert_equal "Song Started!", flash[:success]
+    assert song2.in_progress?
+
+    patch toggle_abandoned_request_url(song2)
+    song2.reload
+
+    assert_equal "Song Abandoned!", flash[:success]
+    assert song2.abandoned?
+
+    # For song3, mark as completed (fail) then mark as abandoned.
+    patch toggle_completed_request_url(song3)
+    song3.reload
+
+    assert_equal "The song needs to be in progress before it can be marked as completed.", flash[:danger]
+    assert song3.request?
+
+    patch toggle_abandoned_request_url(song3)
+    song3.reload
+
+    assert_equal "Song Abandoned!", flash[:success]
+    assert song3.abandoned?
   end
 
   test "admin creating a song request on behalf of a user" do

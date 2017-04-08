@@ -1,6 +1,6 @@
 class SongRequestsController < ApplicationController
-  before_action :logged_in_user,     only: [:create, :toggle_completed, :toggle_abandoned, :reorder]
-  before_action :admin_user,         only: [         :toggle_completed, :toggle_abandoned, :reorder]
+  before_action :logged_in_user,     only: [:create, :toggle_completed, :toggle_abandoned, :toggle_started, :reorder]
+  before_action :admin_user,         only: [         :toggle_completed, :toggle_abandoned, :toggle_started, :reorder]
   before_action :is_member_or_admin, only: [:create]
   before_action :open_event,         only: [:create]
 
@@ -37,6 +37,9 @@ class SongRequestsController < ApplicationController
       flash[:danger] = "The song is already abandoned."
     elsif @request.completed?
       flash[:danger] = "The song is already completed."
+    elsif @request.request?
+      flash[:danger] = "The song needs to be in progress before it can be " +
+      "marked as completed."
     else
       @request.update(status: :completed)
 
@@ -44,6 +47,28 @@ class SongRequestsController < ApplicationController
       reorder_song_request(@request.id, last_song_position)
 
       flash[:success] = "Song Completed!"
+    end
+
+    redirect_to event_url(@request.event_id)
+  end
+
+  # Marks a song as in progress.
+  def toggle_started
+    @request = SongRequest.find(params[:id])
+
+    if @request.abandoned?
+      flash[:danger] = "The song is already abandoned."
+    elsif @request.completed?
+      flash[:danger] = "The song is already completed."
+    elsif @request.in_progress?
+      flash[:danger] = "The song is already in progress."
+    else
+      @request.update(status: :in_progress)
+
+      # Move the current song to the top.
+      reorder_song_request(@request.id, 0)
+
+      flash[:success] = "Song Started!"
     end
 
     redirect_to event_url(@request.event_id)
@@ -62,8 +87,6 @@ class SongRequestsController < ApplicationController
 
       last_song_position = Event.find(@request.event_id).song_order - 1
       reorder_song_request(@request.id, last_song_position)
-
-      last_song = Event.find(@request.event_id).song_order - 1
 
       flash[:success] = "Song Abandoned!"
     end

@@ -23,3 +23,11 @@ brs8:
   soundtrack: brspast
   # This must be changed if a request is added for the event in yml!
   song_order: 16
+
+in_progress:
+  name:       Event with song in progress
+  is_open:    true
+  date:       2016-04-25
+  soundtrack: brspast
+  # This must be changed if a request is added for the event in yml!
+  song_order: 4

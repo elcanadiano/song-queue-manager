@@ -2,19 +2,21 @@ require 'test_helper'
 
 class SongRequestsControllerTest < ActionController::TestCase
   def setup
-    @band         = bands(:h4h)
-    @closed_event = events(:brs7)
-    @open_event   = events(:brs8)
-    @song_request = song_requests(:one)
-    @two          = song_requests(:two)
-    @three        = song_requests(:three)
-    @completed    = song_requests(:completed)
-    @abandoned    = song_requests(:abandoned)
-    @song         = songs(:pretender)
-    @admin        = users(:michael)
-    @nonadmin     = users(:malory)
-    @member       = users(:ray)
-    @nonmember    = users(:donnie)
+    @band           = bands(:h4h)
+    @closed_event   = events(:brs7)
+    @open_event     = events(:brs8)
+    @ip_event       = events(:in_progress)
+    @song_request   = song_requests(:one)
+    @two            = song_requests(:two)
+    @three          = song_requests(:three)
+    @completed      = song_requests(:completed)
+    @abandoned      = song_requests(:abandoned)
+    @in_progress    = song_requests(:ip_progress)
+    @song           = songs(:pretender)
+    @admin          = users(:michael)
+    @nonadmin       = users(:malory)
+    @member         = users(:ray)
+    @nonmember      = users(:donnie)
   end
 
   test "guests cannot create a song request" do
@@ -175,7 +177,7 @@ class SongRequestsControllerTest < ActionController::TestCase
   end
 
   test "guests cannot mark a song request as complete" do
-    assert @song_request.request?
+    assert @song_request.request?, "Song should be in request status to start."
     patch :toggle_completed, id: @song_request
 
     assert_redirected_to login_url
@@ -185,7 +187,7 @@ class SongRequestsControllerTest < ActionController::TestCase
   end
 
   test "nonadmins cannot mark a song request as complete" do
-    assert @song_request.request?
+    assert @song_request.request?, "Song should be in request status to start."
     log_in_as @nonadmin
     patch :toggle_completed, id: @song_request
 
@@ -195,22 +197,19 @@ class SongRequestsControllerTest < ActionController::TestCase
     assert @song_request.request?
   end
 
-  test "admins mark a song request as complete" do
-    assert @song_request.request?
+  test "admins cannot mark a regular song request as complete" do
+    assert @song_request.request?, "Song should be in request status to start."
     log_in_as @admin
     patch :toggle_completed, id: @song_request
     assert_redirected_to event_url(@open_event.id)
     @song_request.reload
 
-    last_song_position = Event.find(@song_request.event_id).song_order - 1
-    assert_equal last_song_position, @song_request.song_order
-
-    assert_equal "Song Completed!", flash[:success]
-    assert @song_request.completed?
+    assert_equal "The song needs to be in progress before it can be marked as completed.", flash[:danger]
+    assert @song_request.request?, "The request should not have changed its state."
   end
 
   test "admins cannot mark an abandoned song request as complete" do
-    assert @abandoned.abandoned?
+    assert @abandoned.abandoned?, "Song should be abandoned."
     log_in_as @admin
     patch :toggle_completed, id: @abandoned
     assert_redirected_to event_url(@open_event.id)
@@ -219,8 +218,19 @@ class SongRequestsControllerTest < ActionController::TestCase
     assert !@abandoned.completed?
   end
 
+  test "admins can mark an in-progress song request as complete" do
+    assert @in_progress.in_progress?, "Song should be in progress to start."
+    log_in_as @admin
+    patch :toggle_completed, id: @in_progress
+    assert_redirected_to event_url(@ip_event)
+    @in_progress.reload
+
+    assert_equal "Song Completed!", flash[:success]
+    assert @in_progress.completed?, "The request should have been completed."
+  end
+
   test "guests cannot mark a song request as abandoned" do
-    assert @song_request.request?
+    assert @song_request.request?, "Song should be in request status to start."
     patch :toggle_abandoned, id: @song_request
     assert_redirected_to login_url
     @song_request.reload
@@ -261,6 +271,72 @@ class SongRequestsControllerTest < ActionController::TestCase
     @song_request.reload
     assert_equal "The song is already completed.", flash[:danger]
     assert !@completed.abandoned?, "Song should not be abandoned."
+  end
+
+  test "guests cannot mark a song request as in progress" do
+    assert @song_request.request?, "Song should be in request status to start."
+    patch :toggle_started, id: @song_request
+    assert_redirected_to login_url
+    @song_request.reload
+    assert_equal "Please log in.", flash[:danger]
+    assert @song_request.request?
+  end
+
+  test "nonadmins cannot mark a song request as in progress" do
+    assert @song_request.request?, "Song should be in request status to start."
+    log_in_as @nonadmin
+    patch :toggle_started, id: @song_request
+    assert_redirected_to root_url
+    @song_request.reload
+    assert_equal "This function requires administrator privileges.", flash[:danger]
+    assert @song_request.request?
+  end
+
+  test "admins mark a song request as in progress" do
+    assert @song_request.request?, "Song should be in request status to start."
+    log_in_as @admin
+    patch :toggle_started, id: @song_request
+    assert_redirected_to event_url(@open_event)
+    @song_request.reload
+
+    # When a song is marked to start, it gets bumped to the top.
+    assert_equal 0, @song_request.song_order
+
+    assert_equal "Song Started!", flash[:success]
+    assert @song_request.in_progress?, "Song should be in_progress."
+  end
+
+  test "admins cannot mark a completed song request as in progress" do
+    assert @completed.completed?, "Song should be completed to start."
+    log_in_as @admin
+    patch :toggle_started, id: @completed
+
+    assert_redirected_to event_url(@open_event)
+    @song_request.reload
+    assert_equal "The song is already completed.", flash[:danger]
+    assert @completed.completed?, "Song should already be completed."
+  end
+
+  test "admins cannot mark an abandoned song request as in progress" do
+    assert @abandoned.abandoned?, "Song should be abandoned to start."
+    log_in_as @admin
+    patch :toggle_started, id: @abandoned
+
+    assert_redirected_to event_url(@open_event)
+    @song_request.reload
+    assert_equal "The song is already abandoned.", flash[:danger]
+    assert @abandoned.abandoned?, "Song should already be abandoned."
+  end
+
+  test "admins cannot mark an in progress song request as in progress" do
+    assert @in_progress.in_progress?, "Song should be in progress to start."
+    log_in_as @admin
+    patch :toggle_started, id: @in_progress
+
+    assert_redirected_to event_url(@ip_event)
+    @song_request.reload
+    assert_equal "The song is already in progress.", flash[:danger]
+    assert @in_progress.in_progress?, "Song should already be in progress."
   end
 
   test "guests cannot move song request by AJAX" do

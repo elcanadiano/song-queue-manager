@@ -13,6 +13,12 @@
       <% else %>
         class="success disabled"
       <% end %>
+    <% elsif song_request.in_progress? %>
+      <% if admin? %>
+        class="warning"
+      <% else %>
+        class="warning disabled"
+      <% end %>
     <% elsif !admin? %>
       class="disabled"
     <% end %>
@@ -20,7 +26,11 @@
     <% if admin? %>
       <% if !song_request.abandoned? && !song_request.completed? %>
         <div class="btn-group-vertical" role="group" style="float:right">
-          <%= link_to "Complete", toggle_completed_request_path(song_request.id), method: :patch, class: "btn btn-success" %>
+          <% if song_request.in_progress? %>
+            <%= link_to "Complete", toggle_completed_request_path(song_request.id), method: :patch, class: "btn btn-success" %>
+          <% else %>
+            <%= link_to "Start", toggle_started_request_path(song_request.id), method: :patch, class: "btn btn-warning" %>
+          <% end %>
           <%= link_to "Abandon", toggle_abandoned_request_path(song_request.id), method: :patch, class: "btn btn-danger" %>
         </div>
       <% end %>

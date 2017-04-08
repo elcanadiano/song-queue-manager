@@ -155,3 +155,33 @@ band_delete:
   event:        brs7
   band:         delete
   song_order:   5
+
+# In Progress request
+
+ip_request:
+  song:         iwantitall
+  status:       0
+  event:        in_progress
+  band:         delete
+  song_order:   5
+
+ip_progress:
+  song:         brainstew
+  status:       1
+  event:        in_progress
+  band:         delete
+  song_order:   5
+
+ip_completed:
+  song:         makedamnsure
+  status:       2
+  event:        in_progress
+  band:         delete
+  song_order:   5
+
+ip_abandoned:
+  song:         pretender
+  status:       -1
+  event:        in_progress
+  band:         delete
+  song_order:   5
