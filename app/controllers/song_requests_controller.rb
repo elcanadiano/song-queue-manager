@@ -63,6 +63,14 @@ class SongRequestsController < ApplicationController
     elsif @request.in_progress?
       flash[:danger] = "The song is already in progress."
     else
+      # Updates any song currently in progress to completed.
+      last_song_position = Event.find(@request.event_id).song_order - 1
+
+      SongRequest.in_progress.where(event_id: @request.event_id).each do |request|
+        request.update(status: :completed)
+        reorder_song_request(@request.id, last_song_position)
+      end
+
       @request.update(status: :in_progress)
 
       # Move the current song to the top.

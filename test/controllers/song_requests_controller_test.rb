@@ -11,6 +11,7 @@ class SongRequestsControllerTest < ActionController::TestCase
     @three          = song_requests(:three)
     @completed      = song_requests(:completed)
     @abandoned      = song_requests(:abandoned)
+    @ip_request     = song_requests(:ip_request)
     @in_progress    = song_requests(:ip_progress)
     @song           = songs(:pretender)
     @admin          = users(:michael)
@@ -304,6 +305,22 @@ class SongRequestsControllerTest < ActionController::TestCase
 
     assert_equal "Song Started!", flash[:success]
     assert @song_request.in_progress?, "Song should be in_progress."
+  end
+
+  test "marking a song request as in progress marks in progress songs as complete." do
+    assert @ip_request.request?,      "Song should be in request status to start."
+    assert @in_progress.in_progress?, "The in progress song should be in progress."
+    log_in_as @admin
+    patch :toggle_started, id: @ip_request
+    assert_redirected_to event_url(@ip_event)
+
+    @ip_request.reload
+    @in_progress.reload
+
+    last_song_position = Event.find(@ip_event.id).song_order - 1
+
+    assert @in_progress.completed?, "The in process song should be completed."
+    assert last_song_position, @in_progress.song_order
   end
 
   test "admins cannot mark a completed song request as in progress" do
